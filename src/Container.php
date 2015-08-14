@@ -71,7 +71,7 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
      */
     public function registerDefaultServices(array $userSettings = [])
     {
-         $defaultSettings = $this->defaultSettings;
+        $defaultSettings = $this->defaultSettings;
 
         /**
          * This service MUST return an array or an
@@ -81,23 +81,21 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return array|\ArrayAccess
          */
-        $this->set('settings', function ($container) use ($userSettings, $defaultSettings) {
+        $this['settings'] = function ($container) use ($userSettings, $defaultSettings) {
             return array_merge($defaultSettings, $userSettings);
-        });
+        };
 
         /**
          * This service MUST return a shared instance
          * of \Slim\Interfaces\Http\EnvironmentInterface.
          *
-         * @param Container $container
-         *
          * @return \Slim\Interfaces\Http\EnvironmentInterface
          */
-        $this['environment'] = function ($container) {
+        $this['environment'] = function () {
             return new Environment($_SERVER);
         };
 
-         /**
+        /**
          * PSR-7 Request object
          *
          * @param Container $container
@@ -125,11 +123,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          * This service MUST return a SHARED instance
          * of \Slim\Interfaces\RouterInterface.
          *
-         * @param Container $container
-         *
          * @return \Slim\Interfaces\RouterInterface
          */
-        $this['router'] = function ($container) {
+        $this['router'] = function () {
             return new Router();
         };
 
@@ -137,11 +133,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          * This service MUST return a SHARED instance
          * of \Slim\Interfaces\InvocationStrategyInterface.
          *
-         * @param Container $container
-         *
          * @return \Slim\Interfaces\InvocationStrategyInterface
          */
-        $this['foundHandler'] = function ($container) {
+        $this['foundHandler'] = function () {
             return new RequestResponse();
         };
 
@@ -156,11 +150,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          * The callable MUST return an instance of
          * \Psr\Http\Message\ResponseInterface.
          *
-         * @param Container $container
-         *
          * @return callable
          */
-        $this['errorHandler'] = function ($container) {
+        $this['errorHandler'] = function () {
             return new Error();
         };
 
@@ -174,11 +166,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          * The callable MUST return an instance of
          * \Psr\Http\Message\ResponseInterface.
          *
-         * @param Container $container
-         *
          * @return callable
          */
-        $this['notFoundHandler'] = function ($container) {
+        $this['notFoundHandler'] = function () {
             return new NotFound();
         };
 
@@ -193,11 +183,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          * The callable MUST return an instance of
          * \Psr\Http\Message\ResponseInterface.
          *
-         * @param Container $container
-         *
          * @return callable
          */
-        $this['notAllowedHandler'] = function ($container) {
+        $this['notAllowedHandler'] = function () {
             return new NotAllowed;
         };
 
@@ -269,7 +257,7 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
      */
     public function offsetExists($name)
     {
-        return parent::has($name);
+        return $this->has($name);
     }
 
     /**
