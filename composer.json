@@ -1,0 +1,41 @@
+{
+  "name": "juliangut/slim-php-di",
+  "description": "Slim Framework PHP-DI container implementation",
+  "keywords": [
+    "slim",
+    "framework",
+    "dependency inversion",
+    "container"
+  ],
+  "homepage": "http://github.com/juliangut/slim-php-di",
+  "type": "library",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Julián Gutiérrez",
+      "email": "juliangut@gmail.com",
+      "homepage": "http://juliangut.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "slim/slim": "3.0.0-beta2",
+    "php-di/php-di": "^5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.5",
+    "squizlabs/php_codesniffer": "~2",
+    "phpmd/phpmd": "~2.2",
+    "sebastian/phpcpd": "~2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jgut\\Slim\\PHPDI\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Jgut\\Slim\\PHPDITests\\": "tests/PHPDITests/"
+    }
+  }
+}
