@@ -270,5 +270,7 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
         // Can't remove definition from $this->definitionSource ?
 
         // Can't remove services as $this->singletonEntries is a private attribute
+
+        $name = '';
     }
 }
