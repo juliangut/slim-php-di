@@ -83,7 +83,7 @@
     <!-- Controversial rules -->
     <!-- <rule ref="rulesets/controversial.xml" /> -->
     <!-- Avoid superglobals -->
-    <rule ref="rulesets/controversial.xml/Superglobals" />
+    <!-- <rule ref="rulesets/controversial.xml/Superglobals" /> -->
     <!-- Use camelCase class name-->
     <rule ref="rulesets/controversial.xml/CamelCaseClassName" />
     <!-- Use camelCase class attribute names -->
