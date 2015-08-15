@@ -41,12 +41,12 @@ class ContainerBuilder
 
             // setDefinitionCache missing
 
-            if (isset($settings['proxy_path']) && !empty(isset($settings['proxy_path']))) {
+            if (isset($settings['proxy_path']) && !empty($settings['proxy_path'])) {
                 $containerBuilder->writeProxiesToFile(true, $settings['proxy_path']);
             }
 
-            if (isset($settings['definitions']) && empty($definitions)) {
-                $definitions = $settings['definitions'];
+            if (isset($settings['definitions']) && is_array($settings['definitions'])) {
+                $definitions = array_merge($settings['definitions'], $definitions);
             }
         }
 
