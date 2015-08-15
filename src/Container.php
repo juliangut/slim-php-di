@@ -229,12 +229,15 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
     public function register(ServiceProviderInterface $provider, array $values = [])
     {
         $container = new PimpleContainer;
+        $container['settings'] = $this->get('settings');
 
         $provider->register($container);
 
         foreach ($container->keys() as $service) {
             $this->set($service, $container->raw($service));
         }
+
+        unset($container);
 
         foreach ($values as $key => $value) {
             $this->set($key, $value);
