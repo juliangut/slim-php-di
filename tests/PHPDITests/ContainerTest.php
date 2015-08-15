@@ -96,4 +96,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container['notAllowedHandler']);
         $this->assertInstanceOf('\Slim\Interfaces\CallableResolverInterface', $this->container['callableResolver']);
     }
+
+    /**
+     * @covers Jgut\Slim\PHPDI\Container::register
+     */
+    public function testRegister()
+    {
+        $service = $this->getMock('Pimple\ServiceProviderInterface', array(), array(), '', false);
+        $service->expects($this->once())->method('register');
+
+        $this->container->register($service, ['foo' => 'bar']);
+    }
 }
