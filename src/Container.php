@@ -81,9 +81,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return array|\ArrayAccess
          */
-        $this['settings'] = function ($container) use ($userSettings, $defaultSettings) {
+        $this->set('settings', function ($container) use ($userSettings, $defaultSettings) {
             return array_merge($defaultSettings, $userSettings);
-        };
+        });
 
         /**
          * This service MUST return a shared instance
@@ -91,9 +91,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return \Slim\Interfaces\Http\EnvironmentInterface
          */
-        $this['environment'] = function () {
+        $this->set('environment', function () {
             return new Environment($_SERVER);
-        };
+        });
 
         /**
          * PSR-7 Request object
@@ -102,9 +102,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return \Psr\Http\Message\ServerRequestInterface
          */
-        $this['request'] = function ($container) {
+        $this->set('request', function ($container) {
             return Request::createFromEnvironment($container['environment']);
-        };
+        });
 
         /**
          * PSR-7 Response object
@@ -113,11 +113,11 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return \Psr\Http\Message\ResponseInterface
          */
-        $this['response'] = function ($container) {
+        $this->set('response', function ($container) {
             $headers = new Headers(['Content-Type' => 'text/html']);
             $response = new Response(200, $headers);
             return $response->withProtocolVersion($container['settings']['httpVersion']);
-        };
+        });
 
         /**
          * This service MUST return a SHARED instance
@@ -125,9 +125,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return \Slim\Interfaces\RouterInterface
          */
-        $this['router'] = function () {
+        $this->set('router', function () {
             return new Router();
-        };
+        });
 
         /**
          * This service MUST return a SHARED instance
@@ -135,9 +135,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return \Slim\Interfaces\InvocationStrategyInterface
          */
-        $this['foundHandler'] = function () {
+        $this->set('foundHandler', function () {
             return new RequestResponse();
-        };
+        });
 
         /**
          * This service MUST return a callable
@@ -152,9 +152,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return callable
          */
-        $this['errorHandler'] = function () {
+        $this->set('errorHandler', function () {
             return new Error();
-        };
+        });
 
         /**
          * This service MUST return a callable
@@ -168,9 +168,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return callable
          */
-        $this['notFoundHandler'] = function () {
+        $this->set('notFoundHandler', function () {
             return new NotFound();
-        };
+        });
 
         /**
          * This service MUST return a callable
@@ -185,9 +185,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return callable
          */
-        $this['notAllowedHandler'] = function () {
+        $this->set('notAllowedHandler', function () {
             return new NotAllowed;
-        };
+        });
 
         /**
          * Instance of \Slim\Interfaces\CallableResolverInterface
@@ -196,9 +196,9 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
          *
          * @return \Slim\Interfaces\CallableResolverInterface
          */
-        $this['callableResolver'] = function ($container) {
+        $this->set('callableResolver', function ($container) {
             return new CallableResolver($container);
-        };
+        });
     }
 
     /**
