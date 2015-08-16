@@ -75,11 +75,9 @@ class Container extends DIContainer implements \ArrayAccess
          * This service MUST return an array or an
          * instance of \ArrayAccess.
          *
-         * @param Container $container
-         *
          * @return array|\ArrayAccess
          */
-        $this->set('settings', function ($container) use ($userSettings, $defaultSettings) {
+        $this->set('settings', function () use ($userSettings, $defaultSettings) {
             return array_merge($defaultSettings, $userSettings);
         });
 
