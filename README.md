@@ -10,9 +10,9 @@
 
 PHP-DI dependency injection container implementation for Slim Framework.
 
-Prepares PHP-DI container to fit in Slim App by registering default services in the container.
+Prepares PHP-DI container to fit in Slim App by registering default Slim services in the container.
 
-Implements ArrayAccess interface to mimic Slim's default container services access based on Pimple.
+In order to allow possible services out there expecting the container to be `Slim\Container` and thus implement `ArrayAccess`, it has been introduced in this container as well. You are encouraged to use ArrayAccess syntax for assignment instead of PHP-DI `set` method.
 
 ## Installation
 
@@ -36,9 +36,14 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 $config = require_once __DIR__ . 'settings.php';
 $container = ContainerBuilder::build($settings);
 
+// Register services in the container
+$container['my_service'] => function ($container) {
+    return new \MyService;
+);
+
 $app = new \Slim\App($container);
 
-// Define your routes here
+// Set your routes
 
 $app->run();
 ```
@@ -69,22 +74,22 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 
 $config = require_once __DIR__ . 'settings.php';
 $definitions = require_once __DIR__ . 'definitions.php';
-$container = ContainerBuilder::build($settings, $definitions);
+$app = new \Slim\App(ContainerBuilder::build($settings, $definitions));
 
-$app = new \Slim\App($container);
-
-// Define your routes here
+// Set your routes
 
 $app->run();
 ```
 
 ### Available configurations
 
-* `use_autowiring` boolean, wether to use or not autowiring (active by default)
-* `use_annotations` boolean, wether to use or not annotations (not active by default)
-* `ignore_phpdoc_errors` boolean, wether to ignore errors on phpDoc annotations
+* `use_autowiring` boolean, whether to use or not autowiring (active by default)
+* `use_annotations` boolean, whether to use or not annotations (not active by default)
+* `ignore_phpdoc_errors` boolean, whether to ignore errors on phpDoc annotations
 * `proxy_path` path where PHP-DI creates its proxy files
 * `definitions` injection definitions for PHP-DI container
+
+*If you want to use annotations you should require `doctrine/annotations` first*. More on this [here](http://php-di.org/doc/annotations.html)
 
 Please refere to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations,
 specially on how to use [definitions](http://php-di.org/doc/definition.html) which is the key element on using this DI container.

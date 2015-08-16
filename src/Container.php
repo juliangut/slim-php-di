@@ -265,9 +265,8 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
      */
     public function offsetUnset($name)
     {
-        // Can't remove definition from $this->definitionSource ?
-
-        // Can't remove services as $this->singletonEntries is a private attribute
+        // Can't remove definitions from $this->definitionSource as it is a private attribute
+        // Can't manually remove services as $this->singletonEntries is a private attribute
 
         $name = '';
     }
