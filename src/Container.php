@@ -20,9 +20,8 @@ use Slim\Handlers\Error;
 use Slim\Handlers\NotFound;
 use Slim\Handlers\NotAllowed;
 use Slim\CallableResolver;
+use DI\NotFoundException as DINotFoundException;
 use Slim\Exception\NotFoundException as SlimNotFoundException;
-use Pimple\ServiceProviderInterface;
-use Pimple\Container as PimpleContainer;
 
 /**
  * PHP-DI Dependency Injection Slim integration.
@@ -216,34 +215,6 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
         } catch (\Exception $exception) {
             throw new SlimNotFoundException($exception->getMessage());
         }
-    }
-
-    /**
-     * Registers a service.
-     *
-     * @param ServiceProviderInterface $provider
-     * @param array $values
-     *
-     * @return static
-     */
-    public function register(ServiceProviderInterface $provider, array $values = [])
-    {
-        $container = new PimpleContainer;
-        $container['settings'] = $this->get('settings');
-
-        $provider->register($container);
-
-        foreach ($container->keys() as $service) {
-            $this->set($service, $container->raw($service));
-        }
-
-        unset($container);
-
-        foreach ($values as $key => $value) {
-            $this->set($key, $value);
-        }
-
-        return $this;
     }
 
     /**
