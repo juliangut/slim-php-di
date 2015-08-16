@@ -73,11 +73,11 @@
         </properties>
     </rule>
     <!-- Excessive class dependencies (13) -->
-    <!-- <rule ref="rulesets/design.xml/CouplingBetweenObjects">
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
         <properties>
             <property name="minimum" value="13"/>
         </properties>
-    </rule> -->
+    </rule>
 
 
     <!-- Controversial rules -->

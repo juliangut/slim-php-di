@@ -8,7 +8,6 @@
 
 namespace Jgut\Slim\PHPDI;
 
-use Interop\Container\ContainerInterface;
 use DI\Container as DIContainer;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -20,7 +19,6 @@ use Slim\Handlers\Error;
 use Slim\Handlers\NotFound;
 use Slim\Handlers\NotAllowed;
 use Slim\CallableResolver;
-use DI\NotFoundException as DINotFoundException;
 use Slim\Exception\NotFoundException as SlimNotFoundException;
 
 /**
@@ -40,7 +38,7 @@ use Slim\Exception\NotFoundException as SlimNotFoundException;
  *  - notAllowedHandler: a callable with the signature: function($request, $response, $allowedHttpMethods)
  *  - callableResolver: an instance of \Slim\Interfaces\CallableResolverInterface
  */
-class Container extends DIContainer implements ContainerInterface, \ArrayAccess
+class Container extends DIContainer implements \ArrayAccess
 {
     /**
      * Default settings
@@ -208,10 +206,6 @@ class Container extends DIContainer implements ContainerInterface, \ArrayAccess
     {
         try {
             return parent::get($name);
-        } catch (DINotFoundException $exception) {
-            throw new SlimNotFoundException($exception->getMessage());
-        } catch (\InvalidArgumentException $exception) {
-            throw new SlimNotFoundException($exception->getMessage());
         } catch (\Exception $exception) {
             throw new SlimNotFoundException($exception->getMessage());
         }
