@@ -26,7 +26,8 @@
     "phpunit/phpunit": "~4.5",
     "squizlabs/php_codesniffer": "~2",
     "phpmd/phpmd": "~2.2",
-    "sebastian/phpcpd": "~2.0"
+    "sebastian/phpcpd": "~2.0",
+    "doctrine/cache": "^1.4"
   },
   "autoload": {
     "psr-4": {

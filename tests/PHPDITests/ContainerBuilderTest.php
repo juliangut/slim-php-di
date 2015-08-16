@@ -14,6 +14,10 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerBuilder
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerCache
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::getDefinitions
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::getDefaultServicesDefinitions
      */
     public function testBuild()
     {
@@ -23,9 +27,40 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
                 'use_annotations' => true,
                 'ignore_phpdoc_errors' => true,
                 'proxy_path' => 'fake/path',
+            ],
+        ];
+
+        ContainerBuilder::build($settings);
+    }
+
+    /**
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::getDefinitions
+     */
+    public function testBuildDefinitions()
+    {
+        $settings = [
+            'php-di' => [
                 'definitions' => [
-                    'foo' => 'bar',
+                    'foo' => function () {
+                        return 'bar';
+                    },
                 ],
+            ],
+        ];
+
+        ContainerBuilder::build($settings);
+    }
+
+    /**
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerCache
+     */
+    public function testBuildCache()
+    {
+        $settings = [
+            'php-di' => [
+                'definitions_cache' => new \Doctrine\Common\Cache\VoidCache,
             ],
         ];
 

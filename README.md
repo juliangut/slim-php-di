@@ -86,13 +86,20 @@ $app->run();
 * `use_autowiring` boolean, whether to use or not autowiring (active by default)
 * `use_annotations` boolean, whether to use or not annotations (not active by default)
 * `ignore_phpdoc_errors` boolean, whether to ignore errors on phpDoc annotations
+* `definitions_cache` \Doctrine\Common\Cache\CacheProvider
 * `proxy_path` path where PHP-DI creates its proxy files
 * `definitions` injection definitions for PHP-DI container
 
-*If you want to use annotations you should require `doctrine/annotations` first*. More on this [here](http://php-di.org/doc/annotations.html)
-
 Please refere to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations,
 specially on how to use [definitions](http://php-di.org/doc/definition.html) which is the key element on using this DI container.
+
+*If you want to use annotations you have to require `doctrine/annotations` first*. More on this [here](http://php-di.org/doc/annotations.html)
+
+*If you want to use definitions cache you have to require `doctrine/cache` first*. More on this [here](http://php-di.org/doc/performances.html)
+
+#### Important note
+
+Be aware that if you use cache you must provide `definitions` for all your services at container creation, and more importantly **not set any service later** as it is not allowed at runtime when using cache.
 
 ## Contributing
 

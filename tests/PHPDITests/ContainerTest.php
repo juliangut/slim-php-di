@@ -44,56 +44,57 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Jgut\Slim\PHPDI\Container::set
-     * @covers Jgut\Slim\PHPDI\Container::set
+     * @covers Jgut\Slim\PHPDI\Container::get
      * @covers Jgut\Slim\PHPDI\Container::offsetSet
+     * @covers Jgut\Slim\PHPDI\Container::offsetExists
      * @covers Jgut\Slim\PHPDI\Container::offsetGet
      */
-    public function testSet()
+    public function testSetGet()
     {
-        $this->container->set('foo', 'bar');
+        $this->container['foo'] = 'bar';
+        $this->assertTrue($this->container->has('foo'));
         $this->assertEquals('bar', $this->container->get('foo'));
 
         $this->container['bar'] = 'baz';
+        $this->assertTrue(isset($this->container['bar']));
         $this->assertEquals('baz', $this->container['bar']);
     }
 
     /**
      * Check container has default services.
-     *
-     * @covers Jgut\Slim\PHPDI\Container::has
-     * @covers Jgut\Slim\PHPDI\Container::offsetExists
      */
-    public function testGet()
+    public function testDefaultServices()
     {
+        $this->assertTrue($this->container->has('settings'));
         $this->assertTrue($this->container->has('environment'));
-        $this->assertTrue(isset($this->container['request']));
+        $this->assertTrue($this->container->has('request'));
         $this->assertTrue($this->container->has('response'));
-        $this->assertTrue(isset($this->container['router']));
+        $this->assertTrue($this->container->has('router'));
         $this->assertTrue($this->container->has('foundHandler'));
-        $this->assertTrue(isset($this->container['errorHandler']));
+        $this->assertTrue($this->container->has('errorHandler'));
         $this->assertTrue($this->container->has('notFoundHandler'));
-        $this->assertTrue(isset($this->container['notAllowedHandler']));
+        $this->assertTrue($this->container->has('notAllowedHandler'));
         $this->assertTrue($this->container->has('callableResolver'));
     }
 
     /**
-     * Check container default services type.
-     *
-     * @covers Jgut\Slim\PHPDI\Container::registerDefaultServices
-     * @covers Jgut\Slim\PHPDI\Container::get
-     * @covers Jgut\Slim\PHPDI\Container::offsetGet
+     * Test default servicesType
      */
-    public function testServicesType()
+    public function testDefaultServicesType()
     {
+        $this->assertTrue(is_array($this->container->get('settings')));
         $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
-        $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container['request']);
-        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container['response']);
-        $this->assertInstanceOf('\Slim\Interfaces\RouterInterface', $this->container['router']);
+        $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
+        $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
+        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container->get('response'));
+        $this->assertInstanceOf('\Slim\Interfaces\RouterInterface', $this->container->get('router'));
         $this->assertInstanceOf('\Slim\Handlers\Strategies\RequestResponse', $this->container['foundHandler']);
-        $this->assertInstanceOf('\Slim\Handlers\Error', $this->container['errorHandler']);
-        $this->assertInstanceOf('\Slim\Handlers\NotFound', $this->container['notFoundHandler']);
-        $this->assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container['notAllowedHandler']);
-        $this->assertInstanceOf('\Slim\Interfaces\CallableResolverInterface', $this->container['callableResolver']);
+        $this->assertInstanceOf('\Slim\Handlers\Error', $this->container->get('errorHandler'));
+        $this->assertInstanceOf('\Slim\Handlers\NotFound', $this->container->get('notFoundHandler'));
+        $this->assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container->get('notAllowedHandler'));
+        $this->assertInstanceOf(
+            '\Slim\Interfaces\CallableResolverInterface',
+            $this->container->get('callableResolver')
+        );
     }
 }
