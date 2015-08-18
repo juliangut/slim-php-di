@@ -34,11 +34,6 @@ class ContainerBuilder
      * @var array
      */
     protected static $defaultSettings = [
-        'cookieLifetime' => '20 minutes',
-        'cookiePath' => '/',
-        'cookieDomain' => null,
-        'cookieSecure' => false,
-        'cookieHttpOnly' => false,
         'httpVersion' => '1.1',
         'responseChunkSize' => 4096,
         'outputBuffering' => 'append',
