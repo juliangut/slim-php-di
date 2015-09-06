@@ -43,30 +43,32 @@ class ContainerBuilder
     /**
      * Build PHP-DI container for Slim Framework.
      *
-     * @param array $userSettings user settings for Slim
-     * @param array $definitions PHP definitions for PHP-DI
+     * @param array $values parameter objects
+     * @param array $definitions definitions for PHP-DI
      *
      * @return \Jgut\Slim\Container
      */
-    public static function build(array $userSettings = [], array $definitions = [])
+    public static function build(array $values = [], array $definitions = [])
     {
         $containerBuilder = new DIContainerBuilder('\Jgut\Slim\PHPDI\Container');
 
+        $userSettings = [];
+        if (isset($values['settings'])) {
+            $userSettings = $values['settings'];
+
+            unset($values['settings']);
+        }
+
         if (isset($userSettings['php-di']) && is_array($userSettings['php-di'])) {
             $containerBuilder = self::configureContainerBuilder($containerBuilder, $userSettings['php-di']);
-
             $containerBuilder = self::configureContainerCache($containerBuilder, $userSettings['php-di']);
-
-            $definitions = self::getDefinitions($userSettings['php-di'], $definitions);
         }
 
         $containerBuilder->addDefinitions(self::getDefaultServicesDefinitions($userSettings));
-
+        $containerBuilder->addDefinitions($values);
         $containerBuilder->addDefinitions($definitions);
 
-        $container = $containerBuilder->build();
-
-        return $container;
+        return $containerBuilder->build();
     }
 
     /**
@@ -77,7 +79,7 @@ class ContainerBuilder
      *
      * @return DI\ContainerBuilder
      */
-    protected static function configureContainerBuilder(DIContainerBuilder $containerBuilder, array $settings)
+    private static function configureContainerBuilder(DIContainerBuilder $containerBuilder, array $settings)
     {
         if (isset($settings['use_autowiring'])) {
             $containerBuilder->useAutowiring((bool) $settings['use_autowiring']);
@@ -106,7 +108,7 @@ class ContainerBuilder
      *
      * @return DI\ContainerBuilder
      */
-    protected static function configureContainerCache(DIContainerBuilder $containerBuilder, array $settings)
+    private static function configureContainerCache(DIContainerBuilder $containerBuilder, array $settings)
     {
         if (isset($settings['definitions_cache'])) {
             $containerBuilder->setDefinitionCache($settings['definitions_cache']);
@@ -116,30 +118,13 @@ class ContainerBuilder
     }
 
     /**
-     * Unify definitions.
-     *
-     * @param array $settings
-     * @param array $definitions
-     *
-     * @return array
-     */
-    protected static function getDefinitions(array $settings, array $definitions)
-    {
-        if (isset($settings['definitions']) && is_array($settings['definitions'])) {
-            $definitions = array_merge($settings['definitions'], $definitions);
-        }
-
-        return $definitions;
-    }
-
-    /**
      * Get definitions for Slim's default services
      *
-     * @param array $settings
+     * @param array $userSettings
      *
      * @return array
      */
-    protected static function getDefaultServicesDefinitions(array $settings)
+    private static function getDefaultServicesDefinitions(array $userSettings)
     {
         $defaultSettings = self::$defaultSettings;
 
@@ -150,8 +135,8 @@ class ContainerBuilder
              *
              * @return array|\ArrayAccess
              */
-            'settings' => function () use ($defaultSettings, $settings) {
-                return array_merge($defaultSettings, $settings);
+            'settings' => function () use ($defaultSettings, $userSettings) {
+                return array_merge($defaultSettings, $userSettings);
             },
 
             /**
@@ -172,7 +157,7 @@ class ContainerBuilder
              * @return \Psr\Http\Message\ServerRequestInterface
              */
             'request' => function (ContainerInterface $container) {
-                return Request::createFromEnvironment($container['environment']);
+                return Request::createFromEnvironment($container->get('environment'));
             },
 
             /**
@@ -186,7 +171,7 @@ class ContainerBuilder
                 $headers = new Headers(['Content-Type' => 'text/html']);
                 $response = new Response(200, $headers);
 
-                return $response->withProtocolVersion($container['settings']['httpVersion']);
+                return $response->withProtocolVersion($container->get('settings')['httpVersion']);
             },
 
             /**

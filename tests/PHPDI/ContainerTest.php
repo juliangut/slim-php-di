@@ -6,7 +6,7 @@
  * @license https://raw.githubusercontent.com/juliangut/slim-php-di/master/LICENSE
  */
 
-namespace Jgut\Slim\PHPDITests;
+namespace Jgut\Slim\PHPDI\Tests;
 
 use Jgut\Slim\PHPDI\ContainerBuilder;
 
@@ -58,6 +58,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->container['bar'] = 'baz';
         $this->assertTrue(isset($this->container['bar']));
         $this->assertEquals('baz', $this->container['bar']);
+
+        // Doesn't really work
+        unset($this->container['foo']);
     }
 
     /**

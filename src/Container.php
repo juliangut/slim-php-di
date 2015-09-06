@@ -31,7 +31,14 @@ use Slim\Exception\NotFoundException;
 class Container extends DIContainer implements \ArrayAccess
 {
     /**
-     * {@inheritDoc}
+     * Returns an entry of the container by its name
+     *
+     * @param string $name Entry name or a class name
+     * @throws \Slim\Exception\NotFoundException
+     *
+     * @see \DI\Container::get
+     *
+     * @return mixed
      */
     public function get($name)
     {
@@ -93,6 +100,6 @@ class Container extends DIContainer implements \ArrayAccess
         // Can't remove definitions from $this->definitionSource as it is a private attribute
         // Can't manually remove services as $this->singletonEntries is a private attribute
 
-        $name = '';
+        unset($name);
     }
 }

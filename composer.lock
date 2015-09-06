@@ -314,12 +314,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/slimphp/Slim.git",
-                "reference": "41f3c89b3cb6699e632a2752dcb4678214a630ce"
+                "reference": "faaf470a4aaffb0a86e34d8eb4fc4e80d43ca3de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim/zipball/41f3c89b3cb6699e632a2752dcb4678214a630ce",
-                "reference": "41f3c89b3cb6699e632a2752dcb4678214a630ce",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/faaf470a4aaffb0a86e34d8eb4fc4e80d43ca3de",
+                "reference": "faaf470a4aaffb0a86e34d8eb4fc4e80d43ca3de",
                 "shasum": ""
             },
             "require": {
@@ -372,7 +372,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2015-08-16 15:16:26"
+            "time": "2015-09-05 17:48:59"
         }
     ],
     "packages-dev": [

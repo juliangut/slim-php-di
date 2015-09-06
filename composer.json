@@ -36,7 +36,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Jgut\\Slim\\PHPDITests\\": "tests/PHPDITests/"
+      "Jgut\\Slim\\PHPDI\\Tests\\": "tests/PHPDI/"
     }
   }
 }
