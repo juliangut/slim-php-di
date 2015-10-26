@@ -38,6 +38,7 @@ class ContainerBuilder
         'responseChunkSize' => 4096,
         'outputBuffering' => 'append',
         'determineRouteBeforeAppMiddleware' => false,
+        'displayErrorDetails' => false,
     ];
 
     /**
@@ -205,10 +206,12 @@ class ContainerBuilder
              * The callable MUST return an instance of
              * \Psr\Http\Message\ResponseInterface.
              *
+             * @param Interop\Container\ContainerInterface $container
+             *
              * @return callable
              */
-            'errorHandler' => function () {
-                return new Error;
+            'errorHandler' => function (ContainerInterface $container) {
+                return new Error($container->get('settings')['displayErrorDetails']);
             },
 
             /**
