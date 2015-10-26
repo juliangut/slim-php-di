@@ -154,7 +154,6 @@ class ContainerBuilder
              * PSR-7 Request object
              *
              * @param Interop\Container\ContainerInterface $container
-             *
              * @return \Psr\Http\Message\ServerRequestInterface
              */
             'request' => function (ContainerInterface $container) {
@@ -165,7 +164,6 @@ class ContainerBuilder
              * PSR-7 Response object
              *
              * @param Interop\Container\ContainerInterface $container
-             *
              * @return \Psr\Http\Message\ResponseInterface
              */
             'response' => function (ContainerInterface $container) {
@@ -207,7 +205,6 @@ class ContainerBuilder
              * \Psr\Http\Message\ResponseInterface.
              *
              * @param Interop\Container\ContainerInterface $container
-             *
              * @return callable
              */
             'errorHandler' => function (ContainerInterface $container) {
@@ -251,7 +248,6 @@ class ContainerBuilder
              * Instance of \Slim\Interfaces\CallableResolverInterface
              *
              * @param Interop\Container\ContainerInterface $container
-             *
              * @return \Slim\Interfaces\CallableResolverInterface
              */
             'callableResolver' => function (ContainerInterface $container) {

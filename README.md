@@ -36,10 +36,15 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 $settings = require __DIR__ . 'settings.php';
 $container = ContainerBuilder::build($settings);
 
-// Register services in the container
+// Register services the Pimple way
+$container['my_service] =  function ($container) {
+    return new \MyService;
+};
+
+// Register services the PHP-DI way
 $container->set('my_service', function ($container) {
     return new \MyService;
- });
+});
 
 $app = new \Slim\App($container);
 
