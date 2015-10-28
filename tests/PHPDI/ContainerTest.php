@@ -26,7 +26,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers Jgut\Slim\PHPDI\Container::offsetGet
      * @covers Jgut\Slim\PHPDI\Container::get
      *
-     * @expectedException \Slim\Exception\NotFoundException
+     * @expectedException \Slim\Exception\ContainerValueNotFoundException
      */
     public function testGetInexistent()
     {
@@ -36,7 +36,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Jgut\Slim\PHPDI\Container::get
      *
-     * @expectedException \Slim\Exception\NotFoundException
+     * @expectedException \Slim\Exception\ContainerValueNotFoundException
      */
     public function testGetWrong()
     {

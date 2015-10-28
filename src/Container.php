@@ -9,7 +9,7 @@
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
-use Slim\Exception\NotFoundException;
+use Slim\Exception\ContainerValueNotFoundException;
 
 /**
  * PHP-DI Dependency Injection Slim integration.
@@ -34,7 +34,7 @@ class Container extends DIContainer implements \ArrayAccess
      * Returns an entry of the container by its name
      *
      * @param string $name Entry name or a class name
-     * @throws \Slim\Exception\NotFoundException
+     * @throws \Slim\Exception\ContainerValueNotFoundException
      *
      * @see \DI\Container::get
      *
@@ -45,7 +45,7 @@ class Container extends DIContainer implements \ArrayAccess
         try {
             return parent::get($name);
         } catch (\Exception $exception) {
-            throw new NotFoundException($exception->getMessage());
+            throw new ContainerValueNotFoundException($exception->getMessage());
         }
     }
 
