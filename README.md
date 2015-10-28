@@ -37,7 +37,7 @@ $settings = require __DIR__ . 'settings.php';
 $container = ContainerBuilder::build($settings);
 
 // Register services the Pimple way
-$container['my_service] =  function ($container) {
+$container['my_service'] =  function ($container) {
     return new \MyService;
 };
 
