@@ -46,8 +46,7 @@ class ContainerBuilder
      *
      * @param array $values parameter objects
      * @param array $definitions definitions for PHP-DI
-     *
-     * @return \Jgut\Slim\Container
+     * @return \Jgut\Slim\PHPDI\Container
      */
     public static function build(array $values = [], array $definitions = [])
     {
@@ -65,8 +64,13 @@ class ContainerBuilder
             $containerBuilder = self::configureContainerCache($containerBuilder, $userSettings['php-di']);
         }
 
+        // Add default services definitions
         $containerBuilder->addDefinitions(self::getDefaultServicesDefinitions($userSettings));
+
+        // Add settings services definitions
         $containerBuilder->addDefinitions($values);
+
+        // Add custom service definitions
         $containerBuilder->addDefinitions($definitions);
 
         return $containerBuilder->build();
@@ -77,7 +81,6 @@ class ContainerBuilder
      *
      * @param DI\ContainerBuilder $containerBuilder
      * @param array $settings
-     *
      * @return DI\ContainerBuilder
      */
     private static function configureContainerBuilder(DIContainerBuilder $containerBuilder, array $settings)
@@ -106,7 +109,6 @@ class ContainerBuilder
      *
      * @param DI\ContainerBuilder $containerBuilder
      * @param array $settings
-     *
      * @return DI\ContainerBuilder
      */
     private static function configureContainerCache(DIContainerBuilder $containerBuilder, array $settings)
@@ -122,7 +124,6 @@ class ContainerBuilder
      * Get definitions for Slim's default services
      *
      * @param array $userSettings
-     *
      * @return array
      */
     private static function getDefaultServicesDefinitions(array $userSettings)

@@ -33,11 +33,10 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Returns an entry of the container by its name
      *
-     * @param string $name Entry name or a class name
-     * @throws \Slim\Exception\ContainerValueNotFoundException
-     *
      * @see \DI\Container::get
      *
+     * @param string $name Entry name or a class name
+     * @throws \Slim\Exception\ContainerValueNotFoundException
      * @return mixed
      */
     public function get($name)
@@ -52,10 +51,10 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Define an object or a value in the container.
      *
+     * @see \Di\Container::set
+     *
      * @param string $name    Entry name
      * @param mixed  $value The value of the parameter or a closure to define an object
-     *
-     * @see \Di\Container::set
      */
     public function offsetSet($name, $value)
     {
@@ -65,11 +64,10 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Returns an entry of the container by its name.
      *
+     * @see \Di\Container::set
+     *
      * @param string $name Entry name or a class name
-     *
      * @return mixed The value of the container entry
-     *
-     * @see \DI\Container::get
      */
     public function offsetGet($name)
     {
@@ -79,11 +77,10 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Test if the container can provide something for the given name.
      *
-     * @param string $name Entry name or a class name
-     *
-     * @return bool
-     *
      * @see \DI\Container::has
+     *
+     * @param string $name Entry name or a class name
+     * @return bool
      */
     public function offsetExists($name)
     {
