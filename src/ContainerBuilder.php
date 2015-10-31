@@ -10,16 +10,17 @@ namespace Jgut\Slim\PHPDI;
 
 use DI\ContainerBuilder as DIContainerBuilder;
 use Interop\Container\ContainerInterface;
+use Slim\CallableResolver;
+use Slim\Collection;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\Environment;
 use Slim\Http\Headers;
-use Slim\Router;
-use Slim\Handlers\Strategies\RequestResponse;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotFound;
 use Slim\Handlers\NotAllowed;
-use Slim\CallableResolver;
+use Slim\Handlers\Strategies\RequestResponse;
+use Slim\Router;
 
 /**
  * Helper to create and configure a Container.
@@ -138,7 +139,7 @@ class ContainerBuilder
              * @return array|\ArrayAccess
              */
             'settings' => function () use ($defaultSettings, $userSettings) {
-                return array_merge($defaultSettings, $userSettings);
+                return new Collection(array_merge($defaultSettings, $userSettings));
             },
 
             /**

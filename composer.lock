@@ -122,22 +122,22 @@
         },
         {
             "name": "php-di/php-di",
-            "version": "5.0.3",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "c59af31dcf2ee6246e28464e775599321df40955"
+                "reference": "f4a8088fa4eb480ee66c51b5ee4e4e30cce78489"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/c59af31dcf2ee6246e28464e775599321df40955",
-                "reference": "c59af31dcf2ee6246e28464e775599321df40955",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/f4a8088fa4eb480ee66c51b5ee4e4e30cce78489",
+                "reference": "f4a8088fa4eb480ee66c51b5ee4e4e30cce78489",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "~1.0",
                 "php": ">=5.4.0",
-                "php-di/invoker": "~1.0",
+                "php-di/invoker": "^1.0.1",
                 "php-di/phpdoc-reader": "~2.0"
             },
             "replace": {
@@ -145,14 +145,14 @@
             },
             "require-dev": {
                 "doctrine/annotations": "~1.2",
-                "doctrine/cache": "~1.0",
+                "doctrine/cache": "~1.4",
                 "mnapoli/phpunit-easymock": "~0.1.4",
                 "ocramius/proxy-manager": "~1.0",
                 "phpunit/phpunit": "~4.5"
             },
             "suggest": {
                 "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
-                "doctrine/cache": "Install it if you want to use the cache (version ~1.0)",
+                "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
                 "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0)"
             },
             "type": "library",
@@ -175,7 +175,7 @@
                 "dependency injection",
                 "di"
             ],
-            "time": "2015-08-12 13:46:41"
+            "time": "2015-09-08 08:56:29"
         },
         {
             "name": "php-di/phpdoc-reader",
@@ -315,12 +315,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/slimphp/Slim.git",
-                "reference": "0506c2a8fe6eb9f8deac46d8b15b66344c736868"
+                "reference": "8bd1002bb69fc1a0c354e72c3195bc56d7dd22c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim/zipball/0506c2a8fe6eb9f8deac46d8b15b66344c736868",
-                "reference": "0506c2a8fe6eb9f8deac46d8b15b66344c736868",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/8bd1002bb69fc1a0c354e72c3195bc56d7dd22c1",
+                "reference": "8bd1002bb69fc1a0c354e72c3195bc56d7dd22c1",
                 "shasum": ""
             },
             "require": {
@@ -373,22 +373,22 @@
                 "micro",
                 "router"
             ],
-            "time": "2015-10-23 13:30:24"
+            "time": "2015-10-31 13:58:26"
         }
     ],
     "packages-dev": [
         {
             "name": "doctrine/cache",
-            "version": "v1.4.1",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "c9eadeb743ac6199f7eec423cb9426bc518b7b03"
+                "reference": "eb8a73619af4f1c8711e2ce482f5de3643258a1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/c9eadeb743ac6199f7eec423cb9426bc518b7b03",
-                "reference": "c9eadeb743ac6199f7eec423cb9426bc518b7b03",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/eb8a73619af4f1c8711e2ce482f5de3643258a1f",
+                "reference": "eb8a73619af4f1c8711e2ce482f5de3643258a1f",
                 "shasum": ""
             },
             "require": {
@@ -409,8 +409,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Cache\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Cache\\": "lib/Doctrine/Common/Cache"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -445,7 +445,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-04-15 00:11:59"
+            "time": "2015-10-28 11:27:45"
         },
         {
             "name": "doctrine/instantiator",
@@ -592,28 +592,25 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.2.3",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "5eeb5a4d39c8304910b33ae49f8813905346cc35"
+                "reference": "08b5bcd454a7148579b68931fc500d824afd3bb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/5eeb5a4d39c8304910b33ae49f8813905346cc35",
-                "reference": "5eeb5a4d39c8304910b33ae49f8813905346cc35",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/08b5bcd454a7148579b68931fc500d824afd3bb5",
+                "reference": "08b5bcd454a7148579b68931fc500d824afd3bb5",
                 "shasum": ""
             },
             "require": {
                 "pdepend/pdepend": "~2.0",
-                "php": ">=5.3.0",
-                "symfony/config": ">=2.4",
-                "symfony/dependency-injection": ">=2.4",
-                "symfony/filesystem": ">=2.4"
+                "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "*",
-                "squizlabs/php_codesniffer": "*"
+                "phpunit/phpunit": "^4.0",
+                "squizlabs/php_codesniffer": "^2.0"
             },
             "bin": [
                 "src/bin/phpmd"
@@ -633,12 +630,18 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",
                     "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
                     "role": "Contributors"
+                },
+                {
+                    "name": "Marc Würth",
+                    "email": "ravage@bluewin.ch",
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
@@ -650,7 +653,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2015-05-27 18:16:57"
+            "time": "2015-09-24 14:37:49"
         },
         {
             "name": "phpspec/prophecy",
@@ -954,16 +957,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.4",
+            "version": "4.8.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "55bf1d6092b0e13a1f26bd5eaffeef3d8ad85ea7"
+                "reference": "625f8c345606ed0f3a141dfb88f4116f0e22978e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/55bf1d6092b0e13a1f26bd5eaffeef3d8ad85ea7",
-                "reference": "55bf1d6092b0e13a1f26bd5eaffeef3d8ad85ea7",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/625f8c345606ed0f3a141dfb88f4116f0e22978e",
+                "reference": "625f8c345606ed0f3a141dfb88f4116f0e22978e",
                 "shasum": ""
             },
             "require": {
@@ -1022,7 +1025,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-08-15 04:21:23"
+            "time": "2015-10-23 06:48:33"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1543,16 +1546,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "c1a26c729508f73560c1a4f767f60b8ab6b4a666"
+                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c1a26c729508f73560c1a4f767f60b8ab6b4a666",
-                "reference": "c1a26c729508f73560c1a4f767f60b8ab6b4a666",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
+                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
                 "shasum": ""
             },
             "require": {
@@ -1613,7 +1616,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2015-06-24 03:16:23"
+            "time": "2015-09-09 00:18:50"
         },
         {
             "name": "symfony/config",

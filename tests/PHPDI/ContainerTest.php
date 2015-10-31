@@ -85,7 +85,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultServicesType()
     {
-        $this->assertTrue(is_array($this->container->get('settings')));
+        $this->assertInstanceOf('\Slim\Collection', $this->container->get('settings'));
         $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
         $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
         $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
