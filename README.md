@@ -71,18 +71,31 @@ $settings = [
     },
     'Bar' => [\DI\get('BarFactory'), 'create'],
     'Baz' => \DI\object('Baz'),
-    ...
 ];
 $app = new \Slim\App(ContainerBuilder::build($settings));
 ```
 
-Or you can separate services definitions out into a single file and load it on container build.
+Or you can separate service definitions and load them on container build.
 
 ```php
 use Jgut\Slim\PHPDI\ContainerBuilder;
 
-$settings = require __DIR__ . 'settings.php';
-$definitions = require __DIR__ . 'definitions.php';
+$settings = [
+    'settings' => [
+        'php-di' => [
+            'use_autowiring' => true,
+            'use_annotations' => true,
+        ],
+    ],
+];
+$definitions = [
+    'my.parameter' => 'value',
+    'Foo' => function (\Interop\Container\ContainerInterface $container) {
+        return new \Foo($container->get('my.parameter'));
+    },
+    'Bar' => [\DI\get('BarFactory'), 'create'],
+    'Baz' => \DI\object('Baz'),
+];
 $app = new \Slim\App(ContainerBuilder::build($settings, $definitions));
 
 // Set your routes
@@ -92,9 +105,11 @@ $app->run();
 
 ### Available PHP-DI settings
 
-* `use_autowiring` boolean, whether to use or not autowiring (active by default)
-* `use_annotations` boolean, whether to use or not annotations (not active by default)
-* `ignore_phpdoc_errors` boolean, whether to ignore errors on phpDoc annotations
+PHP-DI container is configured under `php-di` settings key as shown in previous examples.
+
+* `use_autowiring` boolean, whether or not to use autowiring (true by default)
+* `use_annotations` boolean, whether or not to use annotations (false by default)
+* `ignore_phpdoc_errors` boolean, whether or not to ignore phpDoc errors on annotations (false by default)
 * `proxy_path` path where PHP-DI creates its proxy files
 * `definitions_cache` \Doctrine\Common\Cache\Cache
 
@@ -107,7 +122,7 @@ specially on how to use [definitions](http://php-di.org/doc/definition.html) whi
 
 #### Important note
 
-Be aware that if you use cache you must provide `definitions` for all your services at container creation, and more importantly **not set any service later** as it is not allowed at runtime when using cache.
+Be aware that if you use cache you must provide `definitions` for all your services at container creation, and more importantly **not set any definitions later** as it is not allowed at runtime when using cache (setting values at runtime is allowed though).
 
 The services registration order is:
 
@@ -115,7 +130,7 @@ The services registration order is:
 * Definitions on settings array
 * Definitions on second argument of `build` method
 
-In order to override default Slim services add them in settings array or defined on second argument of `build` method.
+So in order to override default Slim services add them in settings array or defined on second argument of `build` method.
 
 ## Contributing
 
