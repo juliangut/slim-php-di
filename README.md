@@ -19,7 +19,7 @@ In order to allow possible services out there expecting the container to be `Sli
 Best way to install is using [Composer](https://getcomposer.org/):
 
 ```
-php composer.phar require juliangut/slim-php-di
+composer require juliangut/slim-php-di
 ```
 
 Then require_once the autoload file:
