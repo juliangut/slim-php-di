@@ -32,33 +32,43 @@ require_once './vendor/autoload.php';
 
 ```php
 use Jgut\Slim\PHPDI\ContainerBuilder;
+use Interop\Container\ContainerInterface;
+use Slim\App;
 
 $settings = require __DIR__ . 'settings.php';
 $container = ContainerBuilder::build($settings);
 
 // Register services the Pimple way
-$container['my_service'] =  function ($container) {
-    return new \MyService;
+$container['service_one'] =  function (ContainerInterface $container) {
+    return new ServiceOne;
 };
 
 // Register services the PHP-DI way
-$container->set('my_service', function ($container) {
-    return new \MyService;
+$container->set('service_two', function (ContainerInterface $container) {
+    return new ServiceTwo($container->get('service_one'));
 });
 
-$app = new \Slim\App($container);
+$app = new App($container);
 
 // Set your routes
 
 $app->run();
 ```
 
-## Configuration
+### Configuration
+
+You can define your services definitions in settings array as it's done with default Slim Container
 
 ```php
-// You can define your services definitions in settings array
+use Jgut\Slim\PHPDI\ContainerBuilder;
+use Interop\Container\ContainerInterface;
+use Slim\App;
+use function DI\get;
+use function DI\object;
+
 $settings = [
     'settings' => [
+        // Specific settings for PHP-DI container
         'php-di' => [
             'use_autowiring' => true,
             'use_annotations' => true,
@@ -66,44 +76,48 @@ $settings = [
     ],
     // Services definitions
     'my.parameter' => 'value',
-    'Foo' => function (\Interop\Container\ContainerInterface $container) {
-        return new \Foo($container->get('my.parameter'));
+    'Foo' => function (ContainerInterface $container) {
+        return new Foo($container->get('my.parameter'));
     },
-    'Bar' => [\DI\get('BarFactory'), 'create'],
-    'Baz' => \DI\object('Baz'),
+    'Bar' => [get('BarFactory'), 'create'],
+    'Baz' => object('Baz'),
 ];
-$app = new \Slim\App(ContainerBuilder::build($settings));
+$container = ContainerBuilder::build($settings);
+$app = new App($container);
 ```
 
 Or you can separate service definitions and load them on container build.
 
 ```php
 use Jgut\Slim\PHPDI\ContainerBuilder;
+use Interop\Container\ContainerInterface;
+use Slim\App;
+use function DI\get;
+use function DI\object;
 
 $settings = [
     'settings' => [
+        // Specific settings for PHP-DI container
         'php-di' => [
             'use_autowiring' => true,
             'use_annotations' => true,
         ],
     ],
 ];
+// Services definitions
 $definitions = [
     'my.parameter' => 'value',
-    'Foo' => function (\Interop\Container\ContainerInterface $container) {
-        return new \Foo($container->get('my.parameter'));
+    'Foo' => function (ContainerInterface $container) {
+        return new Foo($container->get('my.parameter'));
     },
-    'Bar' => [\DI\get('BarFactory'), 'create'],
-    'Baz' => \DI\object('Baz'),
+    'Bar' => [get('BarFactory'), 'create'],
+    'Baz' => object('Baz'),
 ];
-$app = new \Slim\App(ContainerBuilder::build($settings, $definitions));
-
-// Set your routes
-
-$app->run();
+$container = ContainerBuilder::build($settings, $definitions);
+$app = new App($container);
 ```
 
-### Available PHP-DI settings
+#### Available PHP-DI settings
 
 PHP-DI container is configured under `php-di` settings key as shown in previous examples.
 
@@ -114,23 +128,39 @@ PHP-DI container is configured under `php-di` settings key as shown in previous 
 * `definitions_cache` \Doctrine\Common\Cache\Cache
 
 Refere to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations,
-specially on how to use [definitions](http://php-di.org/doc/definition.html) which is the key element on using this DI container.
+specially on how to use definitions which is the key element on using PHP-DI.
 
-*If you want to use annotations you have to require `doctrine/annotations` first*. More on this [here](http://php-di.org/doc/annotations.html)
+In order for you to use annotations you have to `require doctrine/annotations`. [See here](http://php-di.org/doc/annotations.html)
 
-*If you want to use definitions cache you have to require `doctrine/cache` first*. More on this [here](http://php-di.org/doc/performances.html)
+In order for you to use definitions cache you have to `require doctrine/cache`. [See here](http://php-di.org/doc/performances.html)
 
-#### Important note
+### Registration order
 
-Be aware that if you use cache you must provide `definitions` for all your services at container creation, and more importantly **not set any definitions later** as it is not allowed at runtime when using cache (setting values at runtime is allowed though).
-
-The services registration order is:
+Services registration order is:
 
 * Default Slim services
 * Definitions on settings array
 * Definitions on second argument of `build` method
 
-So in order to override default Slim services add them in settings array or defined on second argument of `build` method.
+In order to override default Slim services add them in settings array or defined on second argument of `build` method.
+
+```php
+use Jgut\Slim\PHPDI\ContainerBuilder;
+use Interop\Container\ContainerInterface;
+use Slim\App;
+
+$settings = [
+    'errorHandler' => function (ContainerInterface $container) {
+        return new MyErrorHandler($container->get('settings')['displayErrorDetails']);
+    },
+];
+$container = ContainerBuilder::build($settings);
+$app = new App($container);
+```
+
+## Important note
+
+Be aware that if you use cache you must provide definitions for all your services at container creation, and more importantly **do not set any definitions later on** as it is [not allowed](http://php-di.org/doc/php-definitions.html#setting-in-the-container-directly) at runtime when using cache (setting values at runtime is allowed though).
 
 ## Contributing
 
