@@ -69,9 +69,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildDefinitionsOverride()
     {
-        $settings = [
-            'foo' => 'bar',
-        ];
         $definitions = [
             'settings' => 'foo',
             'foo' => 'baz',

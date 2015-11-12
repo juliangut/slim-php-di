@@ -125,7 +125,7 @@ class ContainerBuilder
      * Get definitions for Slim's default services
      *
      * @param array $userSettings
-     * @return array
+     * @return Closure[]
      */
     private static function getDefaultServicesDefinitions(array $userSettings)
     {
