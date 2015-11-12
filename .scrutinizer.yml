@@ -1,9 +1,9 @@
 # language: php
+
 filter:
-  excluded_paths:
-    - build/*
+  paths:
+    - src/*
     - tests/*
-    - vendor/*
 
 coding_style:
   php:
@@ -56,15 +56,13 @@ checks:
     fix_identation_4spaces: true
 
 tools:
-  external_code_coverage:
-    timeout: 600
   php_code_coverage: false
   php_code_sniffer:
+    enabled: true
     config:
-      include_standards:
-        - phpcs.xml
+      standard: 'PSR2'
     filter:
-      paths: ['src']
+      paths: [src, tests]
   php_cpd:
     enabled: true
     excluded_dirs: [build, tests, vendor]
@@ -80,4 +78,5 @@ tools:
   sensiolabs_security_checker: true
 
 before_commands:
-  - 'composer install --no-interaction --prefer-source --dev'
+  - 'composer self-update'
+  - 'composer install --no-interaction --prefer-source'

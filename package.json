@@ -16,6 +16,7 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.5",
+    "time-grunt": "~1.2.2",
     "load-grunt-tasks": "~0.6.0",
     "grunt-phplint": "~0.0.5",
     "grunt-phpunit": "~0.3.5",

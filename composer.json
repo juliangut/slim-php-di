@@ -8,7 +8,6 @@
     "container"
   ],
   "homepage": "http://github.com/juliangut/slim-php-di",
-  "type": "library",
   "license": "BSD-3-Clause",
   "authors": [
     {
