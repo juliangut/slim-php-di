@@ -13,29 +13,18 @@ use Slim\Exception\ContainerValueNotFoundException;
 
 /**
  * PHP-DI Dependency Injection Slim integration.
+ * Implements ArrayAccess to accommodate to default Slim container based in Pimple.
  *
- * Slim\App expects a container that implements Interop\Container\ContainerInterface
- * with these service keys configured and ready for use:
- *
- *  - settings: an array or instance of \ArrayAccess
- *  - environment: an instance of \Slim\Interfaces\Http\EnvironmentInterface
- *  - request: an instance of \Psr\Http\Message\ServerRequestInterface
- *  - response: an instance of \Psr\Http\Message\ResponseInterface
- *  - router: an instance of \Slim\Interfaces\RouterInterface
- *  - foundHandler: an instance of \Slim\Interfaces\InvocationStrategyInterface
- *  - errorHandler: a callable with the signature: function($request, $response, $exception)
- *  - notFoundHandler: a callable with the signature: function($request, $response)
- *  - notAllowedHandler: a callable with the signature: function($request, $response, $allowedHttpMethods)
- *  - callableResolver: an instance of \Slim\Interfaces\CallableResolverInterface
+ * @see \Slim\Container
  */
 class Container extends DIContainer implements \ArrayAccess
 {
     /**
-     * Returns an entry of the container by its name
+     * Returns an entry of the container by its name.
      *
      * @see \DI\Container::get
      *
-     * @param string $name Entry name or a class name
+     * @param string $name
      * @throws \Slim\Exception\ContainerValueNotFoundException
      * @return mixed
      */
@@ -53,12 +42,12 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \Di\Container::set
      *
-     * @param string $name    Entry name
-     * @param mixed  $value The value of the parameter or a closure to define an object
+     * @param string $offset Entry name
+     * @param mixed  $value  The value of the parameter or a closure to define an object
      */
-    public function offsetSet($name, $value)
+    public function offsetSet($offset, $value)
     {
-        $this->set($name, $value);
+        $this->set($offset, $value);
     }
 
     /**
@@ -66,12 +55,12 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \Di\Container::set
      *
-     * @param string $name Entry name or a class name
-     * @return mixed The value of the container entry
+     * @param string $offset
+     * @return mixed
      */
-    public function offsetGet($name)
+    public function offsetGet($offset)
     {
-        return $this->get($name);
+        return $this->get($offset);
     }
 
     /**
@@ -79,24 +68,24 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \DI\Container::has
      *
-     * @param string $name Entry name or a class name
+     * @param string $offset
      * @return bool
      */
-    public function offsetExists($name)
+    public function offsetExists($offset)
     {
-        return $this->has($name);
+        return $this->has($offset);
     }
 
     /**
      * Unsets a container entry by its name.
      *
-     * @param string $name Entry name or a class name
+     * @param string $offset
      */
-    public function offsetUnset($name)
+    public function offsetUnset($offset)
     {
         // Can't remove definitions from $this->definitionSource as it is a private attribute
         // Can't manually remove services as $this->singletonEntries is a private attribute
 
-        unset($name);
+        unset($offset);
     }
 }

@@ -15,6 +15,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
      * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerBuilder
+     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerProxies
      * @covers Jgut\Slim\PHPDI\ContainerBuilder::getDefaultServicesDefinitions
      */
     public function testBuild()

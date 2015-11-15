@@ -62,6 +62,7 @@ class ContainerBuilder
 
         if (isset($userSettings['php-di']) && is_array($userSettings['php-di'])) {
             $containerBuilder = self::configureContainerBuilder($containerBuilder, $userSettings['php-di']);
+            $containerBuilder = self::configureContainerProxies($containerBuilder, $userSettings['php-di']);
             $containerBuilder = self::configureContainerCache($containerBuilder, $userSettings['php-di']);
         }
 
@@ -98,6 +99,18 @@ class ContainerBuilder
             $containerBuilder->ignorePhpDocErrors((bool) $settings['ignore_phpdoc_errors']);
         }
 
+        return $containerBuilder;
+    }
+
+    /**
+     * Configure container's proxies.
+     *
+     * @param DI\ContainerBuilder $containerBuilder
+     * @param array $settings
+     * @return DI\ContainerBuilder
+     */
+    private static function configureContainerProxies(DIContainerBuilder $containerBuilder, array $settings)
+    {
         if (isset($settings['proxy_path']) && !empty($settings['proxy_path'])) {
             $containerBuilder->writeProxiesToFile(true, $settings['proxy_path']);
         }
@@ -132,42 +145,18 @@ class ContainerBuilder
         $defaultSettings = self::$defaultSettings;
 
         return [
-            /**
-             * This service MUST return an array or an
-             * instance of \ArrayAccess.
-             *
-             * @return array|\ArrayAccess
-             */
             'settings' => function () use ($defaultSettings, $userSettings) {
                 return new Collection(array_merge($defaultSettings, $userSettings));
             },
 
-            /**
-             * This service MUST return a shared instance
-             * of \Slim\Interfaces\Http\EnvironmentInterface.
-             *
-             * @return \Slim\Interfaces\Http\EnvironmentInterface
-             */
             'environment' => function () {
                 return new Environment($_SERVER);
             },
 
-            /**
-             * PSR-7 Request object
-             *
-             * @param Interop\Container\ContainerInterface $container
-             * @return \Psr\Http\Message\ServerRequestInterface
-             */
             'request' => function (ContainerInterface $container) {
                 return Request::createFromEnvironment($container->get('environment'));
             },
 
-            /**
-             * PSR-7 Response object
-             *
-             * @param Interop\Container\ContainerInterface $container
-             * @return \Psr\Http\Message\ResponseInterface
-             */
             'response' => function (ContainerInterface $container) {
                 $headers = new Headers(['Content-Type' => 'text/html']);
                 $response = new Response(200, $headers);
@@ -175,83 +164,26 @@ class ContainerBuilder
                 return $response->withProtocolVersion($container->get('settings')['httpVersion']);
             },
 
-            /**
-             * This service MUST return a SHARED instance
-             * of \Slim\Interfaces\RouterInterface.
-             *
-             * @return \Slim\Interfaces\RouterInterface
-             */
             'router' => function () {
                 return new Router;
             },
 
-            /**
-             * This service MUST return a SHARED instance
-             * of \Slim\Interfaces\InvocationStrategyInterface.
-             *
-             * @return \Slim\Interfaces\InvocationStrategyInterface
-             */
             'foundHandler' => function () {
                 return new RequestResponse;
             },
 
-            /**
-             * This service MUST return a callable
-             * that accepts three arguments:
-             *
-             * 1. Instance of \Psr\Http\Message\ServerRequestInterface
-             * 2. Instance of \Psr\Http\Message\ResponseInterface
-             * 3. Instance of \Exception
-             *
-             * The callable MUST return an instance of
-             * \Psr\Http\Message\ResponseInterface.
-             *
-             * @param Interop\Container\ContainerInterface $container
-             * @return callable
-             */
             'errorHandler' => function (ContainerInterface $container) {
                 return new Error($container->get('settings')['displayErrorDetails']);
             },
 
-            /**
-             * This service MUST return a callable
-             * that accepts two arguments:
-             *
-             * 1. Instance of \Psr\Http\Message\ServerRequestInterface
-             * 2. Instance of \Psr\Http\Message\ResponseInterface
-             *
-             * The callable MUST return an instance of
-             * \Psr\Http\Message\ResponseInterface.
-             *
-             * @return callable
-             */
             'notFoundHandler' => function () {
                 return new NotFound;
             },
 
-            /**
-             * This service MUST return a callable
-             * that accepts three arguments:
-             *
-             * 1. Instance of \Psr\Http\Message\ServerRequestInterface
-             * 2. Instance of \Psr\Http\Message\ResponseInterface
-             * 3. Array of allowed HTTP methods
-             *
-             * The callable MUST return an instance of
-             * \Psr\Http\Message\ResponseInterface.
-             *
-             * @return callable
-             */
             'notAllowedHandler' => function () {
                 return new NotAllowed;
             },
 
-            /**
-             * Instance of \Slim\Interfaces\CallableResolverInterface
-             *
-             * @param Interop\Container\ContainerInterface $container
-             * @return \Slim\Interfaces\CallableResolverInterface
-             */
             'callableResolver' => function (ContainerInterface $container) {
                 return new CallableResolver($container);
             },
