@@ -3,6 +3,7 @@
  * Slim Framework PHP-DI container (https://github.com/juliangut/slim-php-di)
  *
  * @link https://github.com/juliangut/slim-php-di for the canonical source repository
+ *
  * @license https://raw.githubusercontent.com/juliangut/slim-php-di/master/LICENSE
  */
 
@@ -45,8 +46,9 @@ class ContainerBuilder
     /**
      * Build PHP-DI container for Slim Framework.
      *
-     * @param array $values parameter objects
+     * @param array $values      parameter objects
      * @param array $definitions definitions for PHP-DI
+     *
      * @return \Jgut\Slim\PHPDI\Container
      */
     public static function build(array $values = [], array $definitions = [])
@@ -82,7 +84,8 @@ class ContainerBuilder
      * Configure container builder.
      *
      * @param DI\ContainerBuilder $containerBuilder
-     * @param array $settings
+     * @param array               $settings
+     *
      * @return DI\ContainerBuilder
      */
     private static function configureContainerBuilder(DIContainerBuilder $containerBuilder, array $settings)
@@ -106,7 +109,8 @@ class ContainerBuilder
      * Configure container's proxies.
      *
      * @param DI\ContainerBuilder $containerBuilder
-     * @param array $settings
+     * @param array               $settings
+     *
      * @return DI\ContainerBuilder
      */
     private static function configureContainerProxies(DIContainerBuilder $containerBuilder, array $settings)
@@ -122,7 +126,8 @@ class ContainerBuilder
      * Configure container's cache system.
      *
      * @param DI\ContainerBuilder $containerBuilder
-     * @param array $settings
+     * @param array               $settings
+     *
      * @return DI\ContainerBuilder
      */
     private static function configureContainerCache(DIContainerBuilder $containerBuilder, array $settings)
@@ -138,6 +143,7 @@ class ContainerBuilder
      * Get definitions for Slim's default services
      *
      * @param array $userSettings
+     *
      * @return Closure[]
      */
     private static function getDefaultServicesDefinitions(array $userSettings)

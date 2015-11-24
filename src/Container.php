@@ -3,6 +3,7 @@
  * Slim Framework PHP-DI container (https://github.com/juliangut/slim-php-di)
  *
  * @link https://github.com/juliangut/slim-php-di for the canonical source repository
+ *
  * @license https://raw.githubusercontent.com/juliangut/slim-php-di/master/LICENSE
  */
 
@@ -25,7 +26,9 @@ class Container extends DIContainer implements \ArrayAccess
      * @see \DI\Container::get
      *
      * @param string $name
+     *
      * @throws \Slim\Exception\ContainerValueNotFoundException
+     *
      * @return mixed
      */
     public function get($name)
@@ -42,8 +45,8 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \Di\Container::set
      *
-     * @param string $offset Entry name
-     * @param mixed  $value  The value of the parameter or a closure to define an object
+     * @param string $offset
+     * @param mixed  $value
      */
     public function offsetSet($offset, $value)
     {
@@ -56,6 +59,7 @@ class Container extends DIContainer implements \ArrayAccess
      * @see \Di\Container::set
      *
      * @param string $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)
@@ -69,6 +73,7 @@ class Container extends DIContainer implements \ArrayAccess
      * @see \DI\Container::has
      *
      * @param string $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
