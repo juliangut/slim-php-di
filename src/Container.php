@@ -56,7 +56,7 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Returns an entry of the container by its name.
      *
-     * @see \Di\Container::set
+     * @see \Di\Container::get
      *
      * @param string $offset
      *
@@ -92,5 +92,29 @@ class Container extends DIContainer implements \ArrayAccess
         // Can't manually remove services as $this->singletonEntries is a private attribute
 
         unset($offset);
+    }
+
+    /**
+     * @see \Di\Container::get
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * @see \Di\Container::has
+     *
+     * @param string  $name
+     *
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return $this->has($name);
     }
 }

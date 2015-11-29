@@ -49,6 +49,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers Jgut\Slim\PHPDI\Container::offsetSet
      * @covers Jgut\Slim\PHPDI\Container::offsetExists
      * @covers Jgut\Slim\PHPDI\Container::offsetGet
+     * @covers Jgut\Slim\PHPDI\Container::offsetUnset
+     * @covers Jgut\Slim\PHPDI\Container::__isset
+     * @covers Jgut\Slim\PHPDI\Container::__get
      */
     public function testSetGet()
     {
@@ -59,6 +62,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->container['bar'] = 'baz';
         $this->assertTrue(isset($this->container['bar']));
         $this->assertEquals('baz', $this->container['bar']);
+
+        $this->container['baz'] = 'foo';
+        $this->assertTrue(isset($this->container->baz));
+        $this->assertEquals('foo', $this->container->baz);
 
         // Doesn't really work
         unset($this->container['foo']);
