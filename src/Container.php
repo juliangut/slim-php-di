@@ -109,7 +109,7 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * @see \Di\Container::has
      *
-     * @param string  $name
+     * @param string $name
      *
      * @return bool
      */
