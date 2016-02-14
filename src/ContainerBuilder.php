@@ -164,7 +164,7 @@ class ContainerBuilder
             },
 
             'response' => function (ContainerInterface $container) {
-                $headers = new Headers(['Content-Type' => 'text/html']);
+                $headers = new Headers(['Content-Type' => 'text/html; charset=utf-8']);
                 $response = new Response(200, $headers);
 
                 return $response->withProtocolVersion($container->get('settings')['httpVersion']);
