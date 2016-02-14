@@ -83,10 +83,10 @@ class ContainerBuilder
     /**
      * Configure container builder.
      *
-     * @param DI\ContainerBuilder $containerBuilder
-     * @param array               $settings
+     * @param \DI\ContainerBuilder $containerBuilder
+     * @param array                $settings
      *
-     * @return DI\ContainerBuilder
+     * @return \DI\ContainerBuilder
      */
     private static function configureContainerBuilder(DIContainerBuilder $containerBuilder, array $settings)
     {
@@ -108,10 +108,10 @@ class ContainerBuilder
     /**
      * Configure container's proxies.
      *
-     * @param DI\ContainerBuilder $containerBuilder
-     * @param array               $settings
+     * @param \DI\ContainerBuilder $containerBuilder
+     * @param array                $settings
      *
-     * @return DI\ContainerBuilder
+     * @return \DI\ContainerBuilder
      */
     private static function configureContainerProxies(DIContainerBuilder $containerBuilder, array $settings)
     {
@@ -125,10 +125,10 @@ class ContainerBuilder
     /**
      * Configure container's cache system.
      *
-     * @param DI\ContainerBuilder $containerBuilder
-     * @param array               $settings
+     * @param \DI\ContainerBuilder $containerBuilder
+     * @param array                $settings
      *
-     * @return DI\ContainerBuilder
+     * @return \DI\ContainerBuilder
      */
     private static function configureContainerCache(DIContainerBuilder $containerBuilder, array $settings)
     {
