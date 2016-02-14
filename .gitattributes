@@ -7,4 +7,5 @@
 .coveralls.yml   export-ignore
 .scrutinizer.yml export-ignore
 Gruntfile.js     export-ignore
+phpmd.xml        export-ignore
 phpunit.xml      export-ignore
