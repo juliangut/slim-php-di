@@ -179,7 +179,7 @@ class ContainerBuilder
                 return new RequestResponse;
             },
 
-            'phpErrorHandler' => function(ContainerInterface $container) {
+            'phpErrorHandler' => function (ContainerInterface $container) {
                 return new PhpError($container->get('settings')['displayErrorDetails']);
             },
 
