@@ -20,6 +20,7 @@ use Slim\Http\Headers;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotFound;
 use Slim\Handlers\NotAllowed;
+use Slim\Handlers\PhpError;
 use Slim\Handlers\Strategies\RequestResponse;
 use Slim\Router;
 
@@ -144,7 +145,7 @@ class ContainerBuilder
      *
      * @param array $userSettings
      *
-     * @return Closure[]
+     * @return callable[]
      */
     private static function getDefaultServicesDefinitions(array $userSettings)
     {
@@ -176,6 +177,10 @@ class ContainerBuilder
 
             'foundHandler' => function () {
                 return new RequestResponse;
+            },
+
+            'phpErrorHandler' => function(ContainerInterface $container) {
+                return new PhpError($container->get('settings')['displayErrorDetails']);
             },
 
             'errorHandler' => function (ContainerInterface $container) {

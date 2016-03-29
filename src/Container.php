@@ -82,7 +82,7 @@ class Container extends DIContainer implements \ArrayAccess
     }
 
     /**
-     * Unsets a container entry by its name.
+     * Unset a container entry by its name.
      *
      * @param string $offset
      */
