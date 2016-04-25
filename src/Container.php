@@ -60,6 +60,8 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @param string $offset
      *
+     * @throws \Slim\Exception\ContainerValueNotFoundException
+     *
      * @return mixed
      */
     public function offsetGet($offset)
@@ -73,6 +75,8 @@ class Container extends DIContainer implements \ArrayAccess
      * @see \DI\Container::has
      *
      * @param string $offset
+     *
+     * @throws \InvalidArgumentException
      *
      * @return bool
      */
@@ -99,6 +103,8 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @param string $name
      *
+     * @throws \Slim\Exception\ContainerValueNotFoundException
+     *
      * @return mixed
      */
     public function __get($name)
@@ -110,6 +116,8 @@ class Container extends DIContainer implements \ArrayAccess
      * @see \Di\Container::has
      *
      * @param string $name
+     *
+     * @throws \InvalidArgumentException
      *
      * @return bool
      */

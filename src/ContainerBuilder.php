@@ -57,13 +57,13 @@ class ContainerBuilder
         $containerBuilder = new DIContainerBuilder('\Jgut\Slim\PHPDI\Container');
 
         $userSettings = [];
-        if (isset($values['settings'])) {
+        if (array_key_exists('settings', $values)) {
             $userSettings = $values['settings'];
 
             unset($values['settings']);
         }
 
-        if (isset($userSettings['php-di']) && is_array($userSettings['php-di'])) {
+        if (array_key_exists('php-di', $userSettings) && is_array($userSettings['php-di'])) {
             $containerBuilder = self::configureContainerBuilder($containerBuilder, $userSettings['php-di']);
             $containerBuilder = self::configureContainerProxies($containerBuilder, $userSettings['php-di']);
             $containerBuilder = self::configureContainerCache($containerBuilder, $userSettings['php-di']);
@@ -91,15 +91,15 @@ class ContainerBuilder
      */
     private static function configureContainerBuilder(DIContainerBuilder $containerBuilder, array $settings)
     {
-        if (isset($settings['use_autowiring'])) {
+        if (array_key_exists('use_autowiring', $settings)) {
             $containerBuilder->useAutowiring((bool) $settings['use_autowiring']);
         }
 
-        if (isset($settings['use_annotations'])) {
+        if (array_key_exists('use_annotations', $settings)) {
             $containerBuilder->useAnnotations((bool) $settings['use_annotations']);
         }
 
-        if (isset($settings['ignore_phpdoc_errors'])) {
+        if (array_key_exists('ignore_phpdoc_errors', $settings)) {
             $containerBuilder->ignorePhpDocErrors((bool) $settings['ignore_phpdoc_errors']);
         }
 
@@ -112,11 +112,13 @@ class ContainerBuilder
      * @param \DI\ContainerBuilder $containerBuilder
      * @param array                $settings
      *
+     * @throws \InvalidArgumentException
+     *
      * @return \DI\ContainerBuilder
      */
     private static function configureContainerProxies(DIContainerBuilder $containerBuilder, array $settings)
     {
-        if (isset($settings['proxy_path']) && !empty($settings['proxy_path'])) {
+        if (array_key_exists('proxy_path', $settings) && !empty($settings['proxy_path'])) {
             $containerBuilder->writeProxiesToFile(true, $settings['proxy_path']);
         }
 
@@ -133,7 +135,7 @@ class ContainerBuilder
      */
     private static function configureContainerCache(DIContainerBuilder $containerBuilder, array $settings)
     {
-        if (isset($settings['definitions_cache'])) {
+        if (array_key_exists('definitions_cache', $settings)) {
             $containerBuilder->setDefinitionCache($settings['definitions_cache']);
         }
 
