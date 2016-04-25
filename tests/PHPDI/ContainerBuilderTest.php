@@ -13,12 +13,6 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerBuilder
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerProxies
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::getDefaultServicesDefinitions
-     */
     public function testBuild()
     {
         $settings = [
@@ -32,13 +26,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertInstanceOf('\Jgut\Slim\PHPDI\Container', ContainerBuilder::build($settings));
+        self::assertInstanceOf('\Jgut\Slim\PHPDI\Container', ContainerBuilder::build($settings));
     }
 
-    /**
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::configureContainerCache
-     */
     public function testBuildCache()
     {
         $settings = [
@@ -49,12 +39,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertInstanceOf('\Jgut\Slim\PHPDI\Container', ContainerBuilder::build($settings));
+        self::assertInstanceOf('\Jgut\Slim\PHPDI\Container', ContainerBuilder::build($settings));
     }
 
-    /**
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
-     */
     public function testBuildDefinitions()
     {
         $settings = [
@@ -63,12 +50,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $container = ContainerBuilder::build($settings);
 
-        $this->assertEquals('bar', $container->get('foo'));
+        self::assertEquals('bar', $container->get('foo'));
     }
 
-    /**
-     * @covers Jgut\Slim\PHPDI\ContainerBuilder::build
-     */
     public function testBuildDefinitionsOverride()
     {
         $definitions = [
@@ -78,7 +62,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $container = ContainerBuilder::build([], $definitions);
 
-        $this->assertEquals('foo', $container->get('settings'));
-        $this->assertEquals('baz', $container->get('foo'));
+        self::assertEquals('foo', $container->get('settings'));
+        self::assertEquals('baz', $container->get('foo'));
     }
 }

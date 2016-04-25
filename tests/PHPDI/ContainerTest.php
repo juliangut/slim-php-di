@@ -13,20 +13,15 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var  \Jgut\Slim\PHPDI\Container */
     protected $container;
 
-    /**
-     * @covers Jgut\Slim\PHPDI\Container::registerDefaultServices
-     */
     public function setUp()
     {
         $this->container = ContainerBuilder::build();
     }
 
     /**
-     * @covers Jgut\Slim\PHPDI\Container::offsetGet
-     * @covers Jgut\Slim\PHPDI\Container::get
-     *
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
      */
     public function testGetInexistent()
@@ -35,8 +30,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Jgut\Slim\PHPDI\Container::get
-     *
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
      */
     public function testGetWrong()
@@ -44,66 +37,53 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->container->get(0);
     }
 
-    /**
-     * @covers Jgut\Slim\PHPDI\Container::get
-     * @covers Jgut\Slim\PHPDI\Container::offsetSet
-     * @covers Jgut\Slim\PHPDI\Container::offsetExists
-     * @covers Jgut\Slim\PHPDI\Container::offsetGet
-     * @covers Jgut\Slim\PHPDI\Container::offsetUnset
-     * @covers Jgut\Slim\PHPDI\Container::__isset
-     * @covers Jgut\Slim\PHPDI\Container::__get
-     */
     public function testSetGet()
     {
         $this->container['foo'] = 'bar';
-        $this->assertTrue($this->container->has('foo'));
-        $this->assertEquals('bar', $this->container->get('foo'));
+        self::assertTrue($this->container->has('foo'));
+        self::assertEquals('bar', $this->container->get('foo'));
 
         $this->container['bar'] = 'baz';
-        $this->assertTrue(isset($this->container['bar']));
-        $this->assertEquals('baz', $this->container['bar']);
+        self::assertTrue(isset($this->container['bar']));
+        self::assertEquals('baz', $this->container['bar']);
 
         $this->container['baz'] = 'foo';
-        $this->assertTrue(isset($this->container->baz));
-        $this->assertEquals('foo', $this->container->baz);
+        self::assertTrue(isset($this->container->baz));
+        self::assertEquals('foo', $this->container->baz);
 
         // Doesn't really work
         unset($this->container['foo']);
     }
 
-    /**
-     * Check container has default services.
-     */
     public function testDefaultServices()
     {
-        $this->assertTrue($this->container->has('settings'));
-        $this->assertTrue($this->container->has('environment'));
-        $this->assertTrue($this->container->has('request'));
-        $this->assertTrue($this->container->has('response'));
-        $this->assertTrue($this->container->has('router'));
-        $this->assertTrue($this->container->has('foundHandler'));
-        $this->assertTrue($this->container->has('errorHandler'));
-        $this->assertTrue($this->container->has('notFoundHandler'));
-        $this->assertTrue($this->container->has('notAllowedHandler'));
-        $this->assertTrue($this->container->has('callableResolver'));
+        self::assertTrue($this->container->has('settings'));
+        self::assertTrue($this->container->has('environment'));
+        self::assertTrue($this->container->has('request'));
+        self::assertTrue($this->container->has('response'));
+        self::assertTrue($this->container->has('router'));
+        self::assertTrue($this->container->has('foundHandler'));
+        self::assertTrue($this->container->has('phpErrorHandler'));
+        self::assertTrue($this->container->has('errorHandler'));
+        self::assertTrue($this->container->has('notFoundHandler'));
+        self::assertTrue($this->container->has('notAllowedHandler'));
+        self::assertTrue($this->container->has('callableResolver'));
     }
 
-    /**
-     * Test default servicesType
-     */
     public function testDefaultServicesType()
     {
-        $this->assertInstanceOf('\Slim\Collection', $this->container->get('settings'));
-        $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
-        $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
-        $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
-        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container->get('response'));
-        $this->assertInstanceOf('\Slim\Interfaces\RouterInterface', $this->container->get('router'));
-        $this->assertInstanceOf('\Slim\Handlers\Strategies\RequestResponse', $this->container['foundHandler']);
-        $this->assertInstanceOf('\Slim\Handlers\Error', $this->container->get('errorHandler'));
-        $this->assertInstanceOf('\Slim\Handlers\NotFound', $this->container->get('notFoundHandler'));
-        $this->assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container->get('notAllowedHandler'));
-        $this->assertInstanceOf(
+        self::assertInstanceOf('\Slim\Collection', $this->container->get('settings'));
+        self::assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
+        self::assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
+        self::assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
+        self::assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container->get('response'));
+        self::assertInstanceOf('\Slim\Interfaces\RouterInterface', $this->container->get('router'));
+        self::assertInstanceOf('\Slim\Handlers\Strategies\RequestResponse', $this->container['foundHandler']);
+        self::assertInstanceOf('\Slim\Handlers\PhpError', $this->container->get('phpErrorHandler'));
+        self::assertInstanceOf('\Slim\Handlers\Error', $this->container->get('errorHandler'));
+        self::assertInstanceOf('\Slim\Handlers\NotFound', $this->container->get('notFoundHandler'));
+        self::assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container->get('notAllowedHandler'));
+        self::assertInstanceOf(
             '\Slim\Interfaces\CallableResolverInterface',
             $this->container->get('callableResolver')
         );
