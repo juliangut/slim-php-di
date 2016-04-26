@@ -6,6 +6,8 @@
 .travis.yml      export-ignore
 .coveralls.yml   export-ignore
 .scrutinizer.yml export-ignore
+README.md        export-ignore
+CONTRIBUTING.md  export-ignore
 Gruntfile.js     export-ignore
 phpmd.xml        export-ignore
 phpunit.xml      export-ignore
