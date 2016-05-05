@@ -47,8 +47,10 @@ class ContainerBuilder
     /**
      * Build PHP-DI container for Slim Framework.
      *
-     * @param array $values      parameter objects
-     * @param array $definitions definitions for PHP-DI
+     * @param array $values
+     * @param array $definitions
+     *
+     * @throws \InvalidArgumentException
      *
      * @return \Jgut\Slim\PHPDI\Container
      */
@@ -146,6 +148,8 @@ class ContainerBuilder
      * Get definitions for Slim's default services
      *
      * @param array $userSettings
+     *
+     * @throws \InvalidArgumentException
      *
      * @return callable[]
      */
