@@ -8,13 +8,13 @@
 [![Code Coverage](https://img.shields.io/coveralls/juliangut/slim-php-di.svg?style=flat-square)](https://coveralls.io/github/juliangut/slim-php-di)
 [![Total Downloads](https://img.shields.io/packagist/dt/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di)
 
-# Slim Framework PHP-DI container implementation
+# Slim3 PHP-DI container integration
 
-PHP-DI dependency injection container implementation for Slim Framework.
+PHP-DI dependency injection container integration for Slim3 Framework.
 
-Prepares PHP-DI container to fit in Slim App by registering default Slim services in the container.
+Prepares PHP-DI container to fit in Slim3 App by registering default services in the container.
 
-In order to allow possible services out there expecting the container to be `Slim\Container` and thus implement `ArrayAccess`, it has been introduced in this container as well. You are encouraged to use ArrayAccess syntax for assignment instead of PHP-DI `set` method.
+In order to allow possible services out there expecting the container to be `Slim\Container` and thus implementing `ArrayAccess`, it has been added to the container as well. You are encouraged to use ArrayAccess syntax for assignment instead of PHP-DI `set` method if you plan to reuse your code with default container.
 
 ## Installation
 
@@ -40,14 +40,14 @@ use Slim\App;
 $settings = require __DIR__ . 'settings.php';
 $container = ContainerBuilder::build($settings);
 
-// Register services the Pimple way
+// Register services the "default" way
 $container['service_one'] =  function (ContainerInterface $container) {
     return new ServiceOne;
 };
 
 // Register services the PHP-DI way
 $container->set('service_two', function (ContainerInterface $container) {
-    return new ServiceTwo($container->get('service_one'));
+    return new ServiceTwo($container->get('service_two'));
 });
 
 $app = new App($container);
@@ -106,7 +106,7 @@ $settings = [
         ],
     ],
 ];
-// Services definitions
+
 $definitions = [
     'my.parameter' => 'value',
     'Foo' => function (ContainerInterface $container) {
@@ -115,6 +115,7 @@ $definitions = [
     'Bar' => [get('BarFactory'), 'create'],
     'Baz' => object('Baz'),
 ];
+
 $container = ContainerBuilder::build($settings, $definitions);
 $app = new App($container);
 ```
@@ -129,8 +130,8 @@ PHP-DI container is configured under `php-di` settings key as shown in previous 
 * `proxy_path` path where PHP-DI creates its proxy files
 * `definitions_cache` \Doctrine\Common\Cache\Cache
 
-Refere to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations,
-specially on how to use definitions which is the key element on using PHP-DI.
+Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations,
+*specially on how to use definitions which is the key element on using PHP-DI*.
 
 In order for you to use annotations you have to `require doctrine/annotations`. [See here](http://php-di.org/doc/annotations.html)
 
@@ -138,31 +139,40 @@ In order for you to use definitions cache you have to `require doctrine/cache`. 
 
 ### Registration order
 
-Services registration order is:
+Services are registered in the following order:
 
 * Default Slim services
 * Definitions on settings array
-* Definitions on second argument of `build` method
+* Definitions provided as second argument on building
 
-In order to override default Slim services add them in settings array or defined on second argument of `build` method.
+In order to override default Slim services add them in settings array or provided to `build` method.
 
 ```php
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use Interop\Container\ContainerInterface;
 use Slim\App;
 
+// Overrides default services
 $settings = [
     'errorHandler' => function (ContainerInterface $container) {
         return new MyErrorHandler($container->get('settings')['displayErrorDetails']);
     },
 ];
-$container = ContainerBuilder::build($settings);
+
+// Overrides default services and those in settings array
+$definitions = [
+    'foundHandler' => function () {
+        return new MyRequestResponse;
+    },
+];
+
+$container = ContainerBuilder::build($settings, $definitions);
 $app = new App($container);
 ```
 
 ## Important note
 
-Be aware that if you use cache you must provide definitions for all your services at container creation, and more importantly **do not set any definitions later on** as it is [not allowed](http://php-di.org/doc/php-definitions.html#setting-in-the-container-directly) at runtime when using cache (setting values at runtime is allowed though).
+Be aware that if you use cache definitions for all your services must provided at container creation, and more importantly **do not set any definitions later on** as it is [not allowed](http://php-di.org/doc/php-definitions.html#setting-in-the-container-directly) at runtime when using cache (setting values at runtime is allowed though).
 
 ## Contributing
 
