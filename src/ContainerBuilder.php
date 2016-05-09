@@ -42,6 +42,8 @@ class ContainerBuilder
         'outputBuffering' => 'append',
         'determineRouteBeforeAppMiddleware' => false,
         'displayErrorDetails' => false,
+        'addContentLengthHeader' => true,
+        'routerCacheFile' => false,
     ];
 
     /**
@@ -177,8 +179,13 @@ class ContainerBuilder
                 return $response->withProtocolVersion($container->get('settings')['httpVersion']);
             },
 
-            'router' => function () {
-                return new Router;
+            'router' => function (ContainerInterface $container) {
+                $routerCacheFile = false;
+                if (isset($container->get('settings')['routerCacheFile'])) {
+                    $routerCacheFile = $container->get('settings')['routerCacheFile'];
+                }
+
+                return (new Router)->setCacheFile($routerCacheFile);
             },
 
             'foundHandler' => function () {
