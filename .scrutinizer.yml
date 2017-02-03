@@ -1,9 +1,12 @@
 # language: php
 
 filter:
-  paths:
-    - src/*
-    - tests/*
+  paths: [src/*]
+  excluded_paths: [tests/*, vendor/*]
+
+before_commands:
+  - 'composer self-update'
+  - 'composer update --prefer-stable --prefer-source --no-interaction --no-scripts --no-progress --no-suggest'
 
 coding_style:
   php:
@@ -12,6 +15,30 @@ coding_style:
         general: lower
       constants:
         true_false_null: lower
+    spaces:
+      around_operators:
+          concatenation: true
+          negation: false
+      other:
+        after_type_cast: true
+
+tools:
+  php_code_coverage: false
+  php_code_sniffer:
+    enabled: true
+    config:
+      standard: 'PSR2'
+    filter:
+      paths: [src/*, tests/*]
+  php_mess_detector:
+    enabled: true
+    config:
+      ruleset: 'unusedcode,naming,design,controversial,codesize'
+  php_cpd: true
+  php_loc: true
+  php_pdepend: true
+  php_analyzer: true
+  sensiolabs_security_checker: true
 
 checks:
   php:
@@ -54,29 +81,3 @@ checks:
     fix_linefeed: true
     fix_line_ending: true
     fix_identation_4spaces: true
-
-tools:
-  php_code_coverage: false
-  php_code_sniffer:
-    enabled: true
-    config:
-      standard: 'PSR2'
-    filter:
-      paths: [src, tests]
-  php_cpd:
-    enabled: true
-    excluded_dirs: [build, tests, vendor]
-  php_mess_detector:
-    enabled: true
-    config:
-      ruleset: phpmd.xml
-  php_loc:
-    enabled: true
-    excluded_dirs: [build, tests, vendor]
-  php_pdepend: true
-  php_analyzer: true
-  sensiolabs_security_checker: true
-
-before_commands:
-  - 'composer self-update'
-  - 'composer install --no-interaction --prefer-source'

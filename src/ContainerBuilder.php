@@ -1,10 +1,12 @@
 <?php
-/**
- * Slim Framework PHP-DI container (https://github.com/juliangut/slim-php-di)
+
+/*
+ * slim-php-di (https://github.com/juliangut/slim-php-di).
+ * Slim Framework PHP-DI container implementation.
  *
- * @link https://github.com/juliangut/slim-php-di for the canonical source repository
- *
- * @license https://raw.githubusercontent.com/juliangut/slim-php-di/master/LICENSE
+ * @license BSD-3-Clause
+ * @link https://github.com/juliangut/slim-php-di
+ * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
 namespace Jgut\Slim\PHPDI;
@@ -13,26 +15,28 @@ use DI\ContainerBuilder as DIContainerBuilder;
 use Interop\Container\ContainerInterface;
 use Slim\CallableResolver;
 use Slim\Collection;
-use Slim\Http\Request;
-use Slim\Http\Response;
-use Slim\Http\Environment;
-use Slim\Http\Headers;
 use Slim\Handlers\Error;
-use Slim\Handlers\NotFound;
 use Slim\Handlers\NotAllowed;
+use Slim\Handlers\NotFound;
 use Slim\Handlers\PhpError;
 use Slim\Handlers\Strategies\RequestResponse;
+use Slim\Http\Environment;
+use Slim\Http\Headers;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use Slim\Router;
 
 /**
  * Helper to create and configure a Container.
  *
  * Default Slim services are included in the generated container.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ContainerBuilder
 {
     /**
-     * Slim default settings
+     * Slim default settings.
      *
      * @var array
      */
@@ -147,11 +151,13 @@ class ContainerBuilder
     }
 
     /**
-     * Get definitions for Slim's default services
+     * Get definitions for Slim's default services.
      *
      * @param array $userSettings
      *
      * @throws \InvalidArgumentException
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      *
      * @return callable[]
      */

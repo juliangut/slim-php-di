@@ -21,14 +21,14 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite>
-            <directory suffix="Test.php">./tests/</directory>
+        <testsuite name="slim-php-di test suite">
+            <directory suffix="Test.php">tests/PHPDI/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
 

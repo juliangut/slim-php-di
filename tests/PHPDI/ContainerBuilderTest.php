@@ -1,16 +1,21 @@
 <?php
-/**
- * Slim Framework PHP-DI container (https://github.com/juliangut/slim-php-di)
+
+/*
+ * slim-php-di (https://github.com/juliangut/slim-php-di).
+ * Slim Framework PHP-DI container implementation.
  *
- * @link https://github.com/juliangut/slim-php-di for the canonical source repository
- *
- * @license https://raw.githubusercontent.com/juliangut/slim-php-di/master/LICENSE
+ * @license BSD-3-Clause
+ * @link https://github.com/juliangut/slim-php-di
+ * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Jgut\Slim\PHPDI\ContainerBuilder;
 
+/**
+ * Container builder tests.
+ */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuild()
