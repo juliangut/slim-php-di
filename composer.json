@@ -34,7 +34,6 @@
     "friendsofphp/php-cs-fixer": "^1.12",
     "humbug/humbug": "~1.0@dev",
     "phpmd/phpmd": "^2.0",
-    "phpstan/phpstan": "~0.5",
     "phpunit/phpunit": "^4.5|^5.0",
     "sebastian/phpcpd": "^2.0",
     "squizlabs/php_codesniffer": "^2.0"
@@ -63,7 +62,6 @@
     "phpcs": "phpcs --standard=PSR2 src tests",
     "phpcs-lint": "php-cs-fixer fix --dry-run --verbose",
     "phpcpd": "phpcpd src",
-    "phpstan": "phpstan analyse --level 1 src tests",
     "phpmd": "phpmd src text unusedcode,naming,design,controversial,codesize",
     "phpunit": "phpunit",
     "phpunit-coverage": "phpunit --coverage-html build/coverage",
@@ -74,7 +72,6 @@
       "@phpcs",
       "@phpcs-lint",
       "@phpcpd",
-      "@phpstan",
       "@phpmd"
     ],
     "fix": "php-cs-fixer fix --verbose",
