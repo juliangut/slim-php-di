@@ -79,7 +79,7 @@ return [
             new DefaultValueResolver(),
         ]);
 
-        return new FoundHandler(new Invoker($resolveChain), $container);
+        return new FoundHandler(new Invoker($resolveChain, $container));
     },
 
     'callableResolver' => function (ContainerInterface $container) {

@@ -21,8 +21,8 @@ class App extends SlimApp
     /**
      * App constructor.
      *
-     * @param Configuration $configuration
-     * @param array         $definitions
+     * @param Configuration                                       $configuration
+     * @param string|array|\DI\Definition\Source\DefinitionSource $definitions
      */
     public function __construct(Configuration $configuration, $definitions = [])
     {

@@ -43,7 +43,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
      */
-    public function testGetInexistent()
+    public function testGetNonExistent()
     {
         $this->container['foo'];
     }
@@ -66,9 +66,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         self::assertTrue(isset($this->container['bar']));
         self::assertEquals('baz', $this->container['bar']);
 
-        $this->container['baz'] = 'foo';
+        $this->container['baz'] = 'bam';
         self::assertTrue(isset($this->container->baz));
-        self::assertEquals('foo', $this->container->baz);
+        self::assertEquals('bam', $this->container->baz);
+
+        $this->container->bam = 'foo';
+        self::assertTrue($this->container->has('bam'));
+        self::assertEquals('foo', $this->container->bam);
 
         // Doesn't really work
         unset($this->container['foo']);

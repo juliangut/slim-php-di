@@ -47,12 +47,12 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \DI\Container::set
      *
-     * @param string $offset
+     * @param string $name
      * @param mixed  $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($name, $value)
     {
-        $this->set($offset, $value);
+        $this->set($name, $value);
     }
 
     /**
@@ -60,15 +60,15 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \DI\Container::get
      *
-     * @param string $offset
+     * @param string $name
      *
      * @throws \Slim\Exception\ContainerValueNotFoundException
      *
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($name)
     {
-        return $this->get($offset);
+        return $this->get($name);
     }
 
     /**
@@ -76,25 +76,25 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @see \DI\Container::has
      *
-     * @param string $offset
+     * @param string $name
      *
      * @throws \InvalidArgumentException
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($name)
     {
-        return $this->has($offset);
+        return $this->has($name);
     }
 
     /**
      * Unset a container entry by its name.
      *
-     * @param string $offset
+     * @param string $name
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($name)
     {
         // Can't remove definitions from $this->definitionSource as it is a private attribute
         // Can't manually remove services as $this->singletonEntries is a private attribute
@@ -112,6 +112,17 @@ class Container extends DIContainer implements \ArrayAccess
     public function __get($name)
     {
         return $this->get($name);
+    }
+
+    /**
+     * @see \DI\Container::set
+     *
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function __set($name, $value)
+    {
+        $this->set($name, $value);
     }
 
     /**
