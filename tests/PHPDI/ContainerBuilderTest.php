@@ -11,6 +11,9 @@
 
 namespace Jgut\Slim\PHPDI\Tests;
 
+use DI\Container;
+use Doctrine\Common\Cache\VoidCache;
+use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 
 /**
@@ -18,56 +21,28 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBuild()
+    public function testBuildConfigurations()
     {
-        $settings = [
-            'settings' => [
-                'php-di' => [
-                    'use_autowiring' => false,
-                    'use_annotations' => true,
-                    'ignore_phpdoc_errors' => true,
-                    'proxy_path' => 'fake/path',
-                ],
-            ],
-        ];
+        $configuration = new Configuration([
+            'containerClass' => Container::class,
+            'useAutowiring' => true,
+            'useAnnotations' => true,
+            'ignorePhpDocErrors' => true,
+            'definitionsCache' => new VoidCache,
+            'proxiesPath' => sys_get_temp_dir(),
+        ]);
 
-        self::assertInstanceOf('\Jgut\Slim\PHPDI\Container', ContainerBuilder::build($settings));
+        self::assertInstanceOf(Container::class, ContainerBuilder::build($configuration));
     }
 
-    public function testBuildCache()
+    public function testCustomDefinitions()
     {
-        $settings = [
-            'settings' => [
-                'php-di' => [
-                    'definitions_cache' => new \Doctrine\Common\Cache\VoidCache,
-                ],
-            ],
-        ];
-
-        self::assertInstanceOf('\Jgut\Slim\PHPDI\Container', ContainerBuilder::build($settings));
-    }
-
-    public function testBuildDefinitions()
-    {
-        $settings = [
+        $definitions = [
             'foo' => 'bar',
         ];
 
-        $container = ContainerBuilder::build($settings);
+        $container = ContainerBuilder::build(new Configuration, $definitions);
 
         self::assertEquals('bar', $container->get('foo'));
-    }
-
-    public function testBuildDefinitionsOverride()
-    {
-        $definitions = [
-            'settings' => 'foo',
-            'foo' => 'baz',
-        ];
-
-        $container = ContainerBuilder::build([], $definitions);
-
-        self::assertEquals('foo', $container->get('settings'));
-        self::assertEquals('baz', $container->get('foo'));
     }
 }

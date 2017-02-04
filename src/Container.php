@@ -45,7 +45,7 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Define an object or a value in the container.
      *
-     * @see \Di\Container::set
+     * @see \DI\Container::set
      *
      * @param string $offset
      * @param mixed  $value
@@ -58,7 +58,7 @@ class Container extends DIContainer implements \ArrayAccess
     /**
      * Returns an entry of the container by its name.
      *
-     * @see \Di\Container::get
+     * @see \DI\Container::get
      *
      * @param string $offset
      *
@@ -91,17 +91,17 @@ class Container extends DIContainer implements \ArrayAccess
      * Unset a container entry by its name.
      *
      * @param string $offset
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetUnset($offset)
     {
         // Can't remove definitions from $this->definitionSource as it is a private attribute
         // Can't manually remove services as $this->singletonEntries is a private attribute
-
-        unset($offset);
     }
 
     /**
-     * @see \Di\Container::get
+     * @see \DI\Container::get
      *
      * @param string $name
      *
@@ -115,7 +115,7 @@ class Container extends DIContainer implements \ArrayAccess
     }
 
     /**
-     * @see \Di\Container::has
+     * @see \DI\Container::has
      *
      * @param string $name
      *
