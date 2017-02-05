@@ -117,15 +117,21 @@ In order for you to use annotations you have to `require doctrine/annotations`. 
 
 In order for you to use definitions cache you have to `require doctrine/cache`. [See here](http://php-di.org/doc/performances.html)
 
+## Services registration order
+
+Services are registered in the following order:
+
+* Default Slim services
+* Definitions provided as second argument on `build` method
+
 ## Important note
 
 Be aware that if you use cache then all your service definitions must be provided at container creation, and more importantly **do not set any definitions later on** as it is [not allowed](http://php-di.org/doc/php-definitions.html#setting-in-the-container-directly) at runtime when using cache (setting values at runtime is allowed though).
 
 ## Migration from 1.x
 
-* PHP-DI settings have been moved out from definitions array into its own Configuration object. This object accepts an array of settings on instantiation so it's just a matter of providing settings to it.
-* Configuration settings names have changed from snake_case to camelCase.
-* There is only one place to override default Slim services, second argument of `build` method.
+* PHP-DI settings have been moved out from definitions array into its own Configuration object. This object accepts an array of settings on instantiation so it's just a matter of providing settings to it
+* Configuration settings names have changed from snake_case to camelCase
 
 ## Contributing
 

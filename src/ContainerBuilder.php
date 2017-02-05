@@ -23,8 +23,8 @@ class ContainerBuilder
     /**
      * Build PHP-DI container.
      *
-     * @param Configuration                                       $configuration
-     * @param string|array|\DI\Definition\Source\DefinitionSource $definitions
+     * @param Configuration $configuration
+     * @param string|array  $definitions
      *
      * @return \DI\Container
      */

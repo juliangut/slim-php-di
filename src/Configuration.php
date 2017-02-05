@@ -254,7 +254,7 @@ class Configuration
             throw new \RuntimeException(sprintf('%s directory does not exist', $proxiesPath));
         }
 
-        $this->proxiesPath = $proxiesPath;
+        $this->proxiesPath = rtrim($proxiesPath, DIRECTORY_SEPARATOR);
 
         return $this;
     }
