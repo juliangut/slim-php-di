@@ -21,28 +21,52 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBuildConfigurations()
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Path "/fake/definitions/path" does not exist
+     */
+    public function testNonExistingDefinitionsPath()
+    {
+        ContainerBuilder::build(new Configuration(['definitions' => '/fake/definitions/path']));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessageRegExp /^No definition files loaded from ".+" path$/
+     */
+    public function testInvalidDefinitionsPath()
+    {
+        ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files']));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessageRegExp /^Definitions file should return an array. .+ returned$/
+     */
+    public function testInvalidDefinitionsFile()
+    {
+        ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
+    }
+
+    public function testCreation()
     {
         $configuration = new Configuration([
             'containerClass' => Container::class,
             'useAutowiring' => true,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitionsCache' => new VoidCache,
+            'definitionsCache' => new VoidCache(),
+            'definitions' => [
+                __DIR__ .'/files/definitions/valid/definitions.php',
+                __DIR__ .'/files/definitions/valid',
+            ],
             'proxiesPath' => sys_get_temp_dir(),
         ]);
 
-        self::assertInstanceOf(Container::class, ContainerBuilder::build($configuration));
-    }
+        $container = ContainerBuilder::build($configuration);
 
-    public function testCustomDefinitions()
-    {
-        $definitions = [
-            'foo' => 'bar',
-        ];
-
-        $container = ContainerBuilder::build(new Configuration, $definitions);
-
-        self::assertEquals('bar', $container->get('foo'));
+        self::assertInstanceOf(Container::class, $container);
+        self::assertTrue($container->has('foo'));
+        self::assertEquals('baz', $container->get('foo'));
     }
 }

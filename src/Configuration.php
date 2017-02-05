@@ -44,6 +44,11 @@ class Configuration
     protected $definitionsCache;
 
     /**
+     * @var array
+     */
+    protected $definitions = [];
+
+    /**
      * @var string
      */
     protected $proxiesPath;
@@ -79,6 +84,7 @@ class Configuration
             'useAnnotations',
             'ignorePhpDocErrors',
             'definitionsCache',
+            'definitions',
             'proxiesPath',
         ];
 
@@ -230,6 +236,56 @@ class Configuration
     }
 
     /**
+     * Get definitions.
+     *
+     * @return array
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * Set definitions.
+     *
+     * @param string|array $definitions
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setDefinitions($definitions)
+    {
+        if (is_string($definitions)) {
+            $definitions = [$definitions];
+        }
+
+        if (!is_array($definitions)) {
+            throw new \InvalidArgumentException(
+                sprintf('Definitions must be a string or an array. %s given', gettype($definitions))
+            );
+        }
+
+        array_walk(
+            $definitions,
+            function ($definition) {
+                if (!is_array($definition) && !is_string($definition)) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'A definition must be an array or a file or directory path. %s given',
+                            gettype($definition)
+                        )
+                    );
+                }
+            }
+        );
+
+        $this->definitions = $definitions;
+
+        return $this;
+    }
+
+    /**
      * Get proxies path.
      *
      * @return string
@@ -254,7 +310,7 @@ class Configuration
             throw new \RuntimeException(sprintf('%s directory does not exist', $proxiesPath));
         }
 
-        $this->proxiesPath = $proxiesPath;
+        $this->proxiesPath = rtrim($proxiesPath, DIRECTORY_SEPARATOR);
 
         return $this;
     }

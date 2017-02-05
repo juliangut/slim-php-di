@@ -1,11 +1,11 @@
 {
   "name": "juliangut/slim-php-di",
-  "description": "Slim Framework PHP-DI container implementation",
+  "description": "Slim Framework PHP-DI container integration",
   "keywords": [
     "slim",
-    "framework",
     "dependency injection",
-    "container"
+    "container",
+    "php-di"
   ],
   "homepage": "http://github.com/juliangut/slim-php-di",
   "license": "BSD-3-Clause",

@@ -23,20 +23,21 @@ class ContainerBuilder
     /**
      * Build PHP-DI container.
      *
-     * @param Configuration                                       $configuration
-     * @param string|array|\DI\Definition\Source\DefinitionSource $definitions
+     * @param Configuration $configuration
      *
-     * @return \DI\Container
+     * @throws \RuntimeException
+     *
+     * @return \Interop\Container\ContainerInterface
      */
-    public static function build(Configuration $configuration, $definitions = [])
+    public static function build(Configuration $configuration)
     {
         $containerBuilder = self::getContainerBuilder($configuration);
 
-        // Add default services definitions
+        // Default definitions
         $containerBuilder->addDefinitions(require __DIR__ . '/definitions.php');
 
-        // Add custom service definitions
-        $containerBuilder->addDefinitions($definitions);
+        // Custom definitions
+        $containerBuilder->addDefinitions(static::parseDefinitions($configuration->getDefinitions()));
 
         return $containerBuilder->build();
     }
@@ -65,5 +66,95 @@ class ContainerBuilder
         }
 
         return $containerBuilder;
+    }
+
+    /**
+     * Parse definitions.
+     *
+     * @param array $definitions
+     *
+     * @throws \RuntimeException
+     *
+     * @return array
+     */
+    private static function parseDefinitions(array $definitions)
+    {
+        if (!count($definitions)) {
+            return $definitions;
+        }
+
+        $definitions = array_map(
+            function ($definition) {
+                if (is_array($definition)) {
+                    return $definition;
+                }
+
+                return static::loadDefinitionsFromPath($definition);
+            },
+            $definitions
+        );
+
+        return call_user_func_array('array_merge', $definitions);
+    }
+
+    /**
+     * Load definitions from path.
+     *
+     * @param string $path
+     *
+     * @throws \RuntimeException
+     *
+     * @return array
+     */
+    private static function loadDefinitionsFromPath($path)
+    {
+        if (!file_exists($path)) {
+            throw new \RuntimeException(sprintf('Path "%s" does not exist', $path));
+        }
+
+        if (is_file($path)) {
+            return static::loadDefinitionsFromFile($path);
+        }
+
+        $definitions = [];
+        foreach (glob($path . '/*.php', GLOB_ERR) as $file) {
+            if (is_file($file)) {
+                $definitions[] = static::loadDefinitionsFromFile($file);
+            }
+        }
+
+        if (count($definitions) === 0) {
+            throw new \RuntimeException(sprintf('No definition files loaded from "%s" path', $path));
+        }
+
+        return call_user_func_array('array_merge', $definitions);
+    }
+
+    /**
+     * Load definitions from file.
+     *
+     * @param string $file
+     *
+     * @throws \RuntimeException
+     *
+     * @return array
+     */
+    private static function loadDefinitionsFromFile($file)
+    {
+        if (!is_readable($file)) {
+            // @codeCoverageIgnoreStart
+            throw new \RuntimeException(sprintf('"%s" file is not readable', $file));
+            // @codeCoverageIgnoreEnd
+        }
+
+        $definitions = require $file;
+
+        if (!is_array($definitions)) {
+            throw new \RuntimeException(
+                sprintf('Definitions file should return an array. %s returned', gettype($definitions))
+            );
+        }
+
+        return $definitions;
     }
 }

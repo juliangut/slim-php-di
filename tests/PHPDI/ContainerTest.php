@@ -37,7 +37,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->container = ContainerBuilder::build(new Configuration);
+        $this->container = ContainerBuilder::build(new Configuration());
     }
 
     /**

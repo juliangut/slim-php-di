@@ -21,11 +21,16 @@ class App extends SlimApp
     /**
      * App constructor.
      *
-     * @param Configuration                                       $configuration
-     * @param string|array|\DI\Definition\Source\DefinitionSource $definitions
+     * @param Configuration $configuration
+     *
+     * @throws \RuntimeException
      */
-    public function __construct(Configuration $configuration, $definitions = [])
+    public function __construct(Configuration $configuration = null)
     {
-        parent::__construct(ContainerBuilder::build($configuration, $definitions));
+        if ($configuration === null) {
+            $configuration = new Configuration();
+        }
+
+        parent::__construct(ContainerBuilder::build($configuration));
     }
 }

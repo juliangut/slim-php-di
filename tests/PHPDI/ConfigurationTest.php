@@ -39,6 +39,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         self::assertFalse($configuration->doesUseAnnotations());
         self::assertFalse($configuration->doesIgnorePhpDocErrors());
         self::assertNull($configuration->getDefinitionsCache());
+        self::assertEquals([], $configuration->getDefinitions());
         self::assertNull($configuration->getProxiesPath());
     }
 
@@ -49,7 +50,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'useAutowiring' => false,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitionsCache' => new VoidCache,
+            'definitionsCache' => new VoidCache(),
+            'definitions' => __DIR__ .'/files/definitions/valid/definitions.php',
             'proxiesPath' => sys_get_temp_dir(),
         ];
 
@@ -60,6 +62,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($configuration->doesUseAnnotations());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
         self::assertInstanceOf(VoidCache::class, $configuration->getDefinitionsCache());
+        self::assertEquals([__DIR__ .'/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
     }
 
@@ -70,6 +73,24 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testInvalidContainerClass()
     {
         new Configuration(['containerClass' => VoidCache::class]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Definitions must be a string or an array. integer given
+     */
+    public function testInvalidDefinitionsType()
+    {
+        new Configuration(['definitions' => 10]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage A definition must be an array or a file or directory path. integer given
+     */
+    public function testInvalidDefinitionType()
+    {
+        new Configuration(['definitions' => [10]]);
     }
 
     /**

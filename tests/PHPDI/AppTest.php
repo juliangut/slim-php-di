@@ -12,7 +12,6 @@
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Jgut\Slim\PHPDI\App;
-use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
 
 /**
@@ -20,9 +19,9 @@ use Jgut\Slim\PHPDI\Container;
  */
 class AppTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreation()
+    public function testDefaultCreation()
     {
-        $app = new App(new Configuration);
+        $app = new App();
 
         self::assertInstanceOf(Container::class, $app->getContainer());
     }
