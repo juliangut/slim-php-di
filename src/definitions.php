@@ -89,4 +89,5 @@ return [
 
     // Aliases
     ContainerInterface::class => \DI\get(Container::class),
+    Router::class => \DI\get('router'),
 ];
