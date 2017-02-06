@@ -51,7 +51,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
             'definitionsCache' => new VoidCache(),
-            'definitions' => __DIR__ .'/files/definitions/valid/definitions.php',
+            'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
             'proxiesPath' => sys_get_temp_dir(),
         ];
 
@@ -62,7 +62,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($configuration->doesUseAnnotations());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
         self::assertInstanceOf(VoidCache::class, $configuration->getDefinitionsCache());
-        self::assertEquals([__DIR__ .'/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
+        self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
     }
 

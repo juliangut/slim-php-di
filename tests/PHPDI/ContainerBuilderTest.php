@@ -57,8 +57,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             'ignorePhpDocErrors' => true,
             'definitionsCache' => new VoidCache(),
             'definitions' => [
-                __DIR__ .'/files/definitions/valid/definitions.php',
-                __DIR__ .'/files/definitions/valid',
+                __DIR__ . '/files/definitions/valid/definitions.php',
+                __DIR__ . '/files/definitions/valid',
             ],
             'proxiesPath' => sys_get_temp_dir(),
         ]);
