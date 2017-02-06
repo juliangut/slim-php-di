@@ -132,7 +132,6 @@ Be aware that if you use cache then all your service definitions must be provide
 
 ## Migration from 1.x
 
-* No ContainerBuilder exists any more, as this package is intended to be used with Slim Framework it extends default App class to use PHP-DI
 * PHP-DI settings have been moved into Configuration object. This object accepts an array of settings on instantiation so it's just a matter of providing the settings to it
 * Configuration settings names have changed from snake_case to camelCase
 * Definitions are included in Configuration object rather than set apart
