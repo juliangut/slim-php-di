@@ -17,6 +17,7 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Jgut\Slim\PHPDI\CallableResolver;
+use Jgut\Slim\PHPDI\Container;
 use Jgut\Slim\PHPDI\FoundHandler;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotAllowed;
@@ -85,4 +86,7 @@ return [
     'callableResolver' => function (ContainerInterface $container) {
         return new CallableResolver(new InvokerResolver($container));
     },
+
+    // Aliases
+    ContainerInterface::class => \DI\get(Container::class),
 ];
