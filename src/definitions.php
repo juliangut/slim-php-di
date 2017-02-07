@@ -17,7 +17,6 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Jgut\Slim\PHPDI\CallableResolver;
-use Jgut\Slim\PHPDI\Container;
 use Jgut\Slim\PHPDI\FoundHandler;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotAllowed;
