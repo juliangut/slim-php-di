@@ -34,7 +34,7 @@
     "friendsofphp/php-cs-fixer": "^1.12",
     "humbug/humbug": "~1.0@dev",
     "phpmd/phpmd": "^2.0",
-    "phpunit/phpunit": "^5.0|^6.0",
+    "phpunit/phpunit": "^5.7|^6.0",
     "sebastian/phpcpd": "^2.0",
     "squizlabs/php_codesniffer": "^2.0"
   },
