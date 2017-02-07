@@ -11,6 +11,7 @@
 
 namespace Jgut\Slim\PHPDI;
 
+use DI\Container as DIContainer;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -118,19 +119,13 @@ class Configuration
      */
     public function setContainerClass($containerClass)
     {
-        $interfaces = [
-            'Interop\Container\ContainerInterface',
-            'DI\FactoryInterface',
-            'DI\InvokerInterface',
-        ];
-
-        if (count(array_intersect($interfaces, class_implements($containerClass))) === 0) {
+        if (!class_exists($containerClass)
+            || ($containerClass !== DIContainer::class
+                && !is_subclass_of($containerClass, DIContainer::class)
+            )
+        ) {
             throw new \InvalidArgumentException(
-                sprintf(
-                    'class "%s" must implement all of this interfaces: %s',
-                    $containerClass,
-                    implode(', ', $interfaces)
-                )
+                sprintf('class "%s" must extend %s', $containerClass, DIContainer::class)
             );
         }
 

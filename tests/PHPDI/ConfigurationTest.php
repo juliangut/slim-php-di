@@ -68,7 +68,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /^class ".+" must implement all of this interfaces/
+     * @expectedExceptionMessageRegExp /^class ".+" must extend DI\\Container/
      */
     public function testInvalidContainerClass()
     {
