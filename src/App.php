@@ -21,7 +21,7 @@ class App extends SlimApp
     /**
      * App constructor.
      *
-     * @param Configuration $configuration
+     * @param Configuration|null $configuration
      *
      * @throws \RuntimeException
      */

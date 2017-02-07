@@ -23,11 +23,11 @@ class ContainerBuilder
     /**
      * Build PHP-DI container.
      *
-     * @param Configuration $configuration
+     * @param Configuration|null $configuration
      *
      * @throws \RuntimeException
      *
-     * @return \Interop\Container\ContainerInterface
+     * @return \DI\Container
      */
     public static function build(Configuration $configuration = null)
     {
@@ -41,7 +41,7 @@ class ContainerBuilder
         $containerBuilder->addDefinitions(require __DIR__ . '/definitions.php');
 
         // Custom definitions
-        $containerBuilder->addDefinitions(static::parseDefinitions($configuration->getDefinitions()));
+        $containerBuilder->addDefinitions(self::parseDefinitions($configuration->getDefinitions()));
 
         return $containerBuilder->build();
     }
@@ -93,7 +93,7 @@ class ContainerBuilder
                     return $definition;
                 }
 
-                return static::loadDefinitionsFromPath($definition);
+                return self::loadDefinitionsFromPath($definition);
             },
             $definitions
         );
@@ -117,13 +117,13 @@ class ContainerBuilder
         }
 
         if (is_file($path)) {
-            return static::loadDefinitionsFromFile($path);
+            return self::loadDefinitionsFromFile($path);
         }
 
         $definitions = [];
         foreach (glob($path . '/*.php', GLOB_ERR) as $file) {
             if (is_file($file)) {
-                $definitions[] = static::loadDefinitionsFromFile($file);
+                $definitions[] = self::loadDefinitionsFromFile($file);
             }
         }
 
