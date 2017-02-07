@@ -27,10 +27,6 @@ class App extends SlimApp
      */
     public function __construct(Configuration $configuration = null)
     {
-        if ($configuration === null) {
-            $configuration = new Configuration();
-        }
-
         parent::__construct(ContainerBuilder::build($configuration));
     }
 }

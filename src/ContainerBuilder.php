@@ -29,8 +29,12 @@ class ContainerBuilder
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public static function build(Configuration $configuration)
+    public static function build(Configuration $configuration = null)
     {
+        if ($configuration === null) {
+            $configuration = new Configuration();
+        }
+
         $containerBuilder = self::getContainerBuilder($configuration);
 
         // Default definitions
