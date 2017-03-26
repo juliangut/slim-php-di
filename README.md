@@ -117,7 +117,7 @@ In order for you to use definitions cache you have to `require doctrine/cache`. 
 #### Additional settings
 
 * `containerClass`, container class that will be built, must implement `\Interop\Container\ContainerInterface`, `\Di\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
-* `definitions`, an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
+* `definitions`, an array or traversable of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
 
 ## Services registration order
 

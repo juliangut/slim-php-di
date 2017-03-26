@@ -67,15 +67,13 @@ class Configuration
             throw new \InvalidArgumentException('Configurations must be a traversable');
         }
 
-        if (count($configurations)) {
-            $this->seedConfigurations($configurations);
-        }
+        $this->seedConfigurations($configurations);
     }
 
     /**
      * Seed configurations.
      *
-     * @param $configurations
+     * @param array|\Traversable $configurations
      */
     protected function seedConfigurations($configurations)
     {
@@ -243,7 +241,7 @@ class Configuration
     /**
      * Set definitions.
      *
-     * @param string|array $definitions
+     * @param string|array|\Traversable $definitions
      *
      * @throws \InvalidArgumentException
      *
@@ -255,9 +253,13 @@ class Configuration
             $definitions = [$definitions];
         }
 
+        if ($definitions instanceof \Traversable) {
+            $definitions = iterator_to_array($definitions);
+        }
+
         if (!is_array($definitions)) {
             throw new \InvalidArgumentException(
-                sprintf('Definitions must be a string or an array. %s given', gettype($definitions))
+                sprintf('Definitions must be a string or traversable. %s given', gettype($definitions))
             );
         }
 

@@ -77,7 +77,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Definitions must be a string or an array. integer given
+     * @expectedExceptionMessage Definitions must be a string or traversable. integer given
      */
     public function testInvalidDefinitionsType()
     {
