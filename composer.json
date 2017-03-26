@@ -31,8 +31,9 @@
   },
   "require-dev": {
     "doctrine/cache": "^1.5",
-    "friendsofphp/php-cs-fixer": "^1.12",
+    "friendsofphp/php-cs-fixer": "^2.0",
     "humbug/humbug": "~1.0@dev",
+    "phpmetrics/phpmetrics": "^2.0",
     "phpmd/phpmd": "^2.0",
     "phpunit/phpunit": "^5.7|^6.0",
     "sebastian/phpcpd": "^2.0",
@@ -63,6 +64,8 @@
     "phpcs-lint": "php-cs-fixer fix --dry-run --verbose",
     "phpcpd": "phpcpd src",
     "phpmd": "phpmd src text unusedcode,naming,design,controversial,codesize",
+    "phpmetrics": "phpmetrics --failure-condition='average.maintainabilityIndex < 50' src",
+    "phpmetrics-report": "phpmetrics --report-html=build/metrics/index.html --offline src",
     "phpunit": "phpunit",
     "phpunit-coverage": "phpunit --coverage-html build/coverage",
     "phpunit-clover": "phpunit --coverage-clover build/logs/clover.xml",
@@ -72,7 +75,12 @@
       "@phpcs",
       "@phpcs-lint",
       "@phpcpd",
-      "@phpmd"
+      "@phpmd",
+      "@phpmetrics"
+    ],
+    "reports": [
+      "@phpmetrics-report",
+      "@phpunit-coverage"
     ],
     "fix": "php-cs-fixer fix --verbose",
     "security": "composer outdated",

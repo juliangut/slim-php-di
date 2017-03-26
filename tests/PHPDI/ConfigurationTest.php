@@ -32,7 +32,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
-        $configuration = new Configuration;
+        $configuration = new Configuration();
 
         self::assertEquals(Container::class, $configuration->getContainerClass());
         self::assertTrue($configuration->doesUseAutowiring());

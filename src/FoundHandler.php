@@ -51,7 +51,7 @@ class FoundHandler implements InvocationStrategyInterface
     ) {
         // Inject the request and response by parameter name
         $parameters = [
-            'request'  => $request,
+            'request' => $request,
             'response' => $response,
         ];
 
