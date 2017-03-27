@@ -59,6 +59,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             'definitions' => [
                 __DIR__ . '/files/definitions/valid/definitions.php',
                 __DIR__ . '/files/definitions/valid',
+                [
+                    'valid' => 'definition',
+                ]
             ],
             'proxiesPath' => sys_get_temp_dir(),
         ]);

@@ -84,6 +84,17 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         new Configuration(['definitions' => 10]);
     }
 
+    public function testTraversableDefinitionType()
+    {
+        $configs = [
+            'definitions' => new \ArrayIterator([__DIR__ . '/files/definitions/valid/definitions.php']),
+        ];
+
+        $configuration = new Configuration($configs);
+
+        self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage A definition must be an array or a file or directory path. integer given
