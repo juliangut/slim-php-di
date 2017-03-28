@@ -61,7 +61,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
                 __DIR__ . '/files/definitions/valid',
                 [
                     'valid' => 'definition',
-                ]
+                ],
             ],
             'proxiesPath' => sys_get_temp_dir(),
         ]);
