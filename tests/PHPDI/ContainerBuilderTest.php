@@ -9,17 +9,21 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI\Tests;
 
+use Cache\Adapter\Doctrine\DoctrineCachePool;
 use DI\Container;
 use Doctrine\Common\Cache\VoidCache;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Container builder tests.
  */
-class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
+class ContainerBuilderTest extends TestCase
 {
     /**
      * @expectedException \RuntimeException
@@ -41,7 +45,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /^Definitions file should return an array. .+ returned$/
+     * @expectedExceptionMessageRegExp /^Definitions file should return an array. ".+" returned$/
      */
     public function testInvalidDefinitionsFile()
     {
@@ -50,12 +54,14 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testCreation()
     {
+        $cache = new DoctrineCachePool(new VoidCache());
+
         $configuration = new Configuration([
             'containerClass' => Container::class,
             'useAutowiring' => true,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitionsCache' => new VoidCache(),
+            'definitionsCache' => $cache,
             'definitions' => [
                 __DIR__ . '/files/definitions/valid/definitions.php',
                 __DIR__ . '/files/definitions/valid',

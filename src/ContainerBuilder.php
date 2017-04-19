@@ -9,8 +9,11 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI;
 
+use DI\Container as DIContainer;
 use DI\ContainerBuilder as DIContainerBuilder;
 
 /**
@@ -27,9 +30,9 @@ class ContainerBuilder
      *
      * @throws \RuntimeException
      *
-     * @return \DI\Container
+     * @return DIContainer
      */
-    public static function build(Configuration $configuration = null)
+    public static function build(Configuration $configuration = null): DIContainer
     {
         if ($configuration === null) {
             $configuration = new Configuration();
@@ -53,7 +56,7 @@ class ContainerBuilder
      *
      * @return DIContainerBuilder
      */
-    private static function getContainerBuilder(Configuration $configuration)
+    private static function getContainerBuilder(Configuration $configuration): DIContainerBuilder
     {
         $containerBuilder = new DIContainerBuilder($configuration->getContainerClass());
 
@@ -81,7 +84,7 @@ class ContainerBuilder
      *
      * @return array
      */
-    private static function parseDefinitions(array $definitions)
+    private static function parseDefinitions(array $definitions): array
     {
         if (!count($definitions)) {
             return $definitions;
@@ -110,13 +113,13 @@ class ContainerBuilder
      *
      * @return array
      */
-    private static function loadDefinitionsFromPath($path)
+    private static function loadDefinitionsFromPath(string $path): array
     {
         if (!file_exists($path)) {
             throw new \RuntimeException(sprintf('Path "%s" does not exist', $path));
         }
 
-        if (is_file($path)) {
+        if (!is_dir($path)) {
             return self::loadDefinitionsFromFile($path);
         }
 
@@ -143,11 +146,11 @@ class ContainerBuilder
      *
      * @return array
      */
-    private static function loadDefinitionsFromFile($file)
+    private static function loadDefinitionsFromFile(string $file): array
     {
-        if (!is_readable($file)) {
+        if (!is_file($file) || !is_readable($file)) {
             // @codeCoverageIgnoreStart
-            throw new \RuntimeException(sprintf('"%s" file is not readable', $file));
+            throw new \RuntimeException(sprintf('"%s" must be a readable file', $file));
             // @codeCoverageIgnoreEnd
         }
 
@@ -155,7 +158,7 @@ class ContainerBuilder
 
         if (!is_array($definitions)) {
             throw new \RuntimeException(
-                sprintf('Definitions file should return an array. %s returned', gettype($definitions))
+                sprintf('Definitions file should return an array. "%s" returned', gettype($definitions))
             );
         }
 

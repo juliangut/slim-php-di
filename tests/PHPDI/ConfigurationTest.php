@@ -9,17 +9,22 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI\Tests;
 
+use Cache\Adapter\Doctrine\DoctrineCachePool;
 use DI\Container as DIContainer;
 use Doctrine\Common\Cache\VoidCache;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
+use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Configuration tests.
  */
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -47,10 +52,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $configs = [
             'containerClass' => DIContainer::class,
-            'useAutowiring' => false,
+            'useAutoWiring' => false,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitionsCache' => new VoidCache(),
+            'definitionsCache' => new DoctrineCachePool(new VoidCache()),
             'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
             'proxiesPath' => sys_get_temp_dir(),
         ];
@@ -61,7 +66,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         self::assertFalse($configuration->doesUseAutowiring());
         self::assertTrue($configuration->doesUseAnnotations());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
-        self::assertInstanceOf(VoidCache::class, $configuration->getDefinitionsCache());
+        self::assertInstanceOf(CacheInterface::class, $configuration->getDefinitionsCache());
         self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
     }

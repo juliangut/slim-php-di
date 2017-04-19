@@ -9,10 +9,12 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
-use Doctrine\Common\Cache\Cache;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Container builder configuration.
@@ -27,7 +29,7 @@ class Configuration
     /**
      * @var bool
      */
-    protected $useAutowiring = true;
+    protected $useAutoWiring = true;
 
     /**
      * @var bool
@@ -40,7 +42,7 @@ class Configuration
     protected $ignorePhpDocErrors = false;
 
     /**
-     * @var Cache
+     * @var CacheInterface
      */
     protected $definitionsCache;
 
@@ -79,7 +81,7 @@ class Configuration
     {
         $configs = [
             'containerClass',
-            'useAutowiring',
+            'useAutoWiring',
             'useAnnotations',
             'ignorePhpDocErrors',
             'definitionsCache',
@@ -101,7 +103,7 @@ class Configuration
      *
      * @return string
      */
-    public function getContainerClass()
+    public function getContainerClass(): string
     {
         return $this->containerClass;
     }
@@ -113,9 +115,9 @@ class Configuration
      *
      * @throws \InvalidArgumentException
      *
-     * @return static
+     * @return $this
      */
-    public function setContainerClass($containerClass)
+    public function setContainerClass(string $containerClass)
     {
         if (!class_exists($containerClass)
             || ($containerClass !== DIContainer::class
@@ -133,25 +135,25 @@ class Configuration
     }
 
     /**
-     * Is autowiring enabled.
+     * Is auto wiring enabled.
      *
      * @return bool
      */
-    public function doesUseAutowiring()
+    public function doesUseAutowiring(): bool
     {
-        return $this->useAutowiring;
+        return $this->useAutoWiring;
     }
 
     /**
-     * Set autowiring.
+     * Set auto wiring.
      *
-     * @param bool $useAutowiring
+     * @param bool $useAutoWiring
      *
-     * @return static
+     * @return $this
      */
-    public function setUseAutowiring($useAutowiring)
+    public function setUseAutoWiring($useAutoWiring)
     {
-        $this->useAutowiring = $useAutowiring === true;
+        $this->useAutoWiring = $useAutoWiring === true;
 
         return $this;
     }
@@ -161,7 +163,7 @@ class Configuration
      *
      * @return bool
      */
-    public function doesUseAnnotations()
+    public function doesUseAnnotations(): bool
     {
         return $this->useAnnotations;
     }
@@ -171,11 +173,11 @@ class Configuration
      *
      * @param bool $useAnnotations
      *
-     * @return static
+     * @return $this
      */
-    public function setUseAnnotations($useAnnotations)
+    public function setUseAnnotations(bool $useAnnotations)
     {
-        $this->useAnnotations = $useAnnotations === true;
+        $this->useAnnotations = $useAnnotations;
 
         return $this;
     }
@@ -185,7 +187,7 @@ class Configuration
      *
      * @return bool
      */
-    public function doesIgnorePhpDocErrors()
+    public function doesIgnorePhpDocErrors(): bool
     {
         return $this->ignorePhpDocErrors;
     }
@@ -195,7 +197,7 @@ class Configuration
      *
      * @param bool $ignorePhpDocErrors
      *
-     * @return static
+     * @return $this
      */
     public function setIgnorePhpDocErrors($ignorePhpDocErrors)
     {
@@ -207,7 +209,7 @@ class Configuration
     /**
      * Get definitions cache.
      *
-     * @return Cache
+     * @return CacheInterface
      */
     public function getDefinitionsCache()
     {
@@ -217,11 +219,11 @@ class Configuration
     /**
      * Set definitions cache.
      *
-     * @param Cache $definitionsCache
+     * @param CacheInterface $definitionsCache
      *
-     * @return static
+     * @return $this
      */
-    public function setDefinitionsCache(Cache $definitionsCache)
+    public function setDefinitionsCache(CacheInterface $definitionsCache)
     {
         $this->definitionsCache = $definitionsCache;
 
@@ -233,7 +235,7 @@ class Configuration
      *
      * @return array
      */
-    public function getDefinitions()
+    public function getDefinitions(): array
     {
         return $this->definitions;
     }
@@ -245,7 +247,7 @@ class Configuration
      *
      * @throws \InvalidArgumentException
      *
-     * @return static
+     * @return $this
      */
     public function setDefinitions($definitions)
     {
@@ -299,9 +301,9 @@ class Configuration
      *
      * @throws \RuntimeException
      *
-     * @return static
+     * @return $this
      */
-    public function setProxiesPath($proxiesPath)
+    public function setProxiesPath(string $proxiesPath)
     {
         if (!file_exists($proxiesPath) || !is_dir($proxiesPath)) {
             throw new \RuntimeException(sprintf('%s directory does not exist', $proxiesPath));

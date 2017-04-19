@@ -9,15 +9,18 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Invoker\CallableResolver as InvokerResolver;
 use Jgut\Slim\PHPDI\CallableResolver;
+use PHPUnit\Framework\TestCase;
 
 /**
  * CallableResolver tests.
  */
-class CallableResolverTest extends \PHPUnit_Framework_TestCase
+class CallableResolverTest extends TestCase
 {
     public function testInvokable()
     {

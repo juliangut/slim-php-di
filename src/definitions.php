@@ -9,6 +9,8 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 use Interop\Container\ContainerInterface;
 use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Invoker;
@@ -47,7 +49,7 @@ return [
         'routerCacheFile' => \DI\get('settings.routerCacheFile'),
     ],
 
-    'environment' => \DI\object(Environment::class)
+    'environment' => \DI\create(Environment::class)
         ->constructor($_SERVER),
     'request' => function (ContainerInterface $container) {
         return Request::createFromEnvironment($container->get('environment'));
@@ -59,15 +61,15 @@ return [
         return $response->withProtocolVersion($container->get('settings')['httpVersion']);
     },
 
-    'router' => \DI\object(Router::class)
+    'router' => \DI\create(Router::class)
         ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
 
-    'phpErrorHandler' => \DI\object(PhpError::class)
+    'phpErrorHandler' => \DI\create(PhpError::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
-    'errorHandler' => \DI\object(Error::class)
+    'errorHandler' => \DI\create(Error::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
-    'notFoundHandler' => \DI\object(NotFound::class),
-    'notAllowedHandler' => \DI\object(NotAllowed::class),
+    'notFoundHandler' => \DI\create(NotFound::class),
+    'notAllowedHandler' => \DI\create(NotAllowed::class),
 
     'foundHandler' => function (ContainerInterface $container) {
         $resolveChain = new ResolverChain([

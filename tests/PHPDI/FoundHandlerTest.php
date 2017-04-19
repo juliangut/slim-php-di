@@ -9,17 +9,20 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Invoker\Invoker;
 use Jgut\Slim\PHPDI\FoundHandler;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * FoundHandler tests.
  */
-class FoundHanlerTest extends \PHPUnit_Framework_TestCase
+class FoundHandlerTest extends TestCase
 {
     public function testInvokable()
     {

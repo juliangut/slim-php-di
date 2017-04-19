@@ -9,11 +9,14 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use Jgut\Slim\PHPDI\FoundHandler;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
@@ -27,7 +30,7 @@ use Slim\Interfaces\RouterInterface;
 /**
  * Container tests.
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     /* @var \Jgut\Slim\PHPDI\Container */
     protected $container;

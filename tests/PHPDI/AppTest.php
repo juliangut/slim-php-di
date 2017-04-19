@@ -9,15 +9,18 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Jgut\Slim\PHPDI\App;
 use Jgut\Slim\PHPDI\Container;
+use PHPUnit\Framework\TestCase;
 
 /**
  * App tests.
  */
-class AppTest extends \PHPUnit_Framework_TestCase
+class AppTest extends TestCase
 {
     public function testDefaultCreation()
     {

@@ -9,6 +9,8 @@
  * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
+declare(strict_types=1);
+
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
@@ -109,7 +111,7 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         return $this->get($name);
     }
@@ -120,7 +122,7 @@ class Container extends DIContainer implements \ArrayAccess
      * @param string $name
      * @param mixed  $value
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         $this->set($name, $value);
     }
@@ -134,7 +136,7 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @return bool
      */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         return $this->has($name);
     }

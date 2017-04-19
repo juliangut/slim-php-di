@@ -1,4 +1,4 @@
-[![PHP version](https://img.shields.io/badge/PHP-%3E%3D5.6-8892BF.svg?style=flat-square)](http://php.net)
+[![PHP version](https://img.shields.io/badge/PHP-%3E%3D7.0-8892BF.svg?style=flat-square)](http://php.net)
 [![Latest Version](https://img.shields.io/packagist/vpre/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di)
 [![License](https://img.shields.io/github/license/juliangut/slim-php-di.svg?style=flat-square)](https://github.com/juliangut/slim-php-di/blob/master/LICENSE)
 
@@ -102,7 +102,7 @@ $configuration->setDefinitions('/path/to/definitions/file.php');
 
 #### PHP-DI settings
 
-* `useAutowiring`, whether or not to use autowiring (true by default)
+* `useAutoWiring`, whether or not to use auto wiring (true by default)
 * `useAnnotations`, whether or not to use annotations (false by default)
 * `ignorePhpDocErrors`, whether or not to ignore phpDoc errors on annotations (false by default)
 * `definitionsCache`, \Doctrine\Common\Cache\Cache (none by default)
