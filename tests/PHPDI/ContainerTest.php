@@ -79,6 +79,7 @@ class ContainerTest extends TestCase
 
         // Doesn't really work
         unset($this->container['foo']);
+        unset($this->container->foo);
     }
 
     public function testDefaultServices()

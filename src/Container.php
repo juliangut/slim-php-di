@@ -31,7 +31,7 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @param string $name
      *
-     * @throws \Slim\Exception\ContainerValueNotFoundException
+     * @throws ContainerValueNotFoundException
      *
      * @return mixed
      */
@@ -132,12 +132,20 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
-     *
      * @return bool
      */
     public function __isset(string $name): bool
     {
         return $this->has($name);
+    }
+
+    /**
+     * @see \Jgut\Slim\PHPDI\Container::offset
+     *
+     * @param string $name
+     */
+    public function __unset(string $name)
+    {
+        $this->offsetUnset($name);
     }
 }
