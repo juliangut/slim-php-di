@@ -5,8 +5,12 @@ sudo: false
 git:
   depth: 3
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 env:
-  - COMPOSER_FLAGS="--prefer-stable --prefer-source"
+  - COMPOSER_FLAGS="--prefer-stable --prefer-dist"
 
 php:
   - 7.1
@@ -17,11 +21,11 @@ matrix:
   include:
     - php: 7.0
       env:
-        - COMPOSER_FLAGS="--prefer-lowest --prefer-stable --prefer-source"
+        - COMPOSER_FLAGS="--prefer-lowest --prefer-stable --prefer-dist"
     - php: 7.0
       env:
         - TEST_VERSION=true
-        - COMPOSER_FLAGS="--prefer-stable --prefer-source"
+        - COMPOSER_FLAGS="--prefer-stable --prefer-dist"
   allow_failures:
     - php: nightly
 
@@ -35,7 +39,7 @@ install:
   - if [[ $TEST_VERSION ]]; then travis_retry composer require satooshi/php-coveralls:dev-master $COMPOSER_FLAGS --no-interaction --no-scripts --no-progress ; fi
 
 script:
-  - if [[ $TEST_VERSION ]]; then composer qa & composer phpunit-clover ; fi
+  - if [[ $TEST_VERSION ]]; then composer qa && composer phpunit-clover ; fi
   - if [[ -z $TEST_VERSION ]]; then composer phpunit ; fi
 
 after_script:
