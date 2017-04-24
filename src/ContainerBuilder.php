@@ -41,7 +41,11 @@ class ContainerBuilder
         $containerBuilder = self::getContainerBuilder($configuration);
 
         // Default definitions
-        $containerBuilder->addDefinitions(require __DIR__ . '/definitions.php');
+        $defaultDefinitions = array_merge(
+            require __DIR__ . '/definitions.php',
+            [Configuration::class => $configuration]
+        );
+        $containerBuilder->addDefinitions($defaultDefinitions);
 
         // Custom definitions
         $containerBuilder->addDefinitions(self::parseDefinitions($configuration->getDefinitions()));

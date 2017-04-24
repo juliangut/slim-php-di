@@ -26,6 +26,7 @@ use Slim\Handlers\PhpError;
 use Slim\Http\Environment;
 use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\RouterInterface;
+use Slim\Router;
 
 /**
  * Container tests.
@@ -98,6 +99,8 @@ class ContainerTest extends TestCase
 
         self::assertTrue($this->container->has('router'));
         self::assertInstanceOf(RouterInterface::class, $this->container->get('router'));
+        self::assertTrue($this->container->has(Router::class));
+        self::assertInstanceOf(RouterInterface::class, $this->container->get(Router::class));
 
         self::assertTrue($this->container->has('phpErrorHandler'));
         self::assertInstanceOf(PhpError::class, $this->container->get('phpErrorHandler'));
@@ -116,5 +119,8 @@ class ContainerTest extends TestCase
 
         self::assertTrue($this->container->has('callableResolver'));
         self::assertInstanceOf(CallableResolverInterface::class, $this->container->get('callableResolver'));
+
+        self::assertTrue($this->container->has(Configuration::class));
+        self::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));
     }
 }

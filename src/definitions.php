@@ -19,6 +19,7 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Jgut\Slim\PHPDI\CallableResolver;
+use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\FoundHandler;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotAllowed;
@@ -90,4 +91,7 @@ return [
 
     // Aliases
     Router::class => \DI\get('router'),
+
+    // Replaced by used configuration on container build
+    Configuration::class => null,
 ];
