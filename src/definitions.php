@@ -64,6 +64,7 @@ return [
 
     'router' => \DI\create(Router::class)
         ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
+    Router::class => \DI\get('router'),
 
     'phpErrorHandler' => \DI\create(PhpError::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
@@ -89,9 +90,9 @@ return [
         return new CallableResolver(new InvokerResolver($container));
     },
 
-    // Aliases
-    Router::class => \DI\get('router'),
-
     // Replaced by used configuration on container build
     Configuration::class => null,
+
+    // Replaced by generated container
+    ContainerInterface::class => null,
 ];

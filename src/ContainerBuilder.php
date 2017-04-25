@@ -15,6 +15,7 @@ namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
 use DI\ContainerBuilder as DIContainerBuilder;
+use Psr\Container\ContainerInterface;
 
 /**
  * Helper to create and configure a Container.
@@ -50,7 +51,12 @@ class ContainerBuilder
         // Custom definitions
         $containerBuilder->addDefinitions(self::parseDefinitions($configuration->getDefinitions()));
 
-        return $containerBuilder->build();
+        $container = $containerBuilder->build();
+
+        // Add container itself
+        $container->set(ContainerInterface::class, $container);
+
+        return $container;
     }
 
     /**

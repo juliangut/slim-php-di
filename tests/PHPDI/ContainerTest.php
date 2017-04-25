@@ -17,6 +17,7 @@ use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use Jgut\Slim\PHPDI\FoundHandler;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
@@ -122,5 +123,8 @@ class ContainerTest extends TestCase
 
         self::assertTrue($this->container->has(Configuration::class));
         self::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));
+
+        self::assertTrue($this->container->has(ContainerInterface::class));
+        self::assertEquals($this->container, $this->container->get(ContainerInterface::class));
     }
 }
