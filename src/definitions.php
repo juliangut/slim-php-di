@@ -21,6 +21,8 @@ use Invoker\ParameterResolver\ResolverChain;
 use Jgut\Slim\PHPDI\CallableResolver;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\FoundHandler;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotAllowed;
 use Slim\Handlers\NotFound;
@@ -52,19 +54,21 @@ return [
 
     'environment' => \DI\create(Environment::class)
         ->constructor($_SERVER),
-    'request' => function (ContainerInterface $container) {
+    ServerRequestInterface::class => function (ContainerInterface $container) {
         return Request::createFromEnvironment($container->get('environment'));
     },
-    'response' => function (ContainerInterface $container) {
+    'request' => \DI\get(Request::class),
+    ResponseInterface::class => function (ContainerInterface $container) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=utf-8']);
         $response = new Response(200, $headers);
 
         return $response->withProtocolVersion($container->get('settings')['httpVersion']);
     },
+    'response' => \DI\get(ResponseInterface::class),
 
-    'router' => \DI\create(Router::class)
+    Router::class => \DI\create(Router::class)
         ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
-    Router::class => \DI\get('router'),
+    'router' => \DI\get('router'),
 
     'phpErrorHandler' => \DI\create(PhpError::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
