@@ -68,7 +68,7 @@ return [
 
     Router::class => \DI\create(Router::class)
         ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
-    'router' => \DI\get('router'),
+    'router' => \DI\get(Router::class),
 
     'phpErrorHandler' => \DI\create(PhpError::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
