@@ -57,7 +57,7 @@ return [
     ServerRequestInterface::class => function (ContainerInterface $container) {
         return Request::createFromEnvironment($container->get('environment'));
     },
-    'request' => \DI\get(Request::class),
+    'request' => \DI\get(ServerRequestInterface::class),
     ResponseInterface::class => function (ContainerInterface $container) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=utf-8']);
         $response = new Response(200, $headers);
