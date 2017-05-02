@@ -31,6 +31,7 @@ use Slim\Http\Environment;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Interfaces\InvocationStrategyInterface;
 use Slim\Router;
 
 return [
@@ -77,7 +78,7 @@ return [
     'notFoundHandler' => \DI\create(NotFound::class),
     'notAllowedHandler' => \DI\create(NotAllowed::class),
 
-    'foundHandler' => function (ContainerInterface $container) {
+    InvocationStrategyInterface::class => function (ContainerInterface $container) {
         $resolveChain = new ResolverChain([
             // Inject parameters by name first
             new AssociativeArrayResolver(),
@@ -89,6 +90,7 @@ return [
 
         return new FoundHandler(new Invoker($resolveChain, $container));
     },
+    'foundHandler' => \DI\get(InvocationStrategyInterface::class),
 
     'callableResolver' => function (ContainerInterface $container) {
         return new CallableResolver(new InvokerResolver($container));
