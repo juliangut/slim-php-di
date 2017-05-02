@@ -68,7 +68,7 @@ class ContainerTest extends TestCase
     {
         $configuration = new Configuration([
             'definitions' => [
-                ['foo' => \DI\create('\\Foo\\Bar')]
+                ['foo' => \DI\create('\\Foo\\Bar')],
             ],
         ]);
 
