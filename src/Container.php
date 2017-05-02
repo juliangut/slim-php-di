@@ -40,7 +40,7 @@ class Container extends DIContainer implements \ArrayAccess
         try {
             return parent::get($name);
         } catch (\Exception $exception) {
-            throw new ContainerValueNotFoundException($exception->getMessage());
+            throw new ContainerValueNotFoundException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
