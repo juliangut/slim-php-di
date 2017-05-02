@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
+use DI\NotFoundException;
+use Slim\Exception\ContainerException;
 use Slim\Exception\ContainerValueNotFoundException;
 
 /**
@@ -39,8 +41,10 @@ class Container extends DIContainer implements \ArrayAccess
     {
         try {
             return parent::get($name);
-        } catch (\Exception $exception) {
+        } catch (NotFoundException $exception) {
             throw new ContainerValueNotFoundException($exception->getMessage(), $exception->getCode(), $exception);
+        } catch (\Exception $exception) {
+            throw new ContainerException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 

@@ -61,6 +61,22 @@ class ContainerTest extends TestCase
         $this->container->get(0);
     }
 
+    /**
+     * @expectedException \Slim\Exception\ContainerException
+     */
+    public function testUnresolvable()
+    {
+        $configuration = new Configuration([
+            'definitions' => [
+                ['foo' => \DI\create('\\Foo\\Bar')]
+            ],
+        ]);
+
+        $container = ContainerBuilder::build($configuration);
+
+        $container->get('foo');
+    }
+
     public function testSetterGetter()
     {
         $this->container['foo'] = 'bar';
