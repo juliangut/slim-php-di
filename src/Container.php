@@ -34,6 +34,7 @@ class Container extends DIContainer implements \ArrayAccess
      * @param string $name
      *
      * @throws ContainerValueNotFoundException
+     * @throws ContainerException
      *
      * @return mixed
      */
