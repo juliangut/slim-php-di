@@ -21,6 +21,8 @@ use Jgut\Slim\PHPDI\CallableResolver;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\FoundHandler;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotAllowed;
 use Slim\Handlers\NotFound;
@@ -29,6 +31,7 @@ use Slim\Http\Environment;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Interfaces\InvocationStrategyInterface;
 use Slim\Router;
 
 return [
@@ -52,19 +55,21 @@ return [
 
     'environment' => \DI\create(Environment::class)
         ->constructor($_SERVER),
-    'request' => function (ContainerInterface $container) {
+    ServerRequestInterface::class => function (ContainerInterface $container) {
         return Request::createFromEnvironment($container->get('environment'));
     },
-    'response' => function (ContainerInterface $container) {
+    'request' => \DI\get(ServerRequestInterface::class),
+    ResponseInterface::class => function (ContainerInterface $container) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=utf-8']);
         $response = new Response(200, $headers);
 
         return $response->withProtocolVersion($container->get('settings')['httpVersion']);
     },
+    'response' => \DI\get(ResponseInterface::class),
 
-    'router' => \DI\create(Router::class)
+    Router::class => \DI\create(Router::class)
         ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
-    Router::class => \DI\get('router'),
+    'router' => \DI\get(Router::class),
 
     'phpErrorHandler' => \DI\create(PhpError::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
@@ -73,7 +78,7 @@ return [
     'notFoundHandler' => \DI\create(NotFound::class),
     'notAllowedHandler' => \DI\create(NotAllowed::class),
 
-    'foundHandler' => function (ContainerInterface $container) {
+    InvocationStrategyInterface::class => function (ContainerInterface $container) {
         $resolveChain = new ResolverChain([
             // Inject parameters by name first
             new AssociativeArrayResolver(),
@@ -85,6 +90,7 @@ return [
 
         return new FoundHandler(new Invoker($resolveChain, $container));
     },
+    'foundHandler' => \DI\get(InvocationStrategyInterface::class),
 
     'callableResolver' => function (ContainerInterface $container) {
         return new CallableResolver(new InvokerResolver($container));
