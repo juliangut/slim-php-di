@@ -11,7 +11,6 @@
 
 declare(strict_types=1);
 
-use Interop\Container\ContainerInterface;
 use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -21,6 +20,7 @@ use Invoker\ParameterResolver\ResolverChain;
 use Jgut\Slim\PHPDI\CallableResolver;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\FoundHandler;
+use Psr\Container\ContainerInterface;
 use Slim\Handlers\Error;
 use Slim\Handlers\NotAllowed;
 use Slim\Handlers\NotFound;
