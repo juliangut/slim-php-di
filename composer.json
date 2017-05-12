@@ -41,7 +41,6 @@
     "squizlabs/php_codesniffer": "^2.0"
   },
   "suggest": {
-    "doctrine/cache": "For definition caching"
   },
   "autoload": {
     "psr-4": {
