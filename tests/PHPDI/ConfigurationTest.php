@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
-use Cache\Adapter\Doctrine\DoctrineCachePool;
 use DI\Container as DIContainer;
-use Doctrine\Common\Cache\VoidCache;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Configuration tests.
@@ -43,9 +40,9 @@ class ConfigurationTest extends TestCase
         self::assertTrue($configuration->doesUseAutowiring());
         self::assertFalse($configuration->doesUseAnnotations());
         self::assertFalse($configuration->doesIgnorePhpDocErrors());
-        self::assertNull($configuration->getDefinitionsCache());
         self::assertEquals([], $configuration->getDefinitions());
         self::assertNull($configuration->getProxiesPath());
+        self::assertNull($configuration->getCompilationPath());
     }
 
     public function testCreationConfigurations()
@@ -55,9 +52,9 @@ class ConfigurationTest extends TestCase
             'useAutoWiring' => false,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitionsCache' => new DoctrineCachePool(new VoidCache()),
             'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
             'proxiesPath' => sys_get_temp_dir(),
+            'compilationPath' => __DIR__,
         ];
 
         $configuration = new Configuration($configs);
@@ -66,9 +63,9 @@ class ConfigurationTest extends TestCase
         self::assertFalse($configuration->doesUseAutowiring());
         self::assertTrue($configuration->doesUseAnnotations());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
-        self::assertInstanceOf(CacheInterface::class, $configuration->getDefinitionsCache());
         self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
+        self::assertEquals(__DIR__, $configuration->getCompilationPath());
     }
 
     /**
@@ -77,7 +74,7 @@ class ConfigurationTest extends TestCase
      */
     public function testInvalidContainerClass()
     {
-        new Configuration(['containerClass' => VoidCache::class]);
+        new Configuration(['containerClass' => 'NonExistingClass']);
     }
 
     /**

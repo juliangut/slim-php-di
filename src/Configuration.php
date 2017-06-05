@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Container builder configuration.
@@ -42,11 +41,6 @@ class Configuration
     protected $ignorePhpDocErrors = false;
 
     /**
-     * @var CacheInterface
-     */
-    protected $definitionsCache;
-
-    /**
      * @var array
      */
     protected $definitions = [];
@@ -55,6 +49,11 @@ class Configuration
      * @var string
      */
     protected $proxiesPath;
+
+    /**
+     * @var string
+     */
+    protected $compilationPath;
 
     /**
      * Configuration constructor.
@@ -84,9 +83,9 @@ class Configuration
             'useAutoWiring',
             'useAnnotations',
             'ignorePhpDocErrors',
-            'definitionsCache',
             'definitions',
             'proxiesPath',
+            'compilationPath',
         ];
 
         foreach ($configs as $config) {
@@ -207,30 +206,6 @@ class Configuration
     }
 
     /**
-     * Get definitions cache.
-     *
-     * @return CacheInterface
-     */
-    public function getDefinitionsCache()
-    {
-        return $this->definitionsCache;
-    }
-
-    /**
-     * Set definitions cache.
-     *
-     * @param CacheInterface $definitionsCache
-     *
-     * @return $this
-     */
-    public function setDefinitionsCache(CacheInterface $definitionsCache)
-    {
-        $this->definitionsCache = $definitionsCache;
-
-        return $this;
-    }
-
-    /**
      * Get definitions.
      *
      * @return array
@@ -310,6 +285,30 @@ class Configuration
         }
 
         $this->proxiesPath = rtrim($proxiesPath, DIRECTORY_SEPARATOR);
+
+        return $this;
+    }
+
+    /**
+     * Get compilation path.
+     *
+     * @return string
+     */
+    public function getCompilationPath()
+    {
+        return $this->compilationPath;
+    }
+
+    /**
+     * Set compilation path.
+     *
+     * @param string $compilationPath
+     *
+     * @return $this
+     */
+    public function setCompilationPath(string $compilationPath)
+    {
+        $this->compilationPath = $compilationPath;
 
         return $this;
     }

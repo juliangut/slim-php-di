@@ -67,7 +67,7 @@ return [
     },
     'response' => \DI\get(ResponseInterface::class),
 
-    Router::class => \DI\create(Router::class)
+    Router::class => \DI\create()
         ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
     'router' => \DI\get(Router::class),
 

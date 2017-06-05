@@ -74,12 +74,14 @@ class ContainerBuilder
         $containerBuilder->useAnnotations($configuration->doesUseAnnotations());
         $containerBuilder->ignorePhpDocErrors($configuration->doesIgnorePhpDocErrors());
 
-        if ($configuration->getDefinitionsCache()) {
-            $containerBuilder->setDefinitionCache($configuration->getDefinitionsCache());
-        }
-
         if ($configuration->getProxiesPath()) {
             $containerBuilder->writeProxiesToFile(true, $configuration->getProxiesPath());
+        }
+
+        if ($configuration->getCompilationPath()) {
+            $containerBuilder->compile(
+                sprintf('%s/CompiledContainer.php', rtrim($configuration->getCompilationPath(), ' /'))
+            );
         }
 
         return $containerBuilder;
@@ -111,7 +113,7 @@ class ContainerBuilder
             $definitions
         );
 
-        return call_user_func_array('array_merge', $definitions);
+        return array_merge(...$definitions);
     }
 
     /**
@@ -144,7 +146,7 @@ class ContainerBuilder
             throw new \RuntimeException(sprintf('No definition files loaded from "%s" path', $path));
         }
 
-        return call_user_func_array('array_merge', $definitions);
+        return array_merge(...$definitions);
     }
 
     /**

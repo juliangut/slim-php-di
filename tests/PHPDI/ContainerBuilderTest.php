@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
-use Cache\Adapter\Doctrine\DoctrineCachePool;
 use DI\Container;
-use Doctrine\Common\Cache\VoidCache;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
@@ -54,14 +52,11 @@ class ContainerBuilderTest extends TestCase
 
     public function testCreation()
     {
-        $cache = new DoctrineCachePool(new VoidCache());
-
         $configuration = new Configuration([
             'containerClass' => Container::class,
             'useAutowiring' => true,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitionsCache' => $cache,
             'definitions' => [
                 __DIR__ . '/files/definitions/valid/definitions.php',
                 __DIR__ . '/files/definitions/valid',
@@ -70,6 +65,7 @@ class ContainerBuilderTest extends TestCase
                 ],
             ],
             'proxiesPath' => sys_get_temp_dir(),
+            'compilationPath' => __DIR__ . '/files',
         ]);
 
         $container = ContainerBuilder::build($configuration);
@@ -77,5 +73,8 @@ class ContainerBuilderTest extends TestCase
         self::assertInstanceOf(Container::class, $container);
         self::assertTrue($container->has('foo'));
         self::assertEquals('baz', $container->get('foo'));
+        self::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
+
+        unlink(__DIR__ . '/files/CompiledContainer.php');
     }
 }

@@ -12,7 +12,7 @@
 
 # Slim Framework PHP-DI container integration
 
-PHP-DI dependency injection container integration for Slim Framework.
+PHP-DI (v6) dependency injection container integration for Slim Framework.
 
 In order to allow possible services out there expecting the container to be `Slim\Container` (extending Pimple) and thus implementing `ArrayAccess`, it has been added to default container.
 
@@ -87,7 +87,6 @@ $app->run();
 ### Configuration
 
 ```php
-use Doctrine\Common\Cache\ArrayCache;
 use Jgut\Slim\PHPDI\Configuration;
 
 $settings = [
@@ -97,7 +96,6 @@ $settings = [
 $configuration = new Configuration($settings);
 
 // Can be set after creation
-$configuration->setDefinitionsCache(new ArrayCache());
 $configuration->setProxiesPath(sys_get_temp_dir());
 $configuration->setDefinitions('/path/to/definitions/file.php');
 ```
@@ -107,14 +105,12 @@ $configuration->setDefinitions('/path/to/definitions/file.php');
 * `useAutoWiring`, whether or not to use auto wiring (true by default)
 * `useAnnotations`, whether or not to use annotations (false by default)
 * `ignorePhpDocErrors`, whether or not to ignore phpDoc errors on annotations (false by default)
-* `definitionsCache`, \Doctrine\Common\Cache\Cache (none by default)
 * `proxiesPath`, path where PHP-DI creates its proxy files (none by default)
+* `compilationPath`,path to where PHP-DI creates its compiled container (none by default)
 
 Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations.
 
 In order for you to use annotations you have to `require doctrine/annotations`. [See here](http://php-di.org/doc/annotations.html)
-
-In order for you to use definitions cache you have to `require doctrine/cache`. [See here](http://php-di.org/doc/performances.html)
 
 #### Additional settings
 

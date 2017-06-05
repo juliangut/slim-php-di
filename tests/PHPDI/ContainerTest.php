@@ -58,7 +58,7 @@ class ContainerTest extends TestCase
      */
     public function testGetWrong()
     {
-        $this->container->get(0);
+        $this->container->get('none');
     }
 
     /**

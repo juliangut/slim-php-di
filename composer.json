@@ -25,12 +25,10 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.0",
-    "php-di/php-di": "dev-master",
+    "php-di/php-di": "6.0.0-alpha3",
     "slim/slim": "^3.8"
   },
   "require-dev": {
-    "cache/doctrine-adapter": "~0.6.0",
-    "doctrine/cache": "^1.5",
     "friendsofphp/php-cs-fixer": "^2.0",
     "humbug/humbug": "~1.0@dev",
     "phpmetrics/phpmetrics": "^2.0",
