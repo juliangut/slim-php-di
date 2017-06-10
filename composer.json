@@ -25,7 +25,7 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.0",
-    "php-di/php-di": "6.0.0-alpha3",
+    "php-di/php-di": "dev-master",
     "slim/slim": "^3.8"
   },
   "require-dev": {
