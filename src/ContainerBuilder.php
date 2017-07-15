@@ -79,9 +79,7 @@ class ContainerBuilder
         }
 
         if (!empty($configuration->getCompilationPath())) {
-            $containerBuilder->compile(
-                sprintf('%s/CompiledContainer.php', rtrim($configuration->getCompilationPath(), ' /'))
-            );
+            $containerBuilder->enableCompilation(rtrim($configuration->getCompilationPath(), ' /'));
         }
 
         return $containerBuilder;

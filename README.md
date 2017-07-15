@@ -14,7 +14,7 @@
 
 PHP-DI (v6) dependency injection container integration for Slim Framework.
 
-In order to allow possible services out there expecting the container to be `Slim\Container` (extending Pimple) and thus implementing `ArrayAccess`, it has been added to default container.
+In order to allow possible services out there expecting the container to be `Slim\Container` (extending Pimple) and thus implementing `ArrayAccess`, it has been added to default provided container.
 
 You are encouraged to use array syntax for assignment instead of PHP-DI `set` method if you plan to reuse your code with default Slim container.
 
@@ -124,13 +124,9 @@ Services are registered in the following order:
 * Default Slim services
 * Definitions provided in configuration in the order they are in the array
 
-## Important note
-
-Be aware that when you use cache then all your service definitions must be provided at container creation, and more importantly **do not set any definitions later on** as it is [not allowed](http://php-di.org/doc/php-definitions.html#setting-in-the-container-directly) at runtime when using cache (setting values at runtime is allowed though).
-
 ## Migration from 1.x
 
-* PHP-DI have been upgraded to v6. Review PHP-DI documentation: PSR-16 use, create/autowire functions, etc
+* PHP-DI have been upgraded to v6. Review PHP-DI documentation: container compilation, create/autowire functions, etc
 * PHP-DI settings have been moved into Configuration object. This object accepts an array of settings on instantiation so it's just a matter of providing the settings to it
 * Configuration settings names have changed from snake_case to camelCase
 * Definitions are included in Configuration object rather than set apart. Now you can as well define path(s) to load definition files from
