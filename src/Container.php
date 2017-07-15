@@ -99,12 +99,13 @@ class Container extends DIContainer implements \ArrayAccess
      *
      * @param string $name
      *
+     * @throws \RuntimeException
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetUnset($name)
     {
-        // Can't remove definitions from $this->definitionSource as it is a private attribute
-        // Can't manually remove services as $this->singletonEntries is a private attribute
+        throw new \RuntimeException('It is not possible to unset container definitions');
     }
 
     /**
@@ -148,9 +149,13 @@ class Container extends DIContainer implements \ArrayAccess
      * @see \Jgut\Slim\PHPDI\Container::offset
      *
      * @param string $name
+     *
+     * @throws \RuntimeException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __unset(string $name)
     {
-        $this->offsetUnset($name);
+        throw new \RuntimeException('It is not possible to unset container definitions');
     }
 }

@@ -94,10 +94,24 @@ class ContainerTest extends TestCase
         $this->container->bam = 'foo';
         self::assertTrue($this->container->has('bam'));
         self::assertEquals('foo', $this->container->bam);
+    }
 
-        // Doesn't really work
-        unset($this->container['foo']);
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage It is not possible to unset container definitions
+     */
+    public function testUnset()
+    {
         unset($this->container->foo);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage It is not possible to unset container definitions
+     */
+    public function testUnsetArray()
+    {
+        unset($this->container['foo']);
     }
 
     public function testDefaultServices()
