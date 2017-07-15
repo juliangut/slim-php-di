@@ -74,6 +74,10 @@ class ContainerBuilder
         $containerBuilder->useAnnotations($configuration->doesUseAnnotations());
         $containerBuilder->ignorePhpDocErrors($configuration->doesIgnorePhpDocErrors());
 
+        if ($configuration->getWrapperContainer()) {
+            $containerBuilder->wrapContainer($configuration->getWrapperContainer());
+        }
+
         if ($configuration->getProxiesPath()) {
             $containerBuilder->writeProxiesToFile(true, $configuration->getProxiesPath());
         }

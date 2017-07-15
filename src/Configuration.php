@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
+use Psr\Container\ContainerInterface;
 
 /**
  * Container builder configuration.
@@ -41,9 +42,9 @@ class Configuration
     protected $ignorePhpDocErrors = false;
 
     /**
-     * @var array
+     * @var ContainerInterface
      */
-    protected $definitions = [];
+    protected $wrapperContainer;
 
     /**
      * @var string
@@ -54,6 +55,11 @@ class Configuration
      * @var string
      */
     protected $compilationPath;
+
+    /**
+     * @var array
+     */
+    protected $definitions = [];
 
     /**
      * Configuration constructor.
@@ -83,9 +89,10 @@ class Configuration
             'useAutoWiring',
             'useAnnotations',
             'ignorePhpDocErrors',
-            'definitions',
+            'wrapperContainer',
             'proxiesPath',
             'compilationPath',
+            'definitions',
         ];
 
         foreach ($configs as $config) {
@@ -206,55 +213,25 @@ class Configuration
     }
 
     /**
-     * Get definitions.
+     * Get wrapping container.
      *
-     * @return array
+     * @return ContainerInterface
      */
-    public function getDefinitions(): array
+    public function getWrapperContainer()
     {
-        return $this->definitions;
+        return $this->wrapperContainer;
     }
 
     /**
-     * Set definitions.
+     * Set wrapping container.
      *
-     * @param string|array|\Traversable $definitions
-     *
-     * @throws \InvalidArgumentException
+     * @param ContainerInterface $wrapperContainer
      *
      * @return $this
      */
-    public function setDefinitions($definitions)
+    public function setWrapperContainer(ContainerInterface $wrapperContainer)
     {
-        if (is_string($definitions)) {
-            $definitions = [$definitions];
-        }
-
-        if ($definitions instanceof \Traversable) {
-            $definitions = iterator_to_array($definitions);
-        }
-
-        if (!is_array($definitions)) {
-            throw new \InvalidArgumentException(
-                sprintf('Definitions must be a string or traversable. %s given', gettype($definitions))
-            );
-        }
-
-        array_walk(
-            $definitions,
-            function ($definition) {
-                if (!is_array($definition) && !is_string($definition)) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'A definition must be an array or a file or directory path. %s given',
-                            gettype($definition)
-                        )
-                    );
-                }
-            }
-        );
-
-        $this->definitions = $definitions;
+        $this->wrapperContainer = $wrapperContainer;
 
         return $this;
     }
@@ -309,6 +286,60 @@ class Configuration
     public function setCompilationPath(string $compilationPath)
     {
         $this->compilationPath = $compilationPath;
+
+        return $this;
+    }
+
+    /**
+     * Get definitions.
+     *
+     * @return array
+     */
+    public function getDefinitions(): array
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * Set definitions.
+     *
+     * @param string|array|\Traversable $definitions
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
+     */
+    public function setDefinitions($definitions)
+    {
+        if (is_string($definitions)) {
+            $definitions = [$definitions];
+        }
+
+        if ($definitions instanceof \Traversable) {
+            $definitions = iterator_to_array($definitions);
+        }
+
+        if (!is_array($definitions)) {
+            throw new \InvalidArgumentException(
+                sprintf('Definitions must be a string or traversable. %s given', gettype($definitions))
+            );
+        }
+
+        array_walk(
+            $definitions,
+            function ($definition) {
+                if (!is_array($definition) && !is_string($definition)) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'A definition must be an array or a file or directory path. %s given',
+                            gettype($definition)
+                        )
+                    );
+                }
+            }
+        );
+
+        $this->definitions = $definitions;
 
         return $this;
     }
