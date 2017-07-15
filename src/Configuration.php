@@ -44,7 +44,7 @@ class Configuration
     /**
      * @var ContainerInterface
      */
-    protected $wrapperContainer;
+    protected $wrapContainer;
 
     /**
      * @var string
@@ -89,7 +89,7 @@ class Configuration
             'useAutoWiring',
             'useAnnotations',
             'ignorePhpDocErrors',
-            'wrapperContainer',
+            'wrapContainer',
             'proxiesPath',
             'compilationPath',
             'definitions',
@@ -217,21 +217,21 @@ class Configuration
      *
      * @return ContainerInterface
      */
-    public function getWrapperContainer()
+    public function getWrapContainer()
     {
-        return $this->wrapperContainer;
+        return $this->wrapContainer;
     }
 
     /**
      * Set wrapping container.
      *
-     * @param ContainerInterface $wrapperContainer
+     * @param ContainerInterface $wrapContainer
      *
      * @return $this
      */
-    public function setWrapperContainer(ContainerInterface $wrapperContainer)
+    public function setWrapContainer(ContainerInterface $wrapContainer)
     {
-        $this->wrapperContainer = $wrapperContainer;
+        $this->wrapContainer = $wrapContainer;
 
         return $this;
     }

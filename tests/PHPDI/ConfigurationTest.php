@@ -17,6 +17,7 @@ use DI\Container as DIContainer;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 /**
  * Configuration tests.
@@ -47,14 +48,20 @@ class ConfigurationTest extends TestCase
 
     public function testCreationConfigurations()
     {
+        /** @var ContainerInterface $containerStub */
+        $containerStub = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $configs = [
             'containerClass' => DIContainer::class,
             'useAutoWiring' => false,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
-            'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
+            'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__,
+            'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
         ];
 
         $configuration = new Configuration($configs);
@@ -63,9 +70,10 @@ class ConfigurationTest extends TestCase
         self::assertFalse($configuration->doesUseAutowiring());
         self::assertTrue($configuration->doesUseAnnotations());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
-        self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
+        self::assertEquals($containerStub, $configuration->getWrapContainer());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
         self::assertEquals(__DIR__, $configuration->getCompilationPath());
+        self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
     }
 
     /**

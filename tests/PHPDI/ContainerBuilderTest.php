@@ -17,6 +17,7 @@ use DI\Container;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 /**
  * Container builder tests.
@@ -52,11 +53,19 @@ class ContainerBuilderTest extends TestCase
 
     public function testCreation()
     {
+        /** @var ContainerInterface $containerStub */
+        $containerStub = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $configuration = new Configuration([
             'containerClass' => Container::class,
             'useAutowiring' => true,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
+            'wrapContainer' => $containerStub,
+            'proxiesPath' => sys_get_temp_dir(),
+            'compilationPath' => __DIR__ . '/files',
             'definitions' => [
                 __DIR__ . '/files/definitions/valid/definitions.php',
                 __DIR__ . '/files/definitions/valid',
@@ -64,8 +73,6 @@ class ContainerBuilderTest extends TestCase
                     'valid' => 'definition',
                 ],
             ],
-            'proxiesPath' => sys_get_temp_dir(),
-            'compilationPath' => __DIR__ . '/files',
         ]);
 
         $container = ContainerBuilder::build($configuration);
