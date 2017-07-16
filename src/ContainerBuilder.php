@@ -83,7 +83,7 @@ class ContainerBuilder
         }
 
         if (!empty($configuration->getCompilationPath())) {
-            $containerBuilder->enableCompilation(rtrim($configuration->getCompilationPath(), ' /'));
+            $containerBuilder->enableCompilation($configuration->getCompilationPath());
         }
 
         return $containerBuilder;

@@ -116,10 +116,19 @@ class ConfigurationTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage /fake/proxies/path directory does not exist
+     * @expectedExceptionMessage /fake/proxies/path/ directory does not exist or is write protected
      */
     public function testInvalidProxyPath()
     {
-        new Configuration(['proxiesPath' => '/fake/proxies/path']);
+        new Configuration(['proxiesPath' => '/fake/proxies/path/']);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage /fake/compilation/path/ directory does not exist or is write protected
+     */
+    public function testInvalidCompilationPath()
+    {
+        new Configuration(['compilationPath' => '/fake/compilation/path/']);
     }
 }

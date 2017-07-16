@@ -257,11 +257,11 @@ class Configuration
      */
     public function setProxiesPath(string $proxiesPath)
     {
-        if (!file_exists($proxiesPath) || !is_dir($proxiesPath)) {
-            throw new \RuntimeException(sprintf('%s directory does not exist', $proxiesPath));
+        if (!file_exists($proxiesPath) || !is_dir($proxiesPath) || !is_writable($proxiesPath)) {
+            throw new \RuntimeException(sprintf('%s directory does not exist or is write protected', $proxiesPath));
         }
 
-        $this->proxiesPath = rtrim($proxiesPath, DIRECTORY_SEPARATOR);
+        $this->proxiesPath = $proxiesPath;
 
         return $this;
     }
@@ -281,10 +281,16 @@ class Configuration
      *
      * @param string $compilationPath
      *
+     * @throws \RuntimeException
+     *
      * @return $this
      */
     public function setCompilationPath(string $compilationPath)
     {
+        if (!file_exists($compilationPath) || !is_dir($compilationPath) || !is_writable($compilationPath)) {
+            throw new \RuntimeException(sprintf('%s directory does not exist or is write protected', $compilationPath));
+        }
+
         $this->compilationPath = $compilationPath;
 
         return $this;
