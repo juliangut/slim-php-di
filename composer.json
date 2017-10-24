@@ -29,11 +29,12 @@
     "slim/slim": "^3.8"
   },
   "require-dev": {
+    "brainmaestro/composer-git-hooks": "^2.1",
     "friendsofphp/php-cs-fixer": "^2.0",
     "humbug/humbug": "~1.0@dev",
-    "phpmetrics/phpmetrics": "^2.0",
     "phpmd/phpmd": "^2.0",
-    "phpstan/phpstan": "~0.6",
+    "phpmetrics/phpmetrics": "^2.0",
+    "phpstan/phpstan": "~0.8.1",
     "phpunit/phpunit": "^5.7|^6.0",
     "sebastian/phpcpd": "^2.0",
     "squizlabs/php_codesniffer": "^2.0"
@@ -57,14 +58,16 @@
     "sort-packages": true
   },
   "scripts": {
+    "cghooks": "cghooks",
+    "post-install-cmd": "cghooks add --ignore-lock",
+    "post-update-cmd": "cghooks update",
     "phplint": "php -l src && php -l tests",
     "phpcs": "phpcs --standard=PSR2 src tests",
     "phpcs-lint": "php-cs-fixer fix --dry-run --verbose",
     "phpcpd": "phpcpd src",
-    "phpstan": "phpstan analyse --level 1 src tests",
     "phpmd": "phpmd src text unusedcode,naming,design,controversial,codesize",
-    "phpmetrics": "phpmetrics --failure-condition='average.maintainabilityIndex < 50' src",
-    "phpmetrics-report": "phpmetrics --report-html=build/metrics/index.html --offline src",
+    "phpmetrics-report": "phpmetrics --report-html=build/metrics --report-violations=build/logs/violations.xml --offline .",
+    "phpstan": "phpstan analyse --level 7 src",
     "phpunit": "phpunit",
     "phpunit-coverage": "phpunit --coverage-html build/coverage",
     "phpunit-clover": "phpunit --coverage-clover build/logs/clover.xml",
@@ -75,8 +78,7 @@
       "@phpcs-lint",
       "@phpcpd",
       "@phpmd",
-      "@phpstan",
-      "@phpmetrics"
+      "@phpstan"
     ],
     "reports": [
       "@phpmetrics-report",
@@ -89,5 +91,10 @@
       "@phpunit",
       "@humbug"
     ]
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": "composer qa && composer phpunit"
+    }
   }
 }

@@ -67,8 +67,14 @@ return [
     },
     'response' => \DI\get(ResponseInterface::class),
 
-    Router::class => \DI\create()
-        ->method('setCacheFile', \DI\get('settings.routerCacheFile')),
+    Router::class => function (ContainerInterface $container): Router {
+        $router = new Router();
+
+        $router->setCacheFile($container->get('settings.routerCacheFile'));
+        $router->setContainer($container);
+
+        return $router;
+    },
     'router' => \DI\get(Router::class),
 
     'phpErrorHandler' => \DI\create(PhpError::class)

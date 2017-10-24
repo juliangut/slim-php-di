@@ -121,12 +121,13 @@ class Configuration
      *
      * @throws \InvalidArgumentException
      *
-     * @return $this
+     * @return static
      */
     public function setContainerClass(string $containerClass)
     {
         if (!class_exists($containerClass)
-            || ($containerClass !== DIContainer::class
+            || (
+                $containerClass !== DIContainer::class
                 && !is_subclass_of($containerClass, DIContainer::class)
             )
         ) {
@@ -155,7 +156,7 @@ class Configuration
      *
      * @param bool $useAutoWiring
      *
-     * @return $this
+     * @return static
      */
     public function setUseAutoWiring($useAutoWiring)
     {
@@ -179,7 +180,7 @@ class Configuration
      *
      * @param bool $useAnnotations
      *
-     * @return $this
+     * @return static
      */
     public function setUseAnnotations(bool $useAnnotations)
     {
@@ -203,7 +204,7 @@ class Configuration
      *
      * @param bool $ignorePhpDocErrors
      *
-     * @return $this
+     * @return static
      */
     public function setIgnorePhpDocErrors($ignorePhpDocErrors)
     {
@@ -227,7 +228,7 @@ class Configuration
      *
      * @param ContainerInterface $wrapContainer
      *
-     * @return $this
+     * @return static
      */
     public function setWrapContainer(ContainerInterface $wrapContainer)
     {
@@ -253,7 +254,7 @@ class Configuration
      *
      * @throws \RuntimeException
      *
-     * @return $this
+     * @return static
      */
     public function setProxiesPath(string $proxiesPath)
     {
@@ -283,7 +284,7 @@ class Configuration
      *
      * @throws \RuntimeException
      *
-     * @return $this
+     * @return static
      */
     public function setCompilationPath(string $compilationPath)
     {
@@ -313,7 +314,7 @@ class Configuration
      *
      * @throws \InvalidArgumentException
      *
-     * @return $this
+     * @return static
      */
     public function setDefinitions($definitions)
     {
