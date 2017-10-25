@@ -125,6 +125,15 @@ Services are registered in the following order:
 * Default Slim services
 * Definitions provided in configuration in the order they are in the array
 
+## Slim's settings direct access
+
+Default `\Jgut\Slim\PHPDI\Container` container allows direct access to Slim's settings array values by appending 'settings.' to setting key. If setting is not defined normal container's `ContainerValueNotFoundException` is thrown
+
+```php
+$container->get('setting')['displayErrorDetails'];
+$container->get('setting.displayErrorDetails');
+```
+
 ## Migration from 1.x
 
 * PHP-DI have been upgraded to v6. Review PHP-DI documentation: container compilation, create/autowire functions, etc

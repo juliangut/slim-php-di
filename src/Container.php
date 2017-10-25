@@ -41,6 +41,17 @@ class Container extends DIContainer implements \ArrayAccess
     public function get($name)
     {
         try {
+            if (is_string($name) && strpos($name, 'settings.') === 0) {
+                $settings = parent::get('settings');
+                $setting = substr($name, 9);
+
+                if (array_key_exists($setting, $settings)) {
+                    return $settings[$setting];
+                }
+
+                throw new NotFoundException(sprintf('Setting "%s" not found', $setting));
+            }
+
             return parent::get($name);
         } catch (NotFoundException $exception) {
             throw new ContainerValueNotFoundException($exception->getMessage(), $exception->getCode(), $exception);

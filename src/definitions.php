@@ -35,22 +35,14 @@ use Slim\Interfaces\InvocationStrategyInterface;
 use Slim\Router;
 
 return [
-    'settings.httpVersion' => '1.1',
-    'settings.responseChunkSize' => 4096,
-    'settings.outputBuffering' => 'append',
-    'settings.determineRouteBeforeAppMiddleware' => false,
-    'settings.displayErrorDetails' => false,
-    'settings.addContentLengthHeader' => true,
-    'settings.routerCacheFile' => false,
-
     'settings' => [
-        'httpVersion' => \DI\get('settings.httpVersion'),
-        'responseChunkSize' => \DI\get('settings.responseChunkSize'),
-        'outputBuffering' => \DI\get('settings.outputBuffering'),
-        'determineRouteBeforeAppMiddleware' => \DI\get('settings.determineRouteBeforeAppMiddleware'),
-        'displayErrorDetails' => \DI\get('settings.displayErrorDetails'),
-        'addContentLengthHeader' => \DI\get('settings.addContentLengthHeader'),
-        'routerCacheFile' => \DI\get('settings.routerCacheFile'),
+        'httpVersion' => '1.1',
+        'responseChunkSize' => 4096,
+        'outputBuffering' => 'append',
+        'determineRouteBeforeAppMiddleware' => false,
+        'displayErrorDetails' => false,
+        'addContentLengthHeader' => true,
+        'routerCacheFile' => false,
     ],
 
     'environment' => \DI\create(Environment::class)

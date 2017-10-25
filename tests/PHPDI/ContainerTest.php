@@ -34,7 +34,9 @@ use Slim\Router;
  */
 class ContainerTest extends TestCase
 {
-    /* @var \Jgut\Slim\PHPDI\Container */
+    /**
+     * @var \Jgut\Slim\PHPDI\Container
+     */
     protected $container;
 
     /**
@@ -47,6 +49,7 @@ class ContainerTest extends TestCase
 
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedExceptionMessage No entry or class found for 'foo'
      */
     public function testGetNonExistent()
     {
@@ -55,6 +58,16 @@ class ContainerTest extends TestCase
 
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedExceptionMessage Setting "foo" not found
+     */
+    public function testGetNonExistentSetting()
+    {
+        $this->container['settings.foo'];
+    }
+
+    /**
+     * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedExceptionMessage No entry or class found for 'none'
      */
     public function testGetWrong()
     {
@@ -63,6 +76,7 @@ class ContainerTest extends TestCase
 
     /**
      * @expectedException \Slim\Exception\ContainerException
+     * @expectedExceptionMessage Entry "foo" cannot be resolved: the class doesn't exist
      */
     public function testUnresolvable()
     {
@@ -118,6 +132,13 @@ class ContainerTest extends TestCase
     {
         self::assertTrue($this->container->has('settings'));
         self::assertInternalType('array', $this->container->get('settings'));
+        self::assertEquals('1.1', $this->container->get('settings.httpVersion'));
+        self::assertEquals(4096, $this->container->get('settings.responseChunkSize'));
+        self::assertEquals('append', $this->container->get('settings.outputBuffering'));
+        self::assertEquals(false, $this->container->get('settings.determineRouteBeforeAppMiddleware'));
+        self::assertEquals(false, $this->container->get('settings.displayErrorDetails'));
+        self::assertEquals(true, $this->container->get('settings.addContentLengthHeader'));
+        self::assertEquals(false, $this->container->get('settings.routerCacheFile'));
 
         self::assertTrue($this->container->has('environment'));
         self::assertInstanceOf(Environment::class, $this->container->get('environment'));
