@@ -49,7 +49,9 @@ class ContainerBuilder
         $containerBuilder->addDefinitions($defaultDefinitions);
 
         // Custom definitions
-        $containerBuilder->addDefinitions(self::parseDefinitions($configuration->getDefinitions()));
+        foreach (self::parseDefinitions($configuration->getDefinitions()) as $definitions) {
+            $containerBuilder->addDefinitions($definitions);
+        }
 
         $container = $containerBuilder->build();
 
@@ -104,7 +106,7 @@ class ContainerBuilder
             return $definitions;
         }
 
-        $definitions = array_map(
+        return array_map(
             function ($definition) {
                 if (is_array($definition)) {
                     return $definition;
@@ -114,8 +116,6 @@ class ContainerBuilder
             },
             $definitions
         );
-
-        return array_merge(...$definitions);
     }
 
     /**
