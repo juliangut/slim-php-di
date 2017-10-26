@@ -151,7 +151,7 @@ class ContainerTest extends TestCase
 
         self::assertTrue($this->container->has('router'));
         self::assertInstanceOf(RouterInterface::class, $this->container->get('router'));
-        self::assertTrue($this->container->has(Router::class));
+        self::assertTrue($this->container->has(RouterInterface::class));
         self::assertInstanceOf(RouterInterface::class, $this->container->get(Router::class));
 
         self::assertTrue($this->container->has('phpErrorHandler'));
