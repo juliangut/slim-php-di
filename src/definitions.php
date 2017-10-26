@@ -32,6 +32,7 @@ use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Interfaces\InvocationStrategyInterface;
+use Slim\Interfaces\RouterInterface;
 use Slim\Router;
 
 return [
@@ -59,7 +60,7 @@ return [
     },
     'response' => \DI\get(ResponseInterface::class),
 
-    Router::class => function (ContainerInterface $container): Router {
+    RouterInterface::class => function (ContainerInterface $container): RouterInterface {
         $router = new Router();
 
         $router->setCacheFile($container->get('settings.routerCacheFile'));
@@ -67,7 +68,7 @@ return [
 
         return $router;
     },
-    'router' => \DI\get(Router::class),
+    'router' => \DI\get(RouterInterface::class),
 
     'phpErrorHandler' => \DI\create(PhpError::class)
         ->constructor(\DI\get('settings.displayErrorDetails')),
@@ -94,9 +95,9 @@ return [
         return new CallableResolver(new InvokerResolver($container));
     },
 
-    // Replaced by used configuration on container build
+    // Replaced by used configuration
     Configuration::class => null,
 
-    // Replaced by generated container
+    // Replaced by container itself
     ContainerInterface::class => null,
 ];
