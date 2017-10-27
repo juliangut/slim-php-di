@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
+use Jgut\Slim\PHPDI\CallableStrategy;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
-use Jgut\Slim\PHPDI\FoundHandler;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -167,7 +167,7 @@ class ContainerTest extends TestCase
         self::assertInstanceOf(NotAllowed::class, $this->container->get('notAllowedHandler'));
 
         self::assertTrue($this->container->has('foundHandler'));
-        self::assertInstanceOf(FoundHandler::class, $this->container['foundHandler']);
+        self::assertInstanceOf(CallableStrategy::class, $this->container['foundHandler']);
 
         self::assertTrue($this->container->has('callableResolver'));
         self::assertInstanceOf(CallableResolverInterface::class, $this->container->get('callableResolver'));

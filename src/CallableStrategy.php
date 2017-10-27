@@ -18,7 +18,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 
-class FoundHandler implements InvocationStrategyInterface
+/**
+ * Route callback strategy.
+ */
+class CallableStrategy implements InvocationStrategyInterface
 {
     /**
      * @var InvokerInterface
@@ -26,7 +29,7 @@ class FoundHandler implements InvocationStrategyInterface
     private $invoker;
 
     /**
-     * ControllerInvoker constructor.
+     * CallableStrategy constructor.
      *
      * @param InvokerInterface $invoker
      */

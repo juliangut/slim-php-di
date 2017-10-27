@@ -18,8 +18,8 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Jgut\Slim\PHPDI\CallableResolver;
+use Jgut\Slim\PHPDI\CallableStrategy;
 use Jgut\Slim\PHPDI\Configuration;
-use Jgut\Slim\PHPDI\FoundHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -87,7 +87,7 @@ return [
             new DefaultValueResolver(),
         ]);
 
-        return new FoundHandler(new Invoker($resolveChain, $container));
+        return new CallableStrategy(new Invoker($resolveChain, $container));
     },
     'foundHandler' => \DI\get(InvocationStrategyInterface::class),
 

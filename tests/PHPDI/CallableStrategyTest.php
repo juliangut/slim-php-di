@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Invoker\Invoker;
-use Jgut\Slim\PHPDI\FoundHandler;
+use Jgut\Slim\PHPDI\CallableStrategy;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * FoundHandler tests.
+ * Route callback strategy tests.
  */
-class FoundHandlerTest extends TestCase
+class CallableStrategyTest extends TestCase
 {
     public function testInvokable()
     {
@@ -48,9 +48,9 @@ class FoundHandlerTest extends TestCase
         $invoker->expects(self::once())
             ->method('call')
             ->with($callable, array_merge(['request' => $request, 'response' => $response], $parameters));
-        /* @var \DI\InvokerInterface $invoker */
+        /* @var \Invoker\InvokerInterface $invoker */
 
-        $handler = new FoundHandler($invoker);
+        $handler = new CallableStrategy($invoker);
 
         $handler($callable, $request, $response, $parameters);
     }
