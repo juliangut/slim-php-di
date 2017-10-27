@@ -31,6 +31,7 @@ use Slim\Http\Environment;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 use Slim\Interfaces\RouterInterface;
 use Slim\Router;
@@ -48,11 +49,11 @@ return [
 
     'environment' => \DI\create(Environment::class)
         ->constructor($_SERVER),
-    ServerRequestInterface::class => function (ContainerInterface $container) {
+    ServerRequestInterface::class => function (ContainerInterface $container): ServerRequestInterface {
         return Request::createFromEnvironment($container->get('environment'));
     },
     'request' => \DI\get(ServerRequestInterface::class),
-    ResponseInterface::class => function (ContainerInterface $container) {
+    ResponseInterface::class => function (ContainerInterface $container): ResponseInterface {
         $headers = new Headers(['Content-Type' => 'text/html; charset=utf-8']);
         $response = new Response(200, $headers);
 
@@ -77,7 +78,7 @@ return [
     'notFoundHandler' => \DI\create(NotFound::class),
     'notAllowedHandler' => \DI\create(NotAllowed::class),
 
-    InvocationStrategyInterface::class => function (ContainerInterface $container) {
+    InvocationStrategyInterface::class => function (ContainerInterface $container): InvocationStrategyInterface {
         $resolveChain = new ResolverChain([
             // Inject parameters by name first
             new AssociativeArrayResolver(),
@@ -91,9 +92,10 @@ return [
     },
     'foundHandler' => \DI\get(InvocationStrategyInterface::class),
 
-    'callableResolver' => function (ContainerInterface $container) {
+    CallableResolverInterface::class => function (ContainerInterface $container): CallableResolverInterface {
         return new CallableResolver(new InvokerResolver($container));
     },
+    'callableResolver' => \DI\get(CallableResolverInterface::class),
 
     // Replaced by used configuration
     Configuration::class => null,
