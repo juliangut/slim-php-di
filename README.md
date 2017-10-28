@@ -130,8 +130,8 @@ Services are registered in the following order:
 Default `\Jgut\Slim\PHPDI\Container` container allows direct access to Slim's settings array values by appending 'settings.' to setting key. If setting is not defined normal container's `ContainerValueNotFoundException` is thrown
 
 ```php
-$container->get('setting')['displayErrorDetails'];
-$container->get('setting.displayErrorDetails');
+$container->get('settings')['displayErrorDetails'];
+$container->get('settings.displayErrorDetails');
 ```
 
 ## Migration from 1.x

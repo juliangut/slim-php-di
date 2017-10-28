@@ -60,9 +60,26 @@ class ContainerTest extends TestCase
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
      * @expectedExceptionMessage Setting "foo" not found
      */
-    public function testGetNonExistentSetting()
+    public function testGetNonExistentSimpleSetting()
     {
         $this->container['settings.foo'];
+    }
+
+    public function testSettingsAccess()
+    {
+        $settings = [
+            'foo' => [
+                'bar' => [
+                    'baz' => 'found!',
+                ],
+            ],
+            'foo.bar' => 'bang!',
+        ];
+        $this->container->set('settings', $settings);
+
+        self::assertEquals(['bar' => ['baz' => 'found!']], $this->container->get('settings.foo'));
+        self::assertEquals('bang!', $this->container->get('settings.foo.bar'));
+        self::assertEquals('found!', $this->container->get('settings.foo.bar.baz'));
     }
 
     /**

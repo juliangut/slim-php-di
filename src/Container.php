@@ -42,14 +42,7 @@ class Container extends DIContainer implements \ArrayAccess
     {
         try {
             if (is_string($name) && strpos($name, 'settings.') === 0) {
-                $settings = parent::get('settings');
-                $setting = substr($name, 9);
-
-                if (array_key_exists($setting, $settings)) {
-                    return $settings[$setting];
-                }
-
-                throw new NotFoundException(sprintf('Setting "%s" not found', $setting));
+                return $this->getSetting(substr($name, 9), parent::get('settings'));
             }
 
             return parent::get($name);
@@ -58,6 +51,38 @@ class Container extends DIContainer implements \ArrayAccess
         } catch (\Exception $exception) {
             throw new ContainerException($exception->getMessage(), $exception->getCode(), $exception);
         }
+    }
+
+    /**
+     * Get setting from settings.
+     *
+     * @param string $setting
+     * @param array  $settings
+     *
+     * @throws NotFoundException
+     *
+     * @return mixed
+     */
+    private function getSetting(string $setting, array $settings)
+    {
+        $segments = explode('.', $setting);
+
+        while ($segment = array_shift($segments)) {
+            if (count($segments)) {
+                $combinedSetting = $segment . '.' . implode('.', $segments);
+                if (is_array($settings) && array_key_exists($combinedSetting, $settings)) {
+                    return $settings[$combinedSetting];
+                }
+            }
+
+            if (!is_array($settings) || !array_key_exists($segment, $settings)) {
+                throw new NotFoundException(sprintf('Setting "%s" not found', $setting));
+            }
+
+            $settings = $settings[$segment];
+        }
+
+        return $settings;
     }
 
     /**
