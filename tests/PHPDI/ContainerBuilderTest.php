@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI\Tests;
 
 use DI\Container;
+use Jgut\Slim\PHPDI\AbstractCompiledContainer;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
@@ -60,12 +61,13 @@ class ContainerBuilderTest extends TestCase
 
         $configuration = new Configuration([
             'containerClass' => Container::class,
-            'useAutowiring' => true,
+            'useAutoWiring' => true,
             'useAnnotations' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__ . '/files',
+            'compiledContainerClass' => AbstractCompiledContainer::class,
             'definitions' => [
                 __DIR__ . '/files/definitions/valid/definitions.php',
                 __DIR__ . '/files/definitions/valid',

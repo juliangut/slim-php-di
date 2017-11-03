@@ -49,20 +49,22 @@ class ContainerTest extends TestCase
 
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
-     * @expectedExceptionMessage No entry or class found for 'foo'
+     * @expectedExceptionMessage No entry or class found for 'baz'
      */
     public function testGetNonExistent()
     {
-        $this->container['foo'];
+        self::assertFalse($this->container->has('baz'));
+        $this->container['baz'];
     }
 
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
-     * @expectedExceptionMessage Setting "foo" not found
+     * @expectedExceptionMessage Setting "baz" not found
      */
-    public function testGetNonExistentSimpleSetting()
+    public function testGetNonExistentSetting()
     {
-        $this->container['settings.foo'];
+        self::assertFalse($this->container->has('settings.baz'));
+        $this->container['settings.baz'];
     }
 
     public function testSettingsAccess()
@@ -77,8 +79,13 @@ class ContainerTest extends TestCase
         ];
         $this->container->set('settings', $settings);
 
+        self::assertTrue($this->container->has('settings.foo'));
         self::assertEquals(['bar' => ['baz' => 'found!']], $this->container->get('settings.foo'));
+
+        self::assertTrue($this->container->has('settings.foo.bar'));
         self::assertEquals('bang!', $this->container->get('settings.foo.bar'));
+
+        self::assertTrue($this->container->has('settings.foo.bar.baz'));
         self::assertEquals('found!', $this->container->get('settings.foo.bar.baz'));
     }
 

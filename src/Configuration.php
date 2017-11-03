@@ -13,11 +13,14 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
+use DI\CompiledContainer as DICompiledContainer;
 use DI\Container as DIContainer;
 use Psr\Container\ContainerInterface;
 
 /**
  * Container builder configuration.
+ *
+ * @SuppressWarnings(PMD.LongVariable)
  */
 class Configuration
 {
@@ -57,6 +60,11 @@ class Configuration
     protected $compilationPath;
 
     /**
+     * @var string
+     */
+    protected $compiledContainerClass = AbstractCompiledContainer::class;
+
+    /**
      * @var array
      */
     protected $definitions = [];
@@ -74,26 +82,17 @@ class Configuration
             throw new \InvalidArgumentException('Configurations must be a traversable');
         }
 
-        $this->seedConfigurations($configurations);
-    }
+        $configs = array_keys(get_object_vars($this));
 
-    /**
-     * Seed configurations.
-     *
-     * @param array|\Traversable $configurations
-     */
-    protected function seedConfigurations($configurations)
-    {
-        $configs = [
-            'containerClass',
-            'useAutoWiring',
-            'useAnnotations',
-            'ignorePhpDocErrors',
-            'wrapContainer',
-            'proxiesPath',
-            'compilationPath',
-            'definitions',
-        ];
+        $unknownParameters = array_diff(array_keys($configurations), $configs);
+        if (count($unknownParameters)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The following configuration parameters are not recognized: %s',
+                    implode(', ', $unknownParameters)
+                )
+            );
+        }
 
         foreach ($configs as $config) {
             if (isset($configurations[$config])) {
@@ -105,7 +104,7 @@ class Configuration
     }
 
     /**
-     * get container class.
+     * Get container class.
      *
      * @return string
      */
@@ -293,6 +292,43 @@ class Configuration
         }
 
         $this->compilationPath = $compilationPath;
+
+        return $this;
+    }
+
+    /**
+     * Get compiled container class.
+     *
+     * @return string
+     */
+    public function getCompiledContainerClass(): string
+    {
+        return $this->compiledContainerClass;
+    }
+
+    /**
+     * Set compiled container class.
+     *
+     * @param string $compiledContainerClass
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setCompiledContainerClass(string $compiledContainerClass)
+    {
+        if (!class_exists($compiledContainerClass)
+            || (
+                $compiledContainerClass !== DICompiledContainer::class
+                && !is_subclass_of($compiledContainerClass, DICompiledContainer::class)
+            )
+        ) {
+            throw new \InvalidArgumentException(
+                sprintf('class "%s" must extend %s', $compiledContainerClass, DICompiledContainer::class)
+            );
+        }
+
+        $this->compiledContainerClass = $compiledContainerClass;
 
         return $this;
     }

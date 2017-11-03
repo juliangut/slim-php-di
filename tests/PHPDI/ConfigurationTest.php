@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
+use DI\CompiledContainer as DICompiledContainer;
 use DI\Container as DIContainer;
+use Jgut\Slim\PHPDI\AbstractCompiledContainer;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
@@ -41,9 +43,19 @@ class ConfigurationTest extends TestCase
         self::assertTrue($configuration->doesUseAutowiring());
         self::assertFalse($configuration->doesUseAnnotations());
         self::assertFalse($configuration->doesIgnorePhpDocErrors());
-        self::assertEquals([], $configuration->getDefinitions());
         self::assertNull($configuration->getProxiesPath());
         self::assertNull($configuration->getCompilationPath());
+        self::assertEquals(AbstractCompiledContainer::class, $configuration->getCompiledContainerClass());
+        self::assertEquals([], $configuration->getDefinitions());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The following configuration parameters are not recognized: unknown
+     */
+    public function testUnknownParameter()
+    {
+        new Configuration(['unknown' => 'unknown']);
     }
 
     public function testCreationConfigurations()
@@ -61,6 +73,7 @@ class ConfigurationTest extends TestCase
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__,
+            'compiledContainerClass' => DICompiledContainer::class,
             'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
         ];
 
@@ -73,6 +86,7 @@ class ConfigurationTest extends TestCase
         self::assertEquals($containerStub, $configuration->getWrapContainer());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
         self::assertEquals(__DIR__, $configuration->getCompilationPath());
+        self::assertEquals(DICompiledContainer::class, $configuration->getCompiledContainerClass());
         self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
     }
 
@@ -85,15 +99,6 @@ class ConfigurationTest extends TestCase
         new Configuration(['containerClass' => 'NonExistingClass']);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Definitions must be a string or traversable. integer given
-     */
-    public function testInvalidDefinitionsType()
-    {
-        new Configuration(['definitions' => 10]);
-    }
-
     public function testTraversableDefinitionType()
     {
         $configs = [
@@ -103,15 +108,6 @@ class ConfigurationTest extends TestCase
         $configuration = new Configuration($configs);
 
         self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage A definition must be an array or a file or directory path. integer given
-     */
-    public function testInvalidDefinitionType()
-    {
-        new Configuration(['definitions' => [10]]);
     }
 
     /**
@@ -130,5 +126,32 @@ class ConfigurationTest extends TestCase
     public function testInvalidCompilationPath()
     {
         new Configuration(['compilationPath' => '/fake/compilation/path/']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp /^class ".+" must extend DI\\CompiledContainer/
+     */
+    public function testInvalidCompiledContainerClass()
+    {
+        new Configuration(['compiledContainerClass' => 'NonExistingClass']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage A definition must be an array or a file or directory path. integer given
+     */
+    public function testInvalidArrayDefinitionType()
+    {
+        new Configuration(['definitions' => [10]]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Definitions must be a string or traversable. integer given
+     */
+    public function testInvalidDefinitionType()
+    {
+        new Configuration(['definitions' => 10]);
     }
 }

@@ -85,7 +85,11 @@ class ContainerBuilder
         }
 
         if (!empty($configuration->getCompilationPath())) {
-            $containerBuilder->enableCompilation($configuration->getCompilationPath());
+            $containerBuilder->enableCompilation(
+                $configuration->getCompilationPath(),
+                'CompiledContainer',
+                $configuration->getCompiledContainerClass()
+            );
         }
 
         return $containerBuilder;
