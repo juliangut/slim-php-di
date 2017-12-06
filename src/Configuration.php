@@ -85,7 +85,7 @@ class Configuration
         $configs = array_keys(get_object_vars($this));
 
         $unknownParameters = array_diff(array_keys($configurations), $configs);
-        if (count($unknownParameters)) {
+        if (count($unknownParameters) > 0) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'The following configuration parameters are not recognized: %s',
@@ -215,7 +215,7 @@ class Configuration
     /**
      * Get wrapping container.
      *
-     * @return ContainerInterface
+     * @return ContainerInterface|null
      */
     public function getWrapContainer()
     {
@@ -239,7 +239,7 @@ class Configuration
     /**
      * Get proxies path.
      *
-     * @return string
+     * @return string|null
      */
     public function getProxiesPath()
     {

@@ -76,11 +76,11 @@ class ContainerBuilder
         $containerBuilder->useAnnotations($configuration->doesUseAnnotations());
         $containerBuilder->ignorePhpDocErrors($configuration->doesIgnorePhpDocErrors());
 
-        if ($configuration->getWrapContainer()) {
+        if ($configuration->getWrapContainer() !== null) {
             $containerBuilder->wrapContainer($configuration->getWrapContainer());
         }
 
-        if ($configuration->getProxiesPath()) {
+        if ($configuration->getProxiesPath() !== null) {
             $containerBuilder->writeProxiesToFile(true, $configuration->getProxiesPath());
         }
 
@@ -106,7 +106,7 @@ class ContainerBuilder
      */
     private static function parseDefinitions(array $definitions): array
     {
-        if (!count($definitions)) {
+        if (count($definitions) === 0) {
             return $definitions;
         }
 

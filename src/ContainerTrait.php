@@ -90,7 +90,7 @@ trait ContainerTrait
         $segments = explode('.', $setting);
 
         while ($segment = array_shift($segments)) {
-            if (count($segments)) {
+            if (count($segments) > 0) {
                 $combinedSetting = $segment . '.' . implode('.', $segments);
                 if (is_array($settings) && array_key_exists($combinedSetting, $settings)) {
                     return $settings[$combinedSetting];
