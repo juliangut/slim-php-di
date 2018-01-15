@@ -3,6 +3,6 @@ composer.lock
 vendor/
 .yo-rc.json
 *.cache
-humbuglog.json
-humbuglog.txt
+infection-log.json
+infection-log.txt
 build/
