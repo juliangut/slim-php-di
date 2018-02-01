@@ -32,6 +32,7 @@ matrix:
 
 before_install:
   - yes '' | pecl install apcu
+  - echo 'apc.enable_cli = 1' >> /home/travis/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - if [[ -z $TEST_VERSION && -f "/home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini" ]]; then phpenv config-rm xdebug.ini; fi
   - composer global require hirak/prestissimo
   - composer self-update --stable --no-progress
