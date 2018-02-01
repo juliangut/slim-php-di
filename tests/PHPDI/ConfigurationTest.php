@@ -69,6 +69,7 @@ class ConfigurationTest extends TestCase
             'containerClass' => DIContainer::class,
             'useAutoWiring' => false,
             'useAnnotations' => true,
+            'useDefinitionCache' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
@@ -82,6 +83,7 @@ class ConfigurationTest extends TestCase
         self::assertEquals(DIContainer::class, $configuration->getContainerClass());
         self::assertFalse($configuration->doesUseAutowiring());
         self::assertTrue($configuration->doesUseAnnotations());
+        self::assertTrue($configuration->doesUseDefinitionCache());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
         self::assertEquals($containerStub, $configuration->getWrapContainer());
         self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());

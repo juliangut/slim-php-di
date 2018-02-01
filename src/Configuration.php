@@ -42,6 +42,11 @@ class Configuration
     /**
      * @var bool
      */
+    protected $useDefinitionCache = false;
+
+    /**
+     * @var bool
+     */
     protected $ignorePhpDocErrors = false;
 
     /**
@@ -157,9 +162,9 @@ class Configuration
      *
      * @return static
      */
-    public function setUseAutoWiring($useAutoWiring)
+    public function setUseAutoWiring(bool $useAutoWiring)
     {
-        $this->useAutoWiring = $useAutoWiring === true;
+        $this->useAutoWiring = $useAutoWiring;
 
         return $this;
     }
@@ -189,6 +194,30 @@ class Configuration
     }
 
     /**
+     * Is definition cache used.
+     *
+     * @return bool
+     */
+    public function doesUseDefinitionCache(): bool
+    {
+        return $this->useDefinitionCache;
+    }
+
+    /**
+     * Set definition cache usage.
+     *
+     * @param bool $useDefinitionCache
+     *
+     * @return $this
+     */
+    public function setUseDefinitionCache(bool $useDefinitionCache)
+    {
+        $this->useDefinitionCache = $useDefinitionCache;
+
+        return $this;
+    }
+
+    /**
      * Are PhpDoc errors ignored.
      *
      * @return bool
@@ -205,9 +234,9 @@ class Configuration
      *
      * @return static
      */
-    public function setIgnorePhpDocErrors($ignorePhpDocErrors)
+    public function setIgnorePhpDocErrors(bool $ignorePhpDocErrors)
     {
-        $this->ignorePhpDocErrors = $ignorePhpDocErrors === true;
+        $this->ignorePhpDocErrors = $ignorePhpDocErrors;
 
         return $this;
     }

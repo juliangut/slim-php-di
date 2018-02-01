@@ -104,6 +104,7 @@ $configuration->setDefinitions('/path/to/definitions/file.php');
 
 * `useAutoWiring`, whether or not to use auto wiring (true by default)
 * `useAnnotations`, whether or not to use annotations (false by default)
+* `useDefinitionCache`, whether or not to use definition cache (false by default)
 * `ignorePhpDocErrors`, whether or not to ignore phpDoc errors on annotations (false by default)
 * `wrapContainer`, wrapping container (none by default)
 * `proxiesPath`, path where PHP-DI creates its proxy files (none by default)

@@ -63,6 +63,7 @@ class ContainerBuilderTest extends TestCase
             'containerClass' => Container::class,
             'useAutoWiring' => true,
             'useAnnotations' => true,
+            'useDefinitionCache' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),

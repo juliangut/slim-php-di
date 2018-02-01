@@ -76,6 +76,10 @@ class ContainerBuilder
         $containerBuilder->useAnnotations($configuration->doesUseAnnotations());
         $containerBuilder->ignorePhpDocErrors($configuration->doesIgnorePhpDocErrors());
 
+        if ($configuration->doesUseDefinitionCache()) {
+            $containerBuilder->enableDefinitionCache();
+        }
+
         if ($configuration->getWrapContainer() !== null) {
             $containerBuilder->wrapContainer($configuration->getWrapContainer());
         }
