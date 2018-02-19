@@ -128,7 +128,7 @@ Services are registered in the following order:
 
 ## Slim's settings direct access
 
-Default `\Jgut\Slim\PHPDI\Container` container allows direct access to Slim's settings array values by appending 'settings.' to setting key. If setting is not defined normal container's `ContainerValueNotFoundException` is thrown
+Default `\Jgut\Slim\PHPDI\Container` container allows direct access to Slim's settings array values by prepending 'settings.' to setting key. If setting is not defined normal container's `ContainerValueNotFoundException` is thrown
 
 ```php
 $container->get('settings')['displayErrorDetails'];
@@ -137,6 +137,7 @@ $container->get('settings.displayErrorDetails');
 
 ## Migration from 1.x
 
+* Minimum Slim version is now 3.9
 * PHP-DI have been upgraded to v6. Review PHP-DI documentation: container compilation, create/autowire functions, etc
 * PHP-DI settings have been moved into Configuration object. This object accepts an array of settings on instantiation so it's just a matter of providing the settings to it
 * Configuration settings names have changed from snake_case to camelCase
