@@ -152,11 +152,7 @@ class ContainerBuilder
             }
         }
 
-        if (count($definitions) === 0) {
-            throw new \RuntimeException(sprintf('No definition files loaded from "%s" path', $path));
-        }
-
-        return array_merge(...$definitions);
+        return count($definitions) === 0 ? [] : array_merge(...$definitions);
     }
 
     /**

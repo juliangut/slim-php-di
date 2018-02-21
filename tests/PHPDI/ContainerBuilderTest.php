@@ -36,15 +36,6 @@ class ContainerBuilderTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /^No definition files loaded from ".+" path$/
-     */
-    public function testInvalidDefinitionsPath()
-    {
-        ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files']));
-    }
-
-    /**
-     * @expectedException \RuntimeException
      * @expectedExceptionMessageRegExp /^Definitions file should return an array. ".+" returned$/
      */
     public function testInvalidDefinitionsFile()
