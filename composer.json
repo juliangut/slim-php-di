@@ -35,7 +35,6 @@
     "phpmd/phpmd": "^2.0",
     "phpmetrics/phpmetrics": "^2.0",
     "phpstan/phpstan": "^0.9",
-    "phpstan/phpstan-phpunit": "^0.9",
     "phpstan/phpstan-strict-rules": "^0.9",
     "phpunit/phpunit": "^6.0",
     "povils/phpmnd": "^1.1",
