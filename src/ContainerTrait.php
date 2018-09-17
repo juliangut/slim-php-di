@@ -114,8 +114,6 @@ trait ContainerTrait
      *
      * @param string $name
      * @param mixed  $value
-     *
-     * @return void
      */
     public function offsetSet($name, $value)
     {
@@ -159,8 +157,6 @@ trait ContainerTrait
      *
      * @param string $name
      *
-     * @return void
-     *
      * @throws \RuntimeException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -189,8 +185,6 @@ trait ContainerTrait
      *
      * @param string $name
      * @param mixed  $value
-     *
-     * @return void
      */
     public function __set(string $name, $value)
     {
@@ -213,8 +207,6 @@ trait ContainerTrait
      * @see \Jgut\Slim\PHPDI\Container::offset
      *
      * @param string $name
-     *
-     * @return void
      *
      * @throws \RuntimeException
      *

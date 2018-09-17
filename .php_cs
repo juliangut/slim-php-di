@@ -84,7 +84,6 @@ return Config::create()
         'no_unneeded_control_parentheses' => true,
         'no_unreachable_default_argument_value' => true,
         'no_unneeded_final_method' => true,
-        'no_unset_on_property' => true,
         'no_unused_imports' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
