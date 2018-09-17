@@ -72,7 +72,7 @@ class ConfigurationTest extends TestCase
             'useDefinitionCache' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
-            'proxiesPath' => sys_get_temp_dir(),
+            'proxiesPath' => \sys_get_temp_dir(),
             'compilationPath' => __DIR__,
             'compiledContainerClass' => DICompiledContainer::class,
             'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
@@ -86,7 +86,7 @@ class ConfigurationTest extends TestCase
         self::assertTrue($configuration->doesUseDefinitionCache());
         self::assertTrue($configuration->doesIgnorePhpDocErrors());
         self::assertEquals($containerStub, $configuration->getWrapContainer());
-        self::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
+        self::assertEquals(\sys_get_temp_dir(), $configuration->getProxiesPath());
         self::assertEquals(__DIR__, $configuration->getCompilationPath());
         self::assertEquals(DICompiledContainer::class, $configuration->getCompiledContainerClass());
         self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());

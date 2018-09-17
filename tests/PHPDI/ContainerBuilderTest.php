@@ -57,7 +57,7 @@ class ContainerBuilderTest extends TestCase
             'useDefinitionCache' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
-            'proxiesPath' => sys_get_temp_dir(),
+            'proxiesPath' => \sys_get_temp_dir(),
             'compilationPath' => __DIR__ . '/files',
             'compiledContainerClass' => AbstractCompiledContainer::class,
             'definitions' => [
@@ -76,6 +76,6 @@ class ContainerBuilderTest extends TestCase
         self::assertEquals('baz', $container->get('foo'));
         self::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
 
-        unlink(__DIR__ . '/files/CompiledContainer.php');
+        \unlink(__DIR__ . '/files/CompiledContainer.php');
     }
 }

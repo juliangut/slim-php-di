@@ -27,7 +27,6 @@ use Slim\Handlers\PhpError;
 use Slim\Http\Environment;
 use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\RouterInterface;
-use Slim\Router;
 
 /**
  * Container tests.
@@ -159,10 +158,10 @@ class ContainerTest extends TestCase
         self::assertEquals('1.1', $this->container->get('settings.httpVersion'));
         self::assertEquals(4096, $this->container->get('settings.responseChunkSize'));
         self::assertEquals('append', $this->container->get('settings.outputBuffering'));
-        self::assertEquals(false, $this->container->get('settings.determineRouteBeforeAppMiddleware'));
-        self::assertEquals(false, $this->container->get('settings.displayErrorDetails'));
-        self::assertEquals(true, $this->container->get('settings.addContentLengthHeader'));
-        self::assertEquals(false, $this->container->get('settings.routerCacheFile'));
+        self::assertFalse($this->container->get('settings.determineRouteBeforeAppMiddleware'));
+        self::assertFalse($this->container->get('settings.displayErrorDetails'));
+        self::assertTrue($this->container->get('settings.addContentLengthHeader'));
+        self::assertFalse($this->container->get('settings.routerCacheFile'));
 
         self::assertTrue($this->container->has('environment'));
         self::assertInstanceOf(Environment::class, $this->container->get('environment'));

@@ -55,7 +55,7 @@ class CallableStrategyTest extends TestCase
             ->method('call')
             ->with(
                 $callable,
-                array_merge(['request' => $request, 'response' => $response], $requestAttributes, $parameters)
+                \array_merge(['request' => $request, 'response' => $response], $requestAttributes, $parameters)
             );
         /* @var \Invoker\InvokerInterface $invoker */
 

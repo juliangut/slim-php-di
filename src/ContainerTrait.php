@@ -37,8 +37,8 @@ trait ContainerTrait
     public function get($name)
     {
         try {
-            if (is_string($name) && strpos($name, 'settings.') === 0) {
-                return $this->getSetting(substr($name, 9), parent::get('settings'));
+            if (\is_string($name) && \strpos($name, 'settings.') === 0) {
+                return $this->getSetting(\substr($name, 9), parent::get('settings'));
             }
 
             return parent::get($name);
@@ -62,9 +62,9 @@ trait ContainerTrait
      */
     public function has($name)
     {
-        if (is_string($name) && strpos($name, 'settings.') === 0) {
+        if (\is_string($name) && \strpos($name, 'settings.') === 0) {
             try {
-                $this->getSetting(substr($name, 9), parent::get('settings'));
+                $this->getSetting(\substr($name, 9), parent::get('settings'));
 
                 return true;
             } catch (\Exception $exception) {
@@ -87,18 +87,18 @@ trait ContainerTrait
      */
     protected function getSetting(string $setting, array $settings)
     {
-        $segments = explode('.', $setting);
+        $segments = \explode('.', $setting);
 
-        while ($segment = array_shift($segments)) {
-            if (count($segments) > 0) {
-                $combinedSetting = $segment . '.' . implode('.', $segments);
-                if (is_array($settings) && array_key_exists($combinedSetting, $settings)) {
+        while ($segment = \array_shift($segments)) {
+            if (\count($segments) > 0) {
+                $combinedSetting = $segment . '.' . \implode('.', $segments);
+                if (\is_array($settings) && \array_key_exists($combinedSetting, $settings)) {
                     return $settings[$combinedSetting];
                 }
             }
 
-            if (!is_array($settings) || !array_key_exists($segment, $settings)) {
-                throw new NotFoundException(sprintf('Setting "%s" not found', $setting));
+            if (!\is_array($settings) || !\array_key_exists($segment, $settings)) {
+                throw new NotFoundException(\sprintf('Setting "%s" not found', $setting));
             }
 
             $settings = $settings[$segment];
@@ -114,6 +114,8 @@ trait ContainerTrait
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return void
      */
     public function offsetSet($name, $value)
     {
@@ -157,6 +159,8 @@ trait ContainerTrait
      *
      * @param string $name
      *
+     * @return void
+     *
      * @throws \RuntimeException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -185,6 +189,8 @@ trait ContainerTrait
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return void
      */
     public function __set(string $name, $value)
     {
@@ -207,6 +213,8 @@ trait ContainerTrait
      * @see \Jgut\Slim\PHPDI\Container::offset
      *
      * @param string $name
+     *
+     * @return void
      *
      * @throws \RuntimeException
      *

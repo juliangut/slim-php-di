@@ -15,7 +15,6 @@ namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
 use DI\ContainerBuilder as DIContainerBuilder;
-use Psr\Container\ContainerInterface;
 
 /**
  * Helper to create and configure a Container.
@@ -39,26 +38,15 @@ class ContainerBuilder
             $configuration = new Configuration();
         }
 
-        $containerBuilder = self::getContainerBuilder($configuration);
-
-        // Default definitions
-        $defaultDefinitions = array_merge(
+        $defaultDefinitions = \array_merge(
             require __DIR__ . '/definitions.php',
             [Configuration::class => $configuration]
         );
-        $containerBuilder->addDefinitions($defaultDefinitions);
+        $customDefinitions = self::parseDefinitions($configuration->getDefinitions());
 
-        // Custom definitions
-        foreach (self::parseDefinitions($configuration->getDefinitions()) as $definitions) {
-            $containerBuilder->addDefinitions($definitions);
-        }
-
-        $container = $containerBuilder->build();
-
-        // Add container itself
-        $container->set(ContainerInterface::class, $container);
-
-        return $container;
+        return self::getContainerBuilder($configuration)
+            ->addDefinitions($defaultDefinitions, ...$customDefinitions)
+            ->build();
     }
 
     /**
@@ -110,13 +98,13 @@ class ContainerBuilder
      */
     private static function parseDefinitions(array $definitions): array
     {
-        if (count($definitions) === 0) {
+        if (\count($definitions) === 0) {
             return $definitions;
         }
 
-        return array_map(
+        return \array_map(
             function ($definition) {
-                if (is_array($definition)) {
+                if (\is_array($definition)) {
                     return $definition;
                 }
 
@@ -137,22 +125,22 @@ class ContainerBuilder
      */
     private static function loadDefinitionsFromPath(string $path): array
     {
-        if (!file_exists($path)) {
-            throw new \RuntimeException(sprintf('Path "%s" does not exist', $path));
+        if (!\file_exists($path)) {
+            throw new \RuntimeException(\sprintf('Path "%s" does not exist', $path));
         }
 
-        if (!is_dir($path)) {
+        if (!\is_dir($path)) {
             return self::loadDefinitionsFromFile($path);
         }
 
         $definitions = [];
-        foreach (glob($path . '/*.php', GLOB_ERR) as $file) {
-            if (is_file($file)) {
+        foreach (\glob($path . '/*.php', \GLOB_ERR) as $file) {
+            if (\is_file($file)) {
                 $definitions[] = self::loadDefinitionsFromFile($file);
             }
         }
 
-        return count($definitions) === 0 ? [] : array_merge(...$definitions);
+        return \count($definitions) === 0 ? [] : \array_merge(...$definitions);
     }
 
     /**
@@ -166,17 +154,17 @@ class ContainerBuilder
      */
     private static function loadDefinitionsFromFile(string $file): array
     {
-        if (!is_file($file) || !is_readable($file)) {
+        if (!\is_file($file) || !\is_readable($file)) {
             // @codeCoverageIgnoreStart
-            throw new \RuntimeException(sprintf('"%s" must be a readable file', $file));
+            throw new \RuntimeException(\sprintf('"%s" must be a readable file', $file));
             // @codeCoverageIgnoreEnd
         }
 
         $definitions = require $file;
 
-        if (!is_array($definitions)) {
+        if (!\is_array($definitions)) {
             throw new \RuntimeException(
-                sprintf('Definitions file should return an array. "%s" returned', gettype($definitions))
+                \sprintf('Definitions file should return an array. "%s" returned', \gettype($definitions))
             );
         }
 

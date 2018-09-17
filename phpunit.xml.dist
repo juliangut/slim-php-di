@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.7/phpunit.xsd"
-         bootstrap="./tests/bootstrap.php"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.7/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
          backupGlobals="false"
-         backupStaticAttributes="false"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutChangesToGlobalState="true"
          beStrictAboutOutputDuringTests="true"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
-         stopOnSkipped="false"
-         stopOnIncomplete="false"
-         syntaxCheck="false"
+         stopOnError="true"
+         stopOnFailure="true"
          verbose="true"
 >
     <testsuites>
         <testsuite name="slim-php-di test suite">
-            <directory suffix="Test.php">tests/PHPDI/</directory>
+            <directory>tests/PHPDI/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+        <whitelist>
             <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>

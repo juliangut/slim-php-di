@@ -83,27 +83,27 @@ class Configuration
      */
     public function __construct($configurations = [])
     {
-        if (!is_array($configurations) && !$configurations instanceof \Traversable) {
+        if (!\is_array($configurations) && !$configurations instanceof \Traversable) {
             throw new \InvalidArgumentException('Configurations must be a traversable');
         }
 
-        $configs = array_keys(get_object_vars($this));
+        $configs = \array_keys(\get_object_vars($this));
 
-        $unknownParameters = array_diff(array_keys($configurations), $configs);
-        if (count($unknownParameters) > 0) {
+        $unknownParameters = \array_diff(\array_keys($configurations), $configs);
+        if (\count($unknownParameters) > 0) {
             throw new \InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'The following configuration parameters are not recognized: %s',
-                    implode(', ', $unknownParameters)
+                    \implode(', ', $unknownParameters)
                 )
             );
         }
 
         foreach ($configs as $config) {
             if (isset($configurations[$config])) {
-                $callback = [$this, 'set' . ucfirst($config)];
+                $callback = [$this, 'set' . \ucfirst($config)];
 
-                call_user_func($callback, $configurations[$config]);
+                \call_user_func($callback, $configurations[$config]);
             }
         }
     }
@@ -129,14 +129,14 @@ class Configuration
      */
     public function setContainerClass(string $containerClass)
     {
-        if (!class_exists($containerClass)
+        if (!\class_exists($containerClass)
             || (
                 $containerClass !== DIContainer::class
-                && !is_subclass_of($containerClass, DIContainer::class)
+                && !\is_subclass_of($containerClass, DIContainer::class)
             )
         ) {
             throw new \InvalidArgumentException(
-                sprintf('class "%s" must extend %s', $containerClass, DIContainer::class)
+                \sprintf('class "%s" must extend %s', $containerClass, DIContainer::class)
             );
         }
 
@@ -286,8 +286,8 @@ class Configuration
      */
     public function setProxiesPath(string $proxiesPath)
     {
-        if (!file_exists($proxiesPath) || !is_dir($proxiesPath) || !is_writable($proxiesPath)) {
-            throw new \RuntimeException(sprintf('%s directory does not exist or is write protected', $proxiesPath));
+        if (!\file_exists($proxiesPath) || !\is_dir($proxiesPath) || !\is_writable($proxiesPath)) {
+            throw new \RuntimeException(\sprintf('%s directory does not exist or is write protected', $proxiesPath));
         }
 
         $this->proxiesPath = $proxiesPath;
@@ -316,8 +316,11 @@ class Configuration
      */
     public function setCompilationPath(string $compilationPath)
     {
-        if (!file_exists($compilationPath) || !is_dir($compilationPath) || !is_writable($compilationPath)) {
-            throw new \RuntimeException(sprintf('%s directory does not exist or is write protected', $compilationPath));
+        if (!\file_exists($compilationPath) || !\is_dir($compilationPath) || !\is_writable($compilationPath)) {
+            throw new \RuntimeException(\sprintf(
+                '%s directory does not exist or is write protected',
+                $compilationPath
+            ));
         }
 
         $this->compilationPath = $compilationPath;
@@ -346,14 +349,14 @@ class Configuration
      */
     public function setCompiledContainerClass(string $compiledContainerClass)
     {
-        if (!class_exists($compiledContainerClass)
+        if (!\class_exists($compiledContainerClass)
             || (
                 $compiledContainerClass !== DICompiledContainer::class
-                && !is_subclass_of($compiledContainerClass, DICompiledContainer::class)
+                && !\is_subclass_of($compiledContainerClass, DICompiledContainer::class)
             )
         ) {
             throw new \InvalidArgumentException(
-                sprintf('class "%s" must extend %s', $compiledContainerClass, DICompiledContainer::class)
+                \sprintf('class "%s" must extend %s', $compiledContainerClass, DICompiledContainer::class)
             );
         }
 
@@ -383,28 +386,28 @@ class Configuration
      */
     public function setDefinitions($definitions)
     {
-        if (is_string($definitions)) {
+        if (\is_string($definitions)) {
             $definitions = [$definitions];
         }
 
         if ($definitions instanceof \Traversable) {
-            $definitions = iterator_to_array($definitions);
+            $definitions = \iterator_to_array($definitions);
         }
 
-        if (!is_array($definitions)) {
+        if (!\is_array($definitions)) {
             throw new \InvalidArgumentException(
-                sprintf('Definitions must be a string or traversable. %s given', gettype($definitions))
+                \sprintf('Definitions must be a string or traversable. %s given', \gettype($definitions))
             );
         }
 
-        array_walk(
+        \array_walk(
             $definitions,
             function ($definition) {
-                if (!is_array($definition) && !is_string($definition)) {
+                if (!\is_array($definition) && !\is_string($definition)) {
                     throw new \InvalidArgumentException(
-                        sprintf(
+                        \sprintf(
                             'A definition must be an array or a file or directory path. %s given',
-                            gettype($definition)
+                            \gettype($definition)
                         )
                     );
                 }
