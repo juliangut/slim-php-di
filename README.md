@@ -69,7 +69,7 @@ Or build container and provide it to default Slim App.
 
 ```php
 use Jgut\Slim\PHPDI\Configuration;
-use Jgut\Slim\PHPDI\ContinerBuilder;
+use Jgut\Slim\PHPDI\ContainerBuilder;
 use Slim\App
 
 $settings = require __DIR__ . '/settings.php';
