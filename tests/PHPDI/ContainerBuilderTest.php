@@ -50,7 +50,7 @@ class ContainerBuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configuration = new Configuration([
+        $configuration = [
             'containerClass' => Container::class,
             'useAutoWiring' => true,
             'useAnnotations' => true,
@@ -67,9 +67,13 @@ class ContainerBuilderTest extends TestCase
                     'valid' => 'definition',
                 ],
             ],
-        ]);
+        ];
 
-        $container = ContainerBuilder::build($configuration);
+        if (\ini_get('apc.enabled') === '0') {
+            unset($configuration['useDefinitionCache']);
+        }
+
+        $container = ContainerBuilder::build(new Configuration($configuration));
 
         self::assertInstanceOf(Container::class, $container);
         self::assertTrue($container->has('foo'));
