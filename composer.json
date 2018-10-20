@@ -101,7 +101,7 @@
   },
   "extra": {
     "hooks": {
-      "pre-commit": "composer qa && composer test-phpunit"
+      "pre-commit": "composer lint && composer qa && composer test-phpunit"
     }
   }
 }

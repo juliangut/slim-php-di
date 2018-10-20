@@ -37,7 +37,7 @@ trait ContainerTrait
     public function get($name)
     {
         try {
-            return strpos($name, '.') === false
+            return \strpos($name, '.') === false
                 ? parent::get($name)
                 : $this->getRecursive($name);
         } catch (NotFoundException $exception) {
@@ -64,7 +64,7 @@ trait ContainerTrait
      */
     public function has($name)
     {
-        if (strpos($name, '.') === false) {
+        if (\strpos($name, '.') === false) {
             return parent::has($name);
         }
 
