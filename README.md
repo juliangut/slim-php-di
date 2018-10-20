@@ -126,14 +126,37 @@ Services are registered in the following order:
 * Default Slim services
 * Definitions provided in configuration in the order they are in the array
 
-## Slim's settings direct access
+## Array value access shorthand
 
-Default `\Jgut\Slim\PHPDI\Container` container allows direct access to Slim's settings array values by prepending 'settings.' to setting key. If setting is not defined normal container's `ContainerValueNotFoundException` is thrown
+Default `\Jgut\Slim\PHPDI\Container` container allows shorthand to access array values by concatenating array keys with dots. If any key in the chain is not defined normal container's `ContainerValueNotFoundException` is thrown
 
 ```php
-$container->get('settings')['displayErrorDetails'];
-$container->get('settings.displayErrorDetails');
+$container->get('settings')['displayErrorDetails']; // true
+$container->get('settings.displayErrorDetails'); // true
 ```
+
+This functionality would most commonly be used to directly access settings but can be used to access any other array defined in the container
+
+#### Notice
+
+Be careful though not to shadow any array keys by using dots in keys
+
+```php
+$settings = [
+    'foo' => [
+        'bar' => [
+            'baz' => 'shadowed!',
+        ],
+    ],
+    'foo.bar' => 'bang!',
+];
+$container->set('settings', $settings);
+
+$container->get('settings.foo.bar'); // bang!
+$container->get('settings.foo.bar.baz'); // ContainerValueNotFoundException thrown
+``` 
+
+_The easiest way to avoid this from ever happening is by not using dots in keys_
 
 ## Migration from 1.x
 

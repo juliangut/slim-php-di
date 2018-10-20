@@ -48,7 +48,7 @@ class ContainerTest extends TestCase
 
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
-     * @expectedExceptionMessage No entry or class found for 'baz'
+     * @expectedExceptionMessage No entry or class found for "baz"
      */
     public function testGetNonExistent()
     {
@@ -58,12 +58,35 @@ class ContainerTest extends TestCase
 
     /**
      * @expectedException \Slim\Exception\ContainerValueNotFoundException
-     * @expectedExceptionMessage Setting "baz" not found
+     * @expectedExceptionMessage No entry or class found for "settings.baz"
      */
-    public function testGetNonExistentSetting()
+    public function testGetNonExistentWithDots()
     {
         self::assertFalse($this->container->has('settings.baz'));
         $this->container['settings.baz'];
+    }
+
+    /**
+     * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedExceptionMessage No entry or class found for "settings.foo.bar.baz"
+     */
+    public function testGetShadowed()
+    {
+        $settings = [
+            'foo' => [
+                'bar' => [
+                    'baz' => 'shadowed!',
+                ],
+            ],
+            'foo.bar' => 'bang!',
+        ];
+        $this->container->set('settings', $settings);
+
+        self::assertTrue($this->container->has('settings.foo.bar'));
+        self::assertEquals('bang!', $this->container->get('settings.foo.bar'));
+
+        self::assertFalse($this->container->has('settings.foo.bar.baz'));
+        $this->container->get('settings.foo.bar.baz');
     }
 
     public function testSettingsAccess()
@@ -72,29 +95,23 @@ class ContainerTest extends TestCase
             'foo' => [
                 'bar' => [
                     'baz' => 'found!',
+                    'bam' => [],
                 ],
             ],
-            'foo.bar' => 'bang!',
         ];
         $this->container->set('settings', $settings);
 
         self::assertTrue($this->container->has('settings.foo'));
-        self::assertEquals(['bar' => ['baz' => 'found!']], $this->container->get('settings.foo'));
+        self::assertEquals(['bar' => ['baz' => 'found!', 'bam' => []]], $this->container->get('settings.foo'));
 
         self::assertTrue($this->container->has('settings.foo.bar'));
-        self::assertEquals('bang!', $this->container->get('settings.foo.bar'));
+        self::assertEquals(['baz' => 'found!', 'bam' => []], $this->container->get('settings.foo.bar'));
 
         self::assertTrue($this->container->has('settings.foo.bar.baz'));
         self::assertEquals('found!', $this->container->get('settings.foo.bar.baz'));
-    }
 
-    /**
-     * @expectedException \Slim\Exception\ContainerValueNotFoundException
-     * @expectedExceptionMessage No entry or class found for 'none'
-     */
-    public function testGetWrong()
-    {
-        $this->container->get('none');
+        self::assertTrue($this->container->has('settings.foo.bar.bam'));
+        self::assertEquals([], $this->container->get('settings.foo.bar.bam'));
     }
 
     /**
@@ -105,7 +122,7 @@ class ContainerTest extends TestCase
     {
         $configuration = new Configuration([
             'definitions' => [
-                ['foo' => \DI\create('\\Foo\\Bar')],
+                ['foo' => \DI\create('\\Unknown\\Foo\\Bar')],
             ],
         ]);
 

@@ -37,14 +37,16 @@ trait ContainerTrait
     public function get($name)
     {
         try {
-            if (\is_string($name) && \strpos($name, 'settings.') === 0) {
-                return $this->getSetting(\substr($name, 9), parent::get('settings'));
-            }
-
-            return parent::get($name);
+            return strpos($name, '.') === false
+                ? parent::get($name)
+                : $this->getRecursive($name);
         } catch (NotFoundException $exception) {
-            throw new ContainerValueNotFoundException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (\Exception $exception) {
+            throw new ContainerValueNotFoundException(
+                \sprintf('No entry or class found for "%s"', $name),
+                $exception->getCode(),
+                $exception
+            );
+        } catch (\Throwable $exception) {
             throw new ContainerException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
@@ -62,49 +64,52 @@ trait ContainerTrait
      */
     public function has($name)
     {
-        if (\is_string($name) && \strpos($name, 'settings.') === 0) {
-            try {
-                $this->getSetting(\substr($name, 9), parent::get('settings'));
-
-                return true;
-            } catch (\Exception $exception) {
-                return false;
-            }
+        if (strpos($name, '.') === false) {
+            return parent::has($name);
         }
 
-        return parent::has($name);
+        try {
+            $this->getRecursive($name);
+        } catch (\Throwable $exception) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Get setting from settings.
-     *
-     * @param string $setting
-     * @param array  $settings
+     * @param string     $key
+     * @param array|null $parent
      *
      * @throws NotFoundException
      *
      * @return mixed
      */
-    protected function getSetting(string $setting, array $settings)
+    private function getRecursive(string $key, array $parent = null)
     {
-        $segments = \explode('.', $setting);
-
-        while ($segment = \array_shift($segments)) {
-            if (\count($segments) > 0) {
-                $combinedSetting = $segment . '.' . \implode('.', $segments);
-                if (\is_array($settings) && \array_key_exists($combinedSetting, $settings)) {
-                    return $settings[$combinedSetting];
-                }
-            }
-
-            if (!\is_array($settings) || !\array_key_exists($segment, $settings)) {
-                throw new NotFoundException(\sprintf('Setting "%s" not found', $setting));
-            }
-
-            $settings = $settings[$segment];
+        if ($parent !== null ? \array_key_exists($key, $parent) : parent::has($key)) {
+            return $parent !== null ? $parent[$key] : parent::get($key);
         }
 
-        return $settings;
+        $keySegments = \explode('.', $key);
+        $keyParts = [];
+
+        while (\count($keySegments) > 1) {
+            \array_unshift($keyParts, \array_pop($keySegments));
+            $subKey = \implode('.', $keySegments);
+
+            if ($parent !== null ? \array_key_exists($subKey, $parent) : parent::has($subKey)) {
+                $parent = $parent !== null ? $parent[$subKey] : parent::get($subKey);
+
+                if (!\is_array($parent)) {
+                    break;
+                }
+
+                return $this->getRecursive(\implode('.', $keyParts), $parent);
+            }
+        }
+
+        throw new NotFoundException(\sprintf('Entry "%s" not found', $key));
     }
 
     /**
@@ -147,7 +152,7 @@ trait ContainerTrait
      *
      * @return bool
      */
-    public function offsetExists($name)
+    public function offsetExists($name): bool
     {
         return $this->has($name);
     }

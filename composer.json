@@ -33,13 +33,12 @@
     "friendsofphp/php-cs-fixer": "^2.0",
     "infection/infection": "^0.7",
     "phpmd/phpmd": "^2.0",
-    "phpmetrics/phpmetrics": "^2.0",
     "phpstan/phpstan": "^0.9",
     "phpstan/phpstan-strict-rules": "^0.9",
-    "phpunit/phpunit": "^6.0",
-    "povils/phpmnd": "^1.1",
+    "phpunit/phpunit": "^6.0|^7.0",
+    "povils/phpmnd": "^1.1|^2.0",
     "roave/security-advisories": "dev-master",
-    "sebastian/phpcpd": "^3.0|^4.0",
+    "sebastian/phpcpd": "^2.0|^4.0",
     "squizlabs/php_codesniffer": "^2.0"
   },
   "suggest": {
@@ -74,7 +73,6 @@
     "qa-phpstan": "phpstan analyse --level max --configuration=phpstan.neon --memory-limit=2G --no-progress src",
     "test-phpunit": "phpunit",
     "test-infection": "infection",
-    "report-phpmetrics": "phpmetrics --report-html=build/metrics --report-violations=build/logs/violations.xml --offline .",
     "report-phpunit-coverage": "phpunit --coverage-html build/coverage",
     "report-phpunit-clover": "phpunit --coverage-clover build/logs/clover.xml",
     "lint": [
@@ -98,8 +96,7 @@
     ],
     "report": [
       "@report-phpunit-coverage",
-      "@report-phpunit-clover",
-      "@report-phpmetrics"
+      "@report-phpunit-clover"
     ]
   },
   "extra": {
