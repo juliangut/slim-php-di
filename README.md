@@ -137,7 +137,7 @@ $app->get('/hello/{name}', function (ResponseInterface $response, string $name, 
     // $name will be injected from request arguments
     // $connection will be injected from the container
 
-    $response->getBody()->write('Hellow ' . $name);
+    $response->getBody()->write('Hello ' . $name);
 
     return $response;
 });
