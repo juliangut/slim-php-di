@@ -30,7 +30,7 @@ require_once './vendor/autoload.php';
 
 ## Usage
 
-Use `Jgut\Slim\PHPDI\ContainerBuilder` to create PHP-DI container and seed it to Slim's AppFactory 
+Use `Jgut\Slim\PHPDI\ContainerBuilder` to create PHP-DI container and seed it to Slim's AppFactory
 
 ```php
 use App\ServiceOne;
@@ -121,15 +121,40 @@ $configs = [
 $container->set('configs', $configs);
 
 $container->get('configs.foo.bar'); // bang!
-$container->get('configs.foo.bar.baz'); // ContainerValueNotFoundException thrown
-``` 
+$container->get('configs.foo.bar.baz'); // NotFoundExceptionInterface thrown
+```
 
 _The easiest way to avoid this from ever happening is by NOT using dots in keys_
+
+## Invocation strategy
+
+By default `Jgut\Slim\PHPDI\AppFactory` sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it is quite handy and lets you do things like this
+
+```php
+$app = AppFactory::create();
+
+$app->get('/hello/{name}', function (ResponseInterface $response, string $name, CustomDbConnection $connection): ResponseInterface {
+    // $name will be injected from request arguments
+    // $connection will be injected from the container
+
+    $response->getBody()->write('Hellow ' . $name);
+
+    return $response;
+});
+
+$app->run();
+```
+
+If you prefer default Slim's `Slim\Handlers\Strategies\RequestResponse` strategy you only have to
+
+```php
+AppFactory::setUseCustomStrategy(false);
+```
 
 ## Migration from 2.x
 
 * Minimum Slim version is now 4.0
-* Slim 4 does not have ANY definition on container, so default definitions have been removed. Container by default only provides the Configuration object used on building the container itself. Refer to Slim's [documentation](http://www.slimframework.com/docs/v4/) 
+* Slim 4 does not have ANY definition on container, so default definitions have been removed. Container by default only provides the Configuration object used on building the container itself. Refer to Slim's [documentation](http://www.slimframework.com/docs/v4/)
 * Slim's App is not extended any more, it should be created with custom AppFactory instead of default Slim's
 * Service definitions à la Pimple support has been kept but its use is discouraged, use PHP-DI's methods
 

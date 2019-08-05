@@ -136,7 +136,7 @@ trait ContainerTrait
      *
      * @see \DI\Container::get
      *
-     * @param string $name
+     * @param mixed $name
      *
      * @throws DependencyException
      * @throws NotFoundException

@@ -41,6 +41,11 @@ class AppFactory extends SlimAppFactory
     protected static $configuration;
 
     /**
+     * @var bool
+     */
+    protected static $useCustomStrategy = true;
+
+    /**
      * {@inheritdoc}
      */
     public static function create(
@@ -60,9 +65,11 @@ class AppFactory extends SlimAppFactory
             $routeResolver
         );
 
-        $app
-            ->getRouteCollector()
-            ->setDefaultInvocationStrategy(static::getInvocationStrategy($container));
+        if (static::$useCustomStrategy) {
+            $app
+                ->getRouteCollector()
+                ->setDefaultInvocationStrategy(static::getInvocationStrategy($container));
+        }
 
         return $app;
     }
@@ -96,5 +103,15 @@ class AppFactory extends SlimAppFactory
     final public static function setContainerConfiguration(Configuration $configuration): void
     {
         static::$configuration = $configuration;
+    }
+
+    /**
+     * Set custom invocation strategy usage.
+     *
+     * @param bool $useCustomStrategy
+     */
+    final public static function setUseCustomStrategy(bool $useCustomStrategy = true): void
+    {
+        static::$useCustomStrategy = $useCustomStrategy;
     }
 }
