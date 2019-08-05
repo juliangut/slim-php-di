@@ -32,7 +32,7 @@ class ContainerBuilder
      *
      * @return DIContainer
      */
-    public static function build(Configuration $configuration = null): DIContainer
+    public static function build(?Configuration $configuration = null): DIContainer
     {
         if ($configuration === null) {
             $configuration = new Configuration();
@@ -76,7 +76,7 @@ class ContainerBuilder
             $containerBuilder->writeProxiesToFile(true, $configuration->getProxiesPath());
         }
 
-        if (!empty($configuration->getCompilationPath())) {
+        if ($configuration->getCompilationPath() !== null) {
             $containerBuilder->enableCompilation(
                 $configuration->getCompilationPath(),
                 'CompiledContainer',
@@ -90,11 +90,11 @@ class ContainerBuilder
     /**
      * Parse definitions.
      *
-     * @param array $definitions
+     * @param string[] $definitions
      *
      * @throws \RuntimeException
      *
-     * @return array
+     * @return mixed[]
      */
     private static function parseDefinitions(array $definitions): array
     {
@@ -121,7 +121,7 @@ class ContainerBuilder
      *
      * @throws \RuntimeException
      *
-     * @return array
+     * @return mixed[]
      */
     private static function loadDefinitionsFromPath(string $path): array
     {
@@ -134,9 +134,12 @@ class ContainerBuilder
         }
 
         $definitions = [];
-        foreach (\glob($path . '/*.php', \GLOB_ERR) as $file) {
-            if (\is_file($file)) {
-                $definitions[] = self::loadDefinitionsFromFile($file);
+        $files = \glob($path . '/*.php', \GLOB_ERR);
+        if ($files !== false) {
+            foreach ($files as $file) {
+                if (\is_file($file)) {
+                    $definitions[] = self::loadDefinitionsFromFile($file);
+                }
             }
         }
 
@@ -150,7 +153,7 @@ class ContainerBuilder
      *
      * @throws \RuntimeException
      *
-     * @return array
+     * @return mixed[]
      */
     private static function loadDefinitionsFromFile(string $file): array
     {

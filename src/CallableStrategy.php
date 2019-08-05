@@ -19,7 +19,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 
 /**
- * Route callback strategy.
+ * Route callback strategy with PHP-DI.
  */
 class CallableStrategy implements InvocationStrategyInterface
 {
@@ -46,14 +46,14 @@ class CallableStrategy implements InvocationStrategyInterface
      * @param ResponseInterface      $response
      * @param array                  $routeArguments
      *
-     * @return ResponseInterface|string
+     * @return ResponseInterface
      */
     public function __invoke(
         callable $callable,
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $routeArguments
-    ) {
+    ): ResponseInterface {
         // Inject the request and response by parameter name
         $parameters = [
             'request' => $request,

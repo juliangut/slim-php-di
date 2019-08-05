@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
+use DI\DependencyException;
 use DI\NotFoundException;
-use Slim\Exception\ContainerException;
-use Slim\Exception\ContainerValueNotFoundException;
 
 /**
  * PHP-DI Dependency Injection Container trait.
@@ -29,8 +28,8 @@ trait ContainerTrait
      *
      * @param string $name
      *
-     * @throws ContainerValueNotFoundException
-     * @throws ContainerException
+     * @throws DependencyException
+     * @throws NotFoundException
      *
      * @return mixed
      */
@@ -41,13 +40,13 @@ trait ContainerTrait
                 ? parent::get($name)
                 : $this->getRecursive($name);
         } catch (NotFoundException $exception) {
-            throw new ContainerValueNotFoundException(
+            throw new NotFoundException(
                 \sprintf('No entry or class found for "%s"', $name),
                 $exception->getCode(),
                 $exception
             );
         } catch (\Throwable $exception) {
-            throw new ContainerException($exception->getMessage(), $exception->getCode(), $exception);
+            throw new DependencyException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
@@ -60,7 +59,7 @@ trait ContainerTrait
      *
      * @throws \InvalidArgumentException
      *
-     * @return mixed
+     * @return bool
      */
     public function has($name)
     {
@@ -117,11 +116,18 @@ trait ContainerTrait
      *
      * @see \DI\Container::set
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $name
+     * @param mixed $value
+     *
+     * @deprecated since 3.0
      */
     public function offsetSet($name, $value)
     {
+        @\trigger_error(
+            'ArrayAccess set method is deprecated since 3.0, use PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         $this->set($name, $value);
     }
 
@@ -132,7 +138,8 @@ trait ContainerTrait
      *
      * @param string $name
      *
-     * @throws \Slim\Exception\ContainerValueNotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      *
      * @return mixed
      */
@@ -146,7 +153,7 @@ trait ContainerTrait
      *
      * @see \DI\Container::has
      *
-     * @param string $name
+     * @param mixed $name
      *
      * @throws \InvalidArgumentException
      *
@@ -160,7 +167,7 @@ trait ContainerTrait
     /**
      * Unset a container entry by its name.
      *
-     * @param string $name
+     * @param mixed $name
      *
      * @throws \RuntimeException
      *
@@ -172,20 +179,6 @@ trait ContainerTrait
     }
 
     /**
-     * @see \DI\Container::get
-     *
-     * @param string $name
-     *
-     * @throws \Slim\Exception\ContainerValueNotFoundException
-     *
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        return $this->get($name);
-    }
-
-    /**
      * @see \DI\Container::set
      *
      * @param string $name
@@ -194,6 +187,21 @@ trait ContainerTrait
     public function __set(string $name, $value)
     {
         $this->set($name, $value);
+    }
+
+    /**
+     * @see \DI\Container::get
+     *
+     * @param string $name
+     *
+     * @throws DependencyException
+     * @throws NotFoundException
+     *
+     * @return mixed
+     */
+    public function __get(string $name)
+    {
+        return $this->get($name);
     }
 
     /**

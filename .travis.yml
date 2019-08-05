@@ -13,17 +13,18 @@ env:
   - COMPOSER_FLAGS="--prefer-stable --prefer-dist"
 
 php:
-  - 7.1
+  - 7.0
   - 7.2
+  - 7.3
   - nightly
 
 matrix:
   fast_finish: true
   include:
-    - php: 7.0
+    - php: 7.1
       env:
         - COMPOSER_FLAGS="--prefer-lowest --prefer-stable --prefer-dist"
-    - php: 7.0
+    - php: 7.1
       env:
         - TEST_VERSION=true
         - COMPOSER_FLAGS="--prefer-stable --prefer-dist"
@@ -31,7 +32,7 @@ matrix:
     - php: nightly
 
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION == '7.0' ]] || [[ $TRAVIS_PHP_VERSION == '7.1' ]]; then yes '' | pecl install apcu; fi
+  - pecl install apcu
   - echo 'extension=apcu.so' >> /home/travis/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo 'apc.enable_cli=1' >> /home/travis/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - if [[ -z $TEST_VERSION && -f "/home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini" ]]; then phpenv config-rm xdebug.ini; fi

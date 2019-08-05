@@ -14,10 +14,6 @@
 
 PHP-DI (v6) dependency injection container integration for Slim Framework.
 
-In order to allow possible services out there expecting the container to be `Slim\Container` (extending Pimple) and thus implementing `ArrayAccess`, it has been added to default provided container.
-
-You are encouraged to use array syntax for assignment instead of PHP-DI `set` method if you plan to reuse your code with default Slim container.
-
 ## Installation
 
 Best way to install is using [Composer](https://getcomposer.org/):
@@ -34,55 +30,36 @@ require_once './vendor/autoload.php';
 
 ## Usage
 
-Use `\Jgut\Slim\PHPDI\App` which will build PHP-DI container.
+Use `Jgut\Slim\PHPDI\ContainerBuilder` to create PHP-DI container and seed it to Slim's AppFactory 
 
 ```php
-use Interop\Container\ContainerInterface;
+use App\ServiceOne;
+use Jgut\Slim\PHPDI\AppFactory;
 use Jgut\Slim\PHPDI\Configuration;
-use Jgut\Slim\PHPDI\App;
+use Psr\Container\ContainerInterface;
 
 $settings = require __DIR__ . '/settings.php';
 $configuration = new Configuration($settings);
 $configuration->setDefinitions('/path/to/definitions/file.php');
 
-$app = new App($configuration);
+AppFactory::setContainerConfiguration($configuration);
+
+$app = AppFactory::create();
+
+// Get container
 $container = $app->getContainer();
 
-// Register services the PHP-DI way
-$container->set('service_one', function (ContainerInterface $container) {
+// Get container and register your services if not provided as definitions
+$app->getContainer()->set('service_one', function (ContainerInterface $container) {
     return new ServiceOne($container->get('service_two'));
 });
-
-// \Jgut\Slim\PHPDI\Container accepts registering services à la Pimple
-$container['service_two'] =  function (ContainerInterface $container) {
-    return new ServiceTwo();
-};
 
 // Set your routes
 
 $app->run();
 ```
 
-#### ContainerBuilder
-
-Or build container and provide it to default Slim App.
-
-```php
-use Jgut\Slim\PHPDI\Configuration;
-use Jgut\Slim\PHPDI\ContainerBuilder;
-use Slim\App
-
-$settings = require __DIR__ . '/settings.php';
-$container = ContainerBuilder::build(new Configuration($settings));
-
-// ...
-
-$app = new App($container);
-
-// ...
-
-$app->run();
-```
+In order to register services in the container it's way better to do it by definition files
 
 ### Configuration
 
@@ -119,30 +96,21 @@ In order for you to use annotations you have to `require doctrine/annotations`. 
 * `containerClass`, container class that will be built. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
 * `definitions`, an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
 
-## Services registration order
-
-Services are registered in the following order:
-
-* Default Slim services
-* Definitions provided in configuration in the order they are in the array
-
 ## Array value access shorthand
 
-Default `\Jgut\Slim\PHPDI\Container` container allows shorthand to access array values by concatenating array keys with dots. If any key in the chain is not defined normal container's `ContainerValueNotFoundException` is thrown
+Default `\Jgut\Slim\PHPDI\Container` container allows shorthand to access array values by concatenating array keys with dots. If any key in the chain is not defined normal container's `Psr\Container\NotFoundExceptionInterface` is thrown
 
 ```php
-$container->get('settings')['displayErrorDetails']; // true
-$container->get('settings.displayErrorDetails'); // true
+$container->get('configs')['database']['dsn']; // given configs is an array
+$container->get('configs.database.dsn'); // same as before
 ```
-
-This functionality would most commonly be used to directly access settings but can be used to access any other array defined in the container
 
 #### Notice
 
 Be careful though not to shadow any array keys by using dots in keys
 
 ```php
-$settings = [
+$configs = [
     'foo' => [
         'bar' => [
             'baz' => 'shadowed!',
@@ -150,21 +118,20 @@ $settings = [
     ],
     'foo.bar' => 'bang!',
 ];
-$container->set('settings', $settings);
+$container->set('configs', $configs);
 
-$container->get('settings.foo.bar'); // bang!
-$container->get('settings.foo.bar.baz'); // ContainerValueNotFoundException thrown
+$container->get('configs.foo.bar'); // bang!
+$container->get('configs.foo.bar.baz'); // ContainerValueNotFoundException thrown
 ``` 
 
-_The easiest way to avoid this from ever happening is by not using dots in keys_
+_The easiest way to avoid this from ever happening is by NOT using dots in keys_
 
-## Migration from 1.x
+## Migration from 2.x
 
-* Minimum Slim version is now 3.9
-* PHP-DI have been upgraded to v6. Review PHP-DI documentation: container compilation, create/autowire functions, etc
-* PHP-DI settings have been moved into Configuration object. This object accepts an array of settings on instantiation so it's just a matter of providing the settings to it
-* Configuration settings names have changed from snake_case to camelCase
-* Definitions are included in Configuration object rather than set apart. Now you can as well define path(s) to load definition files from
+* Minimum Slim version is now 4.0
+* Slim 4 does not have ANY definition on container, so default definitions have been removed. Container by default only provides the Configuration object used on building the container itself. Refer to Slim's [documentation](http://www.slimframework.com/docs/v4/) 
+* Slim's App is not extended any more, it should be created with custom AppFactory instead of default Slim's
+* Service definitions à la Pimple support has been kept but its use is discouraged, use PHP-DI's methods
 
 ## Contributing
 

@@ -13,20 +13,10 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
-use Jgut\Slim\PHPDI\CallableStrategy;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Handlers\Error;
-use Slim\Handlers\NotAllowed;
-use Slim\Handlers\NotFound;
-use Slim\Handlers\PhpError;
-use Slim\Http\Environment;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\RouterInterface;
 
 /**
  * Container tests.
@@ -47,7 +37,7 @@ class ContainerTest extends TestCase
     }
 
     /**
-     * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedException \Psr\Container\NotFoundExceptionInterface
      * @expectedExceptionMessage No entry or class found for "baz"
      */
     public function testGetNonExistent()
@@ -57,7 +47,7 @@ class ContainerTest extends TestCase
     }
 
     /**
-     * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedException \Psr\Container\NotFoundExceptionInterface
      * @expectedExceptionMessage No entry or class found for "settings.baz"
      */
     public function testGetNonExistentWithDots()
@@ -67,7 +57,7 @@ class ContainerTest extends TestCase
     }
 
     /**
-     * @expectedException \Slim\Exception\ContainerValueNotFoundException
+     * @expectedException \Psr\Container\NotFoundExceptionInterface
      * @expectedExceptionMessage No entry or class found for "settings.foo.bar.baz"
      */
     public function testGetShadowed()
@@ -115,7 +105,7 @@ class ContainerTest extends TestCase
     }
 
     /**
-     * @expectedException \Slim\Exception\ContainerException
+     * @expectedException \Psr\Container\ContainerExceptionInterface
      * @expectedExceptionMessage Entry "foo" cannot be resolved: the class doesn't exist
      */
     public function testUnresolvable()
@@ -170,46 +160,6 @@ class ContainerTest extends TestCase
 
     public function testDefaultServices()
     {
-        self::assertTrue($this->container->has('settings'));
-        self::assertInternalType('array', $this->container->get('settings'));
-        self::assertEquals('1.1', $this->container->get('settings.httpVersion'));
-        self::assertEquals(4096, $this->container->get('settings.responseChunkSize'));
-        self::assertEquals('append', $this->container->get('settings.outputBuffering'));
-        self::assertFalse($this->container->get('settings.determineRouteBeforeAppMiddleware'));
-        self::assertFalse($this->container->get('settings.displayErrorDetails'));
-        self::assertTrue($this->container->get('settings.addContentLengthHeader'));
-        self::assertFalse($this->container->get('settings.routerCacheFile'));
-
-        self::assertTrue($this->container->has('environment'));
-        self::assertInstanceOf(Environment::class, $this->container->get('environment'));
-
-        self::assertTrue($this->container->has('request'));
-        self::assertInstanceOf(ServerRequestInterface::class, $this->container->get('request'));
-
-        self::assertTrue($this->container->has('response'));
-        self::assertInstanceOf(ResponseInterface::class, $this->container->get('response'));
-
-        self::assertTrue($this->container->has('router'));
-        self::assertInstanceOf(RouterInterface::class, $this->container->get('router'));
-
-        self::assertTrue($this->container->has('phpErrorHandler'));
-        self::assertInstanceOf(PhpError::class, $this->container->get('phpErrorHandler'));
-
-        self::assertTrue($this->container->has('errorHandler'));
-        self::assertInstanceOf(Error::class, $this->container->get('errorHandler'));
-
-        self::assertTrue($this->container->has('notFoundHandler'));
-        self::assertInstanceOf(NotFound::class, $this->container->get('notFoundHandler'));
-
-        self::assertTrue($this->container->has('notAllowedHandler'));
-        self::assertInstanceOf(NotAllowed::class, $this->container->get('notAllowedHandler'));
-
-        self::assertTrue($this->container->has('foundHandler'));
-        self::assertInstanceOf(CallableStrategy::class, $this->container['foundHandler']);
-
-        self::assertTrue($this->container->has('callableResolver'));
-        self::assertInstanceOf(CallableResolverInterface::class, $this->container->get('callableResolver'));
-
         self::assertTrue($this->container->has(Configuration::class));
         self::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));
 

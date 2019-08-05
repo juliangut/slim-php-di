@@ -41,7 +41,7 @@ class CallableStrategyTest extends TestCase
             ->getMock();
         $request->expects(self::once())
             ->method('getAttributes')
-            ->will($this->returnValue($requestAttributes));
+            ->will(static::returnValue($requestAttributes));
         /* @var ServerRequestInterface $request */
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
@@ -56,7 +56,8 @@ class CallableStrategyTest extends TestCase
             ->with(
                 $callable,
                 \array_merge(['request' => $request, 'response' => $response], $requestAttributes, $parameters)
-            );
+            )
+            ->willReturn($response);
         /* @var \Invoker\InvokerInterface $invoker */
 
         $handler = new CallableStrategy($invoker);

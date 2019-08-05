@@ -34,6 +34,10 @@ class CallableResolverTest extends TestCase
 
         $resolver = new CallableResolver($invoker);
 
-        $resolver->resolve('Controller::method');
+        try {
+            $resolver->resolve('Controller::method');
+        } catch (\RuntimeException $exception) {
+            self::assertEquals('"Controller::method" is not resolvable', $exception->getMessage());
+        }
     }
 }

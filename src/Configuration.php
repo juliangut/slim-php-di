@@ -70,14 +70,14 @@ class Configuration
     protected $compiledContainerClass = AbstractCompiledContainer::class;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $definitions = [];
 
     /**
      * Configuration constructor.
      *
-     * @param array|\Traversable $configurations
+     * @param mixed $configurations
      *
      * @throws \InvalidArgumentException
      */
@@ -85,6 +85,10 @@ class Configuration
     {
         if (!\is_array($configurations) && !$configurations instanceof \Traversable) {
             throw new \InvalidArgumentException('Configurations must be a traversable');
+        }
+
+        if ($configurations instanceof \Traversable) {
+            $configurations = \iterator_to_array($configurations);
         }
 
         $configs = \array_keys(\get_object_vars($this));
@@ -101,6 +105,7 @@ class Configuration
 
         foreach ($configs as $config) {
             if (isset($configurations[$config])) {
+                /** @var callable $callback */
                 $callback = [$this, 'set' . \ucfirst($config)];
 
                 \call_user_func($callback, $configurations[$config]);
@@ -246,7 +251,7 @@ class Configuration
      *
      * @return ContainerInterface|null
      */
-    public function getWrapContainer()
+    public function getWrapContainer(): ?ContainerInterface
     {
         return $this->wrapContainer;
     }
@@ -270,7 +275,7 @@ class Configuration
      *
      * @return string|null
      */
-    public function getProxiesPath()
+    public function getProxiesPath(): ?string
     {
         return $this->proxiesPath;
     }
@@ -298,9 +303,9 @@ class Configuration
     /**
      * Get compilation path.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCompilationPath()
+    public function getCompilationPath(): ?string
     {
         return $this->compilationPath;
     }
@@ -368,7 +373,7 @@ class Configuration
     /**
      * Get definitions.
      *
-     * @return array
+     * @return string[]
      */
     public function getDefinitions(): array
     {
@@ -378,7 +383,7 @@ class Configuration
     /**
      * Set definitions.
      *
-     * @param string|array|\Traversable $definitions
+     * @param mixed $definitions
      *
      * @throws \InvalidArgumentException
      *

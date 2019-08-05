@@ -39,8 +39,18 @@ class CallableResolver implements CallableResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve($toResolve)
+    public function resolve($toResolve): callable
     {
-        return $this->callableResolver->resolve($toResolve);
+        /** @var mixed $resolved */
+        $resolved = $this->callableResolver->resolve($toResolve);
+
+        if (!\is_callable($resolved)) {
+            throw new \RuntimeException(\sprintf(
+                '"%s" is not resolvable',
+                \is_string($toResolve) ? $toResolve : \gettype($toResolve)
+            ));
+        }
+
+        return $resolved;
     }
 }
