@@ -22,7 +22,27 @@ use PHPUnit\Framework\TestCase;
  */
 class CallableResolverTest extends TestCase
 {
-    public function testInvokable()
+    public function testInvocable()
+    {
+        $invoker = $this->getMockBuilder(InvokerResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoker->expects(self::once())
+            ->method('resolve')
+            ->with('Controller::method')
+            ->will(self::returnValue(function () {
+                return 'ok';
+            }));
+        /* @var InvokerResolver $invoker */
+
+        $resolver = new CallableResolver($invoker);
+
+        $invocable = $resolver->resolve('Controller::method');
+
+        self::assertEquals('ok', $invocable());
+    }
+
+    public function testNotInvocable()
     {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()

@@ -43,6 +43,14 @@ class ContainerBuilderTest extends TestCase
         ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
     }
 
+    public function testDefault()
+    {
+        $container = ContainerBuilder::build();
+
+        self::assertTrue($container->has(Configuration::class));
+        self::assertTrue($container->has(ContainerInterface::class));
+    }
+
     public function testCreation()
     {
         /** @var ContainerInterface $containerStub */
