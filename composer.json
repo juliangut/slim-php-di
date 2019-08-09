@@ -42,7 +42,7 @@
     "roave/security-advisories": "dev-master",
     "sebastian/phpcpd": "^4.0",
     "squizlabs/php_codesniffer": "^2.0",
-    "thecodingmachine/phpstan-strict-rules": "~0.11.1",
+    "thecodingmachine/phpstan-strict-rules": "~0.11.2",
     "zendframework/zend-diactoros": "^2.0"
   },
   "suggest": {

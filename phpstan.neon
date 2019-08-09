@@ -5,4 +5,3 @@ parameters:
   ignoreErrors:
     - '/^In method "Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::has", caught "Throwable" must be rethrown\./'
     - '/^Method Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::.+\(\) has no return typehint specified\./'
-    - '/^Method Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::.+\(\) has parameter \$.+ with no typehint specified\./'
