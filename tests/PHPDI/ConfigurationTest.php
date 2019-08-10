@@ -78,7 +78,7 @@ class ConfigurationTest extends TestCase
             'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
         ];
 
-        $configuration = new Configuration($configs);
+        $configuration = new Configuration(new \ArrayIterator($configs));
 
         self::assertEquals(DIContainer::class, $configuration->getContainerClass());
         self::assertFalse($configuration->doesUseAutowiring());

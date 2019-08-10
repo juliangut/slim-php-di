@@ -17,6 +17,7 @@ use Jgut\Slim\PHPDI\AppFactory;
 use Jgut\Slim\PHPDI\Configuration;
 use PHPUnit\Framework\TestCase;
 use Slim\App;
+use Slim\Handlers\Strategies\RequestResponse;
 
 /**
  * AppFactory tests.
@@ -25,11 +26,26 @@ class AppFactoryTest extends TestCase
 {
     public function testCreation()
     {
-        AppFactory::setUseCustomStrategy(true);
         AppFactory::setContainerConfiguration(new Configuration());
 
         $app = AppFactory::create();
 
         self::assertInstanceOf(App::class, $app);
+    }
+
+    public function testCreationWithInvocationStrategy()
+    {
+        /** @var \Slim\Interfaces\InvocationStrategyInterface $strategy */
+        $strategy = $this->getMockBuilder(RequestResponse::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        AppFactory::setInvocationStrategy($strategy);
+        AppFactory::setContainerConfiguration(new Configuration());
+
+        $app = AppFactory::create();
+
+        self::assertInstanceOf(App::class, $app);
+        self::assertSame($strategy, $app->getRouteCollector()->getDefaultInvocationStrategy());
     }
 }

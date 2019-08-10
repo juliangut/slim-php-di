@@ -49,8 +49,8 @@ $app = AppFactory::create();
 // Get container
 $container = $app->getContainer();
 
-// Get container and register your services if not provided as definitions
-$app->getContainer()->set('service_one', function (ContainerInterface $container) {
+// Register your services if not provided as definitions
+$container->set('service_one', function (ContainerInterface $container) {
     return new ServiceOne($container->get('service_two'));
 });
 
@@ -145,17 +145,17 @@ $app->get('/hello/{name}', function (ResponseInterface $response, string $name, 
 $app->run();
 ```
 
-If you prefer default Slim's `Slim\Handlers\Strategies\RequestResponse` strategy you only have to
+If you prefer default Slim's `Slim\Handlers\Strategies\RequestResponse` strategy or any of your choosing you only have to add it to AppFactory
 
 ```php
-AppFactory::setUseCustomStrategy(false);
+AppFactory::setInvocationStrategy(new RequestResponse());
 ```
 
 ## Migration from 2.x
 
 * Minimum Slim version is now 4.0
-* Slim 4 does not have ANY definition on container, so default definitions have been removed. Container by default only provides the Configuration object used on building the container itself. Refer to Slim's [documentation](http://www.slimframework.com/docs/v4/)
-* Slim's App is not extended any more, it should be created with custom AppFactory instead of default Slim's
+* Slim 4 does not have ANY definition on container, so default definitions have been removed. PHP-DI container by default only provides the Configuration object used on building the container itself. Refer to Slim's [documentation](http://www.slimframework.com/docs/v4/)
+* Slim's App is not extended any more
 * Service definitions à la Pimple support has been kept but its use is discouraged, use PHP-DI's methods
 
 ## Contributing

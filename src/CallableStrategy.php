@@ -29,13 +29,20 @@ class CallableStrategy implements InvocationStrategyInterface
     private $invoker;
 
     /**
+     * @var bool
+     */
+    protected $appendRouteArguments;
+
+    /**
      * CallableStrategy constructor.
      *
      * @param InvokerInterface $invoker
+     * @param bool             $appendRouteArguments
      */
-    public function __construct(InvokerInterface $invoker)
+    public function __construct(InvokerInterface $invoker, bool $appendRouteArguments = false)
     {
         $this->invoker = $invoker;
+        $this->appendRouteArguments = $appendRouteArguments;
     }
 
     /**
@@ -54,14 +61,22 @@ class CallableStrategy implements InvocationStrategyInterface
         ResponseInterface $response,
         array $routeArguments
     ): ResponseInterface {
+        if ($this->appendRouteArguments) {
+            foreach ($routeArguments as $k => $v) {
+                $request = $request->withAttribute($k, $v);
+            }
+        }
+
         // Inject the request and response by parameter name
         $parameters = [
             'request' => $request,
             'response' => $response,
         ];
 
-        // Inject the route arguments by name
-        $parameters += $routeArguments;
+        if (!$this->appendRouteArguments) {
+            // Inject the route arguments by name
+            $parameters += $routeArguments;
+        }
 
         // Inject the attributes defined on the request
         $parameters += $request->getAttributes();

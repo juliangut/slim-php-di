@@ -41,9 +41,9 @@ class AppFactory extends SlimAppFactory
     protected static $configuration;
 
     /**
-     * @var bool
+     * @var InvocationStrategyInterface
      */
-    protected static $useCustomStrategy = true;
+    protected static $invocationStrategy;
 
     /**
      * {@inheritdoc}
@@ -55,23 +55,44 @@ class AppFactory extends SlimAppFactory
         ?RouteCollectorInterface $routeCollector = null,
         ?RouteResolverInterface $routeResolver = null
     ): App {
-        $container = $container ?? ContainerBuilder::build(static::$configuration);
+        $container = $container ?? static::getContainer();
 
         $app = parent::create(
             $responseFactory,
             $container,
-            $callableResolver ?? new CallableResolver(new InvokerCallableResolver($container)),
+            $callableResolver ?? static::getCallableResolver($container),
             $routeCollector,
             $routeResolver
         );
 
-        if (static::$useCustomStrategy) {
-            $app
-                ->getRouteCollector()
-                ->setDefaultInvocationStrategy(static::getInvocationStrategy($container));
-        }
+        $invocationStrategy = static::$invocationStrategy ?? static::getInvocationStrategy($container);
+        $app
+            ->getRouteCollector()
+            ->setDefaultInvocationStrategy($invocationStrategy);
 
         return $app;
+    }
+
+    /**
+     * Get container.
+     *
+     * @return ContainerInterface
+     */
+    protected static function getContainer(): ContainerInterface
+    {
+        return static::$container ?? ContainerBuilder::build(static::$configuration);
+    }
+
+    /**
+     * Get callable resolver.
+     *
+     * @param ContainerInterface $container
+     *
+     * @return CallableResolverInterface
+     */
+    protected static function getCallableResolver(ContainerInterface $container): CallableResolverInterface
+    {
+        return static::$callableResolver ?? new CallableResolver(new InvokerCallableResolver($container));
     }
 
     /**
@@ -81,7 +102,7 @@ class AppFactory extends SlimAppFactory
      *
      * @return InvocationStrategyInterface
      */
-    final protected static function getInvocationStrategy(ContainerInterface $container): InvocationStrategyInterface
+    protected static function getInvocationStrategy(ContainerInterface $container): InvocationStrategyInterface
     {
         $resolveChain = new ResolverChain([
             // Inject parameters by name first
@@ -106,12 +127,12 @@ class AppFactory extends SlimAppFactory
     }
 
     /**
-     * Set custom invocation strategy usage.
+     * Set invocation strategy.
      *
-     * @param bool $useCustomStrategy
+     * @param InvocationStrategyInterface $invocationStrategy
      */
-    final public static function setUseCustomStrategy(bool $useCustomStrategy = true): void
+    final public static function setInvocationStrategy(InvocationStrategyInterface $invocationStrategy): void
     {
-        static::$useCustomStrategy = $useCustomStrategy;
+        static::$invocationStrategy = $invocationStrategy;
     }
 }

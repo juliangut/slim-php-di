@@ -18,50 +18,70 @@ use Jgut\Slim\PHPDI\CallableStrategy;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * Route callback strategy tests.
  */
 class CallableStrategyTest extends TestCase
 {
-    public function testInvokable()
+    public function testInvoke()
     {
-        $callable = function () {
-            // Empty
-        };
-        $parameters = [
-            'param' => 'value',
-        ];
-        $requestAttributes = [
-            'attribute' => 'value',
-        ];
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $request->withAttribute('attribute', 'value');
 
-        $request = $this->getMockBuilder(ServerRequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $request->expects(self::once())
-            ->method('getAttributes')
-            ->will(static::returnValue($requestAttributes));
-        /* @var ServerRequestInterface $request */
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         /* @var ResponseInterface $response */
+
+        $callable = function (ServerRequestInterface $request, $param) {
+            $this->assertEquals('value', $request->getAttribute('attribute'));
+            $this->assertNull('value', $request->getAttribute('param'));
+            $this->assertEquals('value', $param);
+        };
 
         $invoker = $this->getMockBuilder(Invoker::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoker->expects(self::once())
             ->method('call')
-            ->with(
-                $callable,
-                \array_merge(['request' => $request, 'response' => $response], $requestAttributes, $parameters)
-            )
+            ->with($callable)
             ->willReturn($response);
         /* @var \Invoker\InvokerInterface $invoker */
 
-        $handler = new CallableStrategy($invoker);
+        $strategy = new CallableStrategy($invoker);
 
-        $handler($callable, $request, $response, $parameters);
+        $strategy($callable, $request, $response, ['param' => 'value']);
+    }
+
+    public function testInvokeAppendingToRequest()
+    {
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $request->withAttribute('attribute', 'value');
+
+        $response = $this->getMockBuilder(ResponseInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /* @var ResponseInterface $response */
+
+        $callable = function (ServerRequestInterface $request, $param) {
+            $this->assertEquals('value', $request->getAttribute('attribute'));
+            $this->assertEquals('value', $request->getAttribute('param'));
+            $this->assertEquals('value', $param);
+        };
+
+        $invoker = $this->getMockBuilder(Invoker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoker->expects(self::once())
+            ->method('call')
+            ->with($callable)
+            ->willReturn($response);
+        /* @var \Invoker\InvokerInterface $invoker */
+
+        $strategy = new CallableStrategy($invoker, true);
+
+        $strategy($callable, $request, $response, ['param' => 'value']);
     }
 }
