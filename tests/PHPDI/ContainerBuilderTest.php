@@ -29,7 +29,7 @@ class ContainerBuilderTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Path "/fake/definitions/path" does not exist
      */
-    public function testNonExistingDefinitionsPath()
+    public function testNonExistingDefinitionsPath(): void
     {
         ContainerBuilder::build(new Configuration(['definitions' => '/fake/definitions/path']));
     }
@@ -38,12 +38,12 @@ class ContainerBuilderTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessageRegExp /^Definitions file should return an array. ".+" returned$/
      */
-    public function testInvalidDefinitionsFile()
+    public function testInvalidDefinitionsFile(): void
     {
         ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
     }
 
-    public function testDefault()
+    public function testDefault(): void
     {
         $container = ContainerBuilder::build();
 
@@ -51,7 +51,7 @@ class ContainerBuilderTest extends TestCase
         self::assertTrue($container->has(ContainerInterface::class));
     }
 
-    public function testCreation()
+    public function testCreation(): void
     {
         /** @var ContainerInterface $containerStub */
         $containerStub = $this->getMockBuilder(ContainerInterface::class)

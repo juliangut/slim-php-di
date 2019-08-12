@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CallableResolverTest extends TestCase
 {
-    public function testInvocable()
+    public function testInvocable(): void
     {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
@@ -42,7 +42,7 @@ class CallableResolverTest extends TestCase
         self::assertEquals('ok', $invocable());
     }
 
-    public function testNotInvocable()
+    public function testNotInvocable(): void
     {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()

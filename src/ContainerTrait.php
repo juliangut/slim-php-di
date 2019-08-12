@@ -121,7 +121,7 @@ trait ContainerTrait
      *
      * @deprecated since 3.0
      */
-    public function offsetSet($name, $value)
+    public function offsetSet($name, $value): void
     {
         @\trigger_error(
             'ArrayAccess set method is deprecated since 3.0, use PHP-DI methods instead.',
@@ -173,7 +173,7 @@ trait ContainerTrait
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function offsetUnset($name)
+    public function offsetUnset($name): void
     {
         throw new \RuntimeException('It is not possible to unset container definitions');
     }
@@ -184,7 +184,7 @@ trait ContainerTrait
      * @param string $name
      * @param mixed  $value
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, $value): void
     {
         $this->set($name, $value);
     }
@@ -225,7 +225,7 @@ trait ContainerTrait
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __unset(string $name)
+    public function __unset(string $name): void
     {
         throw new \RuntimeException('It is not possible to unset container definitions');
     }

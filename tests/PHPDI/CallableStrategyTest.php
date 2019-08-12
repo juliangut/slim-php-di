@@ -25,7 +25,7 @@ use Zend\Diactoros\ServerRequestFactory;
  */
 class CallableStrategyTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $request->withAttribute('attribute', 'value');
@@ -35,7 +35,7 @@ class CallableStrategyTest extends TestCase
             ->getMock();
         /* @var ResponseInterface $response */
 
-        $callable = function (ServerRequestInterface $request, $param) {
+        $callable = function (ServerRequestInterface $request, $param): void {
             $this->assertEquals('value', $request->getAttribute('attribute'));
             $this->assertNull('value', $request->getAttribute('param'));
             $this->assertEquals('value', $param);
@@ -55,7 +55,7 @@ class CallableStrategyTest extends TestCase
         $strategy($callable, $request, $response, ['param' => 'value']);
     }
 
-    public function testInvokeAppendingToRequest()
+    public function testInvokeAppendingToRequest(): void
     {
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $request->withAttribute('attribute', 'value');
@@ -65,7 +65,7 @@ class CallableStrategyTest extends TestCase
             ->getMock();
         /* @var ResponseInterface $response */
 
-        $callable = function (ServerRequestInterface $request, $param) {
+        $callable = function (ServerRequestInterface $request, $param): void {
             $this->assertEquals('value', $request->getAttribute('attribute'));
             $this->assertEquals('value', $request->getAttribute('param'));
             $this->assertEquals('value', $param);

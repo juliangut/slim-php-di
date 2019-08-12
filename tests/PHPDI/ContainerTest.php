@@ -40,7 +40,7 @@ class ContainerTest extends TestCase
      * @expectedException \Psr\Container\NotFoundExceptionInterface
      * @expectedExceptionMessage No entry or class found for "baz"
      */
-    public function testGetNonExistent()
+    public function testGetNonExistent(): void
     {
         self::assertFalse($this->container->has('baz'));
         $this->container['baz'];
@@ -50,7 +50,7 @@ class ContainerTest extends TestCase
      * @expectedException \Psr\Container\NotFoundExceptionInterface
      * @expectedExceptionMessage No entry or class found for "settings.baz"
      */
-    public function testGetNonExistentWithDots()
+    public function testGetNonExistentWithDots(): void
     {
         self::assertFalse($this->container->has('settings.baz'));
         $this->container['settings.baz'];
@@ -60,7 +60,7 @@ class ContainerTest extends TestCase
      * @expectedException \Psr\Container\NotFoundExceptionInterface
      * @expectedExceptionMessage No entry or class found for "settings.foo.bar.baz"
      */
-    public function testGetShadowed()
+    public function testGetShadowed(): void
     {
         $settings = [
             'foo' => [
@@ -79,7 +79,7 @@ class ContainerTest extends TestCase
         $this->container->get('settings.foo.bar.baz');
     }
 
-    public function testSettingsAccess()
+    public function testSettingsAccess(): void
     {
         $settings = [
             'foo' => [
@@ -108,7 +108,7 @@ class ContainerTest extends TestCase
      * @expectedException \Psr\Container\ContainerExceptionInterface
      * @expectedExceptionMessage Entry "foo" cannot be resolved: the class doesn't exist
      */
-    public function testUnresolvable()
+    public function testUnresolvable(): void
     {
         $configuration = new Configuration([
             'definitions' => [
@@ -121,7 +121,7 @@ class ContainerTest extends TestCase
         $container->get('foo');
     }
 
-    public function testSetterGetter()
+    public function testSetterGetter(): void
     {
         $this->container['foo'] = 'bar';
         self::assertTrue($this->container->has('foo'));
@@ -144,7 +144,7 @@ class ContainerTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage It is not possible to unset container definitions
      */
-    public function testUnset()
+    public function testUnset(): void
     {
         unset($this->container->foo);
     }
@@ -153,12 +153,12 @@ class ContainerTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage It is not possible to unset container definitions
      */
-    public function testUnsetArray()
+    public function testUnsetArray(): void
     {
         unset($this->container['foo']);
     }
 
-    public function testDefaultServices()
+    public function testDefaultServices(): void
     {
         self::assertTrue($this->container->has(Configuration::class));
         self::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));

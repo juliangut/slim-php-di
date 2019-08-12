@@ -407,7 +407,7 @@ class Configuration
 
         \array_walk(
             $definitions,
-            function ($definition) {
+            function ($definition): void {
                 if (!\is_array($definition) && !\is_string($definition)) {
                     throw new \InvalidArgumentException(
                         \sprintf(

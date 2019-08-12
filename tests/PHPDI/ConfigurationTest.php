@@ -30,12 +30,12 @@ class ConfigurationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * #@expectedExceptionMessage Configurations must be a traversable
      */
-    public function testInvalidConfigurations()
+    public function testInvalidConfigurations(): void
     {
         new Configuration('');
     }
 
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $configuration = new Configuration();
 
@@ -53,12 +53,12 @@ class ConfigurationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The following configuration parameters are not recognized: unknown
      */
-    public function testUnknownParameter()
+    public function testUnknownParameter(): void
     {
         new Configuration(['unknown' => 'unknown']);
     }
 
-    public function testCreationConfigurations()
+    public function testCreationConfigurations(): void
     {
         /** @var ContainerInterface $containerStub */
         $containerStub = $this->getMockBuilder(ContainerInterface::class)
@@ -96,12 +96,12 @@ class ConfigurationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /^class ".+" must extend DI\\Container/
      */
-    public function testInvalidContainerClass()
+    public function testInvalidContainerClass(): void
     {
         new Configuration(['containerClass' => 'NonExistingClass']);
     }
 
-    public function testTraversableDefinitionType()
+    public function testTraversableDefinitionType(): void
     {
         $configs = [
             'definitions' => new \ArrayIterator([__DIR__ . '/files/definitions/valid/definitions.php']),
@@ -116,7 +116,7 @@ class ConfigurationTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage /fake/proxies/path/ directory does not exist or is write protected
      */
-    public function testInvalidProxyPath()
+    public function testInvalidProxyPath(): void
     {
         new Configuration(['proxiesPath' => '/fake/proxies/path/']);
     }
@@ -125,7 +125,7 @@ class ConfigurationTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage /fake/compilation/path/ directory does not exist or is write protected
      */
-    public function testInvalidCompilationPath()
+    public function testInvalidCompilationPath(): void
     {
         new Configuration(['compilationPath' => '/fake/compilation/path/']);
     }
@@ -134,7 +134,7 @@ class ConfigurationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /^class ".+" must extend DI\\CompiledContainer/
      */
-    public function testInvalidCompiledContainerClass()
+    public function testInvalidCompiledContainerClass(): void
     {
         new Configuration(['compiledContainerClass' => 'NonExistingClass']);
     }
@@ -143,7 +143,7 @@ class ConfigurationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage A definition must be an array or a file or directory path. integer given
      */
-    public function testInvalidArrayDefinitionType()
+    public function testInvalidArrayDefinitionType(): void
     {
         new Configuration(['definitions' => [10]]);
     }
@@ -152,7 +152,7 @@ class ConfigurationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Definitions must be a string or traversable. integer given
      */
-    public function testInvalidDefinitionType()
+    public function testInvalidDefinitionType(): void
     {
         new Configuration(['definitions' => 10]);
     }

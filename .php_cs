@@ -40,6 +40,7 @@ return Config::create()
         'cast_spaces' => true,
         'class_attributes_separation' => true,
         'combine_consecutive_unsets' => true,
+        'compact_nullable_typehint' => true,
         'concat_space' => [
             'spacing' => 'one'
         ],
@@ -55,6 +56,9 @@ return Config::create()
         'heredoc_to_nowdoc' => true,
         'include' => true,
         'linebreak_after_opening_tag' => true,
+        'list_syntax' => [
+            'syntax' => 'short',
+        ],
         'lowercase_cast' => true,
         'lowercase_static_reference' => true,
         'magic_constant_casing' => true,
@@ -84,13 +88,16 @@ return Config::create()
         'no_unneeded_control_parentheses' => true,
         'no_unreachable_default_argument_value' => true,
         'no_unneeded_final_method' => true,
+        'no_unset_on_property' => true,
         'no_unused_imports' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
         'no_whitespace_before_comma_in_array' => true,
         'no_whitespace_in_blank_line' => true,
         'normalize_index_brace' => true,
-        'ordered_imports' => true,
+        'ordered_imports' => [
+            'imports_order' => ['const', 'class', 'function'],
+        ],
         'php_unit_construct' => true,
         'php_unit_dedicate_assert' => true,
         'phpdoc_add_missing_param_annotation' => true,
@@ -131,6 +138,7 @@ return Config::create()
         'trailing_comma_in_multiline_array' => true,
         'trim_array_spaces' => true,
         'unary_operator_spaces' => true,
+        'void_return' => true,
         'whitespace_after_comma_in_array' => true,
         'yoda_style' => false,
     ])

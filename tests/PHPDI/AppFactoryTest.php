@@ -24,7 +24,7 @@ use Slim\Handlers\Strategies\RequestResponse;
  */
 class AppFactoryTest extends TestCase
 {
-    public function testCreation()
+    public function testCreation(): void
     {
         AppFactory::setContainerConfiguration(new Configuration());
 
@@ -33,7 +33,7 @@ class AppFactoryTest extends TestCase
         self::assertInstanceOf(App::class, $app);
     }
 
-    public function testCreationWithInvocationStrategy()
+    public function testCreationWithInvocationStrategy(): void
     {
         /** @var \Slim\Interfaces\InvocationStrategyInterface $strategy */
         $strategy = $this->getMockBuilder(RequestResponse::class)
