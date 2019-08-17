@@ -70,6 +70,7 @@ trait ContainerTrait
         try {
             $this->getRecursive($name);
         } catch (\Throwable $exception) {
+            // @ignoreException
             return false;
         }
 
