@@ -27,7 +27,7 @@ class CallableResolverTest extends TestCase
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $invoker->expects(self::once())
+        $invoker->expects(static::once())
             ->method('resolve')
             ->with('Controller::method')
             ->will(self::returnValue(function () {
@@ -39,7 +39,7 @@ class CallableResolverTest extends TestCase
 
         $invocable = $resolver->resolve('Controller::method');
 
-        self::assertEquals('ok', $invocable());
+        static::assertEquals('ok', $invocable());
     }
 
     public function testNotInvocable(): void
@@ -47,7 +47,7 @@ class CallableResolverTest extends TestCase
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $invoker->expects(self::once())
+        $invoker->expects(static::once())
             ->method('resolve')
             ->with('Controller::method');
         /* @var InvokerResolver $invoker */
@@ -57,7 +57,7 @@ class CallableResolverTest extends TestCase
         try {
             $resolver->resolve('Controller::method');
         } catch (\RuntimeException $exception) {
-            self::assertEquals('"Controller::method" is not resolvable', $exception->getMessage());
+            static::assertEquals('"Controller::method" is not resolvable', $exception->getMessage());
         }
     }
 }

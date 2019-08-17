@@ -36,15 +36,15 @@ class CallableStrategyTest extends TestCase
         /* @var ResponseInterface $response */
 
         $callable = function (ServerRequestInterface $request, $param): void {
-            $this->assertEquals('value', $request->getAttribute('attribute'));
-            $this->assertNull('value', $request->getAttribute('param'));
-            $this->assertEquals('value', $param);
+            static::assertEquals('value', $request->getAttribute('attribute'));
+            static::assertNull('value', $request->getAttribute('param'));
+            static::assertEquals('value', $param);
         };
 
         $invoker = $this->getMockBuilder(Invoker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $invoker->expects(self::once())
+        $invoker->expects(static::once())
             ->method('call')
             ->with($callable)
             ->willReturn($response);
@@ -66,15 +66,15 @@ class CallableStrategyTest extends TestCase
         /* @var ResponseInterface $response */
 
         $callable = function (ServerRequestInterface $request, $param): void {
-            $this->assertEquals('value', $request->getAttribute('attribute'));
-            $this->assertEquals('value', $request->getAttribute('param'));
-            $this->assertEquals('value', $param);
+            static::assertEquals('value', $request->getAttribute('attribute'));
+            static::assertEquals('value', $request->getAttribute('param'));
+            static::assertEquals('value', $param);
         };
 
         $invoker = $this->getMockBuilder(Invoker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $invoker->expects(self::once())
+        $invoker->expects(static::once())
             ->method('call')
             ->with($callable)
             ->willReturn($response);

@@ -30,7 +30,7 @@ class AppFactoryTest extends TestCase
 
         $app = AppFactory::create();
 
-        self::assertInstanceOf(App::class, $app);
+        static::assertInstanceOf(App::class, $app);
     }
 
     public function testCreationWithInvocationStrategy(): void
@@ -45,7 +45,7 @@ class AppFactoryTest extends TestCase
 
         $app = AppFactory::create();
 
-        self::assertInstanceOf(App::class, $app);
-        self::assertSame($strategy, $app->getRouteCollector()->getDefaultInvocationStrategy());
+        static::assertInstanceOf(App::class, $app);
+        static::assertSame($strategy, $app->getRouteCollector()->getDefaultInvocationStrategy());
     }
 }

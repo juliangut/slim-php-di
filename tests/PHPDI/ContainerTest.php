@@ -16,7 +16,9 @@ namespace Jgut\Slim\PHPDI\Tests;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Container tests.
@@ -36,32 +38,29 @@ class ContainerTest extends TestCase
         $this->container = ContainerBuilder::build();
     }
 
-    /**
-     * @expectedException \Psr\Container\NotFoundExceptionInterface
-     * @expectedExceptionMessage No entry or class found for "baz"
-     */
     public function testGetNonExistent(): void
     {
-        self::assertFalse($this->container->has('baz'));
+        $this->expectException(NotFoundExceptionInterface::class);
+        $this->expectExceptionMessage('No entry or class found for "baz"');
+
+        static::assertFalse($this->container->has('baz'));
         $this->container['baz'];
     }
 
-    /**
-     * @expectedException \Psr\Container\NotFoundExceptionInterface
-     * @expectedExceptionMessage No entry or class found for "settings.baz"
-     */
     public function testGetNonExistentWithDots(): void
     {
-        self::assertFalse($this->container->has('settings.baz'));
+        $this->expectException(NotFoundExceptionInterface::class);
+        $this->expectExceptionMessage('No entry or class found for "settings.baz"');
+
+        static::assertFalse($this->container->has('settings.baz'));
         $this->container['settings.baz'];
     }
 
-    /**
-     * @expectedException \Psr\Container\NotFoundExceptionInterface
-     * @expectedExceptionMessage No entry or class found for "settings.foo.bar.baz"
-     */
     public function testGetShadowed(): void
     {
+        $this->expectException(NotFoundExceptionInterface::class);
+        $this->expectExceptionMessage('No entry or class found for "settings.foo.bar.baz"');
+
         $settings = [
             'foo' => [
                 'bar' => [
@@ -72,10 +71,10 @@ class ContainerTest extends TestCase
         ];
         $this->container->set('settings', $settings);
 
-        self::assertTrue($this->container->has('settings.foo.bar'));
-        self::assertEquals('bang!', $this->container->get('settings.foo.bar'));
+        static::assertTrue($this->container->has('settings.foo.bar'));
+        static::assertEquals('bang!', $this->container->get('settings.foo.bar'));
 
-        self::assertFalse($this->container->has('settings.foo.bar.baz'));
+        static::assertFalse($this->container->has('settings.foo.bar.baz'));
         $this->container->get('settings.foo.bar.baz');
     }
 
@@ -91,25 +90,24 @@ class ContainerTest extends TestCase
         ];
         $this->container->set('settings', $settings);
 
-        self::assertTrue($this->container->has('settings.foo'));
-        self::assertEquals(['bar' => ['baz' => 'found!', 'bam' => []]], $this->container->get('settings.foo'));
+        static::assertTrue($this->container->has('settings.foo'));
+        static::assertEquals(['bar' => ['baz' => 'found!', 'bam' => []]], $this->container->get('settings.foo'));
 
-        self::assertTrue($this->container->has('settings.foo.bar'));
-        self::assertEquals(['baz' => 'found!', 'bam' => []], $this->container->get('settings.foo.bar'));
+        static::assertTrue($this->container->has('settings.foo.bar'));
+        static::assertEquals(['baz' => 'found!', 'bam' => []], $this->container->get('settings.foo.bar'));
 
-        self::assertTrue($this->container->has('settings.foo.bar.baz'));
-        self::assertEquals('found!', $this->container->get('settings.foo.bar.baz'));
+        static::assertTrue($this->container->has('settings.foo.bar.baz'));
+        static::assertEquals('found!', $this->container->get('settings.foo.bar.baz'));
 
-        self::assertTrue($this->container->has('settings.foo.bar.bam'));
-        self::assertEquals([], $this->container->get('settings.foo.bar.bam'));
+        static::assertTrue($this->container->has('settings.foo.bar.bam'));
+        static::assertEquals([], $this->container->get('settings.foo.bar.bam'));
     }
 
-    /**
-     * @expectedException \Psr\Container\ContainerExceptionInterface
-     * @expectedExceptionMessage Entry "foo" cannot be resolved: the class doesn't exist
-     */
     public function testUnresolvable(): void
     {
+        $this->expectException(ContainerExceptionInterface::class);
+        $this->expectExceptionMessage('Entry "foo" cannot be resolved: the class doesn\'t exist');
+
         $configuration = new Configuration([
             'definitions' => [
                 ['foo' => \DI\create('\\Unknown\\Foo\\Bar')],
@@ -124,46 +122,44 @@ class ContainerTest extends TestCase
     public function testSetterGetter(): void
     {
         $this->container['foo'] = 'bar';
-        self::assertTrue($this->container->has('foo'));
-        self::assertEquals('bar', $this->container->get('foo'));
+        static::assertTrue($this->container->has('foo'));
+        static::assertEquals('bar', $this->container->get('foo'));
 
         $this->container['bar'] = 'baz';
-        self::assertTrue(isset($this->container['bar']));
-        self::assertEquals('baz', $this->container['bar']);
+        static::assertTrue(isset($this->container['bar']));
+        static::assertEquals('baz', $this->container['bar']);
 
         $this->container['baz'] = 'bam';
-        self::assertTrue(isset($this->container->baz));
-        self::assertEquals('bam', $this->container->baz);
+        static::assertTrue(isset($this->container->baz));
+        static::assertEquals('bam', $this->container->baz);
 
         $this->container->bam = 'foo';
-        self::assertTrue($this->container->has('bam'));
-        self::assertEquals('foo', $this->container->bam);
+        static::assertTrue($this->container->has('bam'));
+        static::assertEquals('foo', $this->container->bam);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage It is not possible to unset container definitions
-     */
     public function testUnset(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('It is not possible to unset container definitions');
+
         unset($this->container->foo);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage It is not possible to unset container definitions
-     */
     public function testUnsetArray(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('It is not possible to unset container definitions');
+
         unset($this->container['foo']);
     }
 
     public function testDefaultServices(): void
     {
-        self::assertTrue($this->container->has(Configuration::class));
-        self::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));
+        static::assertTrue($this->container->has(Configuration::class));
+        static::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));
 
-        self::assertTrue($this->container->has(ContainerInterface::class));
-        self::assertEquals($this->container, $this->container->get(ContainerInterface::class));
+        static::assertTrue($this->container->has(ContainerInterface::class));
+        static::assertEquals($this->container, $this->container->get(ContainerInterface::class));
     }
 }

@@ -26,12 +26,11 @@ use Psr\Container\ContainerInterface;
  */
 class ConfigurationTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * #@expectedExceptionMessage Configurations must be a traversable
-     */
     public function testInvalidConfigurations(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Configurations must be a traversable');
+
         new Configuration('');
     }
 
@@ -39,22 +38,21 @@ class ConfigurationTest extends TestCase
     {
         $configuration = new Configuration();
 
-        self::assertEquals(Container::class, $configuration->getContainerClass());
-        self::assertTrue($configuration->doesUseAutowiring());
-        self::assertFalse($configuration->doesUseAnnotations());
-        self::assertFalse($configuration->doesIgnorePhpDocErrors());
-        self::assertNull($configuration->getProxiesPath());
-        self::assertNull($configuration->getCompilationPath());
-        self::assertEquals(AbstractCompiledContainer::class, $configuration->getCompiledContainerClass());
-        self::assertEquals([], $configuration->getDefinitions());
+        static::assertEquals(Container::class, $configuration->getContainerClass());
+        static::assertTrue($configuration->doesUseAutowiring());
+        static::assertFalse($configuration->doesUseAnnotations());
+        static::assertFalse($configuration->doesIgnorePhpDocErrors());
+        static::assertNull($configuration->getProxiesPath());
+        static::assertNull($configuration->getCompilationPath());
+        static::assertEquals(AbstractCompiledContainer::class, $configuration->getCompiledContainerClass());
+        static::assertEquals([], $configuration->getDefinitions());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The following configuration parameters are not recognized: unknown
-     */
     public function testUnknownParameter(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The following configuration parameters are not recognized: unknown');
+
         new Configuration(['unknown' => 'unknown']);
     }
 
@@ -80,24 +78,23 @@ class ConfigurationTest extends TestCase
 
         $configuration = new Configuration(new \ArrayIterator($configs));
 
-        self::assertEquals(DIContainer::class, $configuration->getContainerClass());
-        self::assertFalse($configuration->doesUseAutowiring());
-        self::assertTrue($configuration->doesUseAnnotations());
-        self::assertTrue($configuration->doesUseDefinitionCache());
-        self::assertTrue($configuration->doesIgnorePhpDocErrors());
-        self::assertEquals($containerStub, $configuration->getWrapContainer());
-        self::assertEquals(\sys_get_temp_dir(), $configuration->getProxiesPath());
-        self::assertEquals(__DIR__, $configuration->getCompilationPath());
-        self::assertEquals(DICompiledContainer::class, $configuration->getCompiledContainerClass());
-        self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
+        static::assertEquals(DIContainer::class, $configuration->getContainerClass());
+        static::assertFalse($configuration->doesUseAutowiring());
+        static::assertTrue($configuration->doesUseAnnotations());
+        static::assertTrue($configuration->doesUseDefinitionCache());
+        static::assertTrue($configuration->doesIgnorePhpDocErrors());
+        static::assertEquals($containerStub, $configuration->getWrapContainer());
+        static::assertEquals(\sys_get_temp_dir(), $configuration->getProxiesPath());
+        static::assertEquals(__DIR__, $configuration->getCompilationPath());
+        static::assertEquals(DICompiledContainer::class, $configuration->getCompiledContainerClass());
+        static::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /^class ".+" must extend DI\\Container/
-     */
     public function testInvalidContainerClass(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/^class ".+" must extend DI\\\Container/');
+
         new Configuration(['containerClass' => 'NonExistingClass']);
     }
 
@@ -109,51 +106,46 @@ class ConfigurationTest extends TestCase
 
         $configuration = new Configuration($configs);
 
-        self::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
+        static::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage /fake/proxies/path/ directory does not exist or is write protected
-     */
     public function testInvalidProxyPath(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('/fake/proxies/path/ directory does not exist or is write protected');
+
         new Configuration(['proxiesPath' => '/fake/proxies/path/']);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage /fake/compilation/path/ directory does not exist or is write protected
-     */
     public function testInvalidCompilationPath(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('/fake/compilation/path/ directory does not exist or is write protected');
+
         new Configuration(['compilationPath' => '/fake/compilation/path/']);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /^class ".+" must extend DI\\CompiledContainer/
-     */
     public function testInvalidCompiledContainerClass(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/^class ".+" must extend DI\\\CompiledContainer/');
+
         new Configuration(['compiledContainerClass' => 'NonExistingClass']);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage A definition must be an array or a file or directory path. integer given
-     */
     public function testInvalidArrayDefinitionType(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('A definition must be an array or a file or directory path. integer given');
+
         new Configuration(['definitions' => [10]]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Definitions must be a string or traversable. integer given
-     */
     public function testInvalidDefinitionType(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Definitions must be a string or traversable. integer given');
+
         new Configuration(['definitions' => 10]);
     }
 }

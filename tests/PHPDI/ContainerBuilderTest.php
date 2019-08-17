@@ -25,21 +25,19 @@ use Psr\Container\ContainerInterface;
  */
 class ContainerBuilderTest extends TestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Path "/fake/definitions/path" does not exist
-     */
     public function testNonExistingDefinitionsPath(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Path "/fake/definitions/path" does not exist');
+
         ContainerBuilder::build(new Configuration(['definitions' => '/fake/definitions/path']));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /^Definitions file should return an array. ".+" returned$/
-     */
     public function testInvalidDefinitionsFile(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/^Definitions file should return an array. ".+" returned$/');
+
         ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
     }
 
@@ -47,8 +45,8 @@ class ContainerBuilderTest extends TestCase
     {
         $container = ContainerBuilder::build();
 
-        self::assertTrue($container->has(Configuration::class));
-        self::assertTrue($container->has(ContainerInterface::class));
+        static::assertTrue($container->has(Configuration::class));
+        static::assertTrue($container->has(ContainerInterface::class));
     }
 
     public function testCreation(): void
@@ -83,10 +81,10 @@ class ContainerBuilderTest extends TestCase
 
         $container = ContainerBuilder::build(new Configuration($configuration));
 
-        self::assertInstanceOf(Container::class, $container);
-        self::assertTrue($container->has('foo'));
-        self::assertEquals('baz', $container->get('foo'));
-        self::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
+        static::assertInstanceOf(Container::class, $container);
+        static::assertTrue($container->has('foo'));
+        static::assertEquals('baz', $container->get('foo'));
+        static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
 
         \unlink(__DIR__ . '/files/CompiledContainer.php');
     }
