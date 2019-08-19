@@ -12,7 +12,7 @@
 
 # Slim Framework PHP-DI container integration
 
-PHP-DI (v6) dependency injection container integration for Slim Framework.
+PHP-DI (v6) dependency injection container integration for Slim framework.
 
 ## Installation
 
@@ -30,24 +30,21 @@ require_once './vendor/autoload.php';
 
 ## Usage
 
-Use `Jgut\Slim\PHPDI\ContainerBuilder` to create PHP-DI container and seed it to Slim's AppFactory
+Use `Jgut\Slim\PHPDI\ContainerBuilder` to create PHP-DI container and extract Slim's App from it
 
 ```php
 use App\ServiceOne;
-use Jgut\Slim\PHPDI\AppFactory;
 use Jgut\Slim\PHPDI\Configuration;
+use Jgut\Slim\PHPDI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
+use Slim\App;
 
-$settings = require __DIR__ . '/settings.php';
-$configuration = new Configuration($settings);
-$configuration->setDefinitions('/path/to/definitions/file.php');
+$settings = [
+    'definitions' => '/path/to/definitions/files',
+];
+$container = ContainerBuilder::build(new Configuration($settings));
 
-AppFactory::setContainerConfiguration($configuration);
-
-$app = AppFactory::create();
-
-// Get container
-$container = $app->getContainer();
+$app = $container->get(App::class);
 
 // Register your services if not provided as definitions
 $container->set('service_one', function (ContainerInterface $container) {
@@ -59,7 +56,7 @@ $container->set('service_one', function (ContainerInterface $container) {
 $app->run();
 ```
 
-In order to register services in the container it's way better to do it by definition files
+In order to register services in the container it's way better to do it in definition files
 
 ### Configuration
 
@@ -67,14 +64,16 @@ In order to register services in the container it's way better to do it by defin
 use Jgut\Slim\PHPDI\Configuration;
 
 $settings = [
-    'useAnnotations' => true,
     'ignorePhpDocErrors' => true,
+    'compilationPath' => '/path/to/compiled/container',
 ];
 $configuration = new Configuration($settings);
 
-// Can be set after creation
+// Can be set after configuration creation
 $configuration->setProxiesPath(sys_get_temp_dir());
-$configuration->setDefinitions('/path/to/definitions/file.php');
+$configuration->setDefinitions('/path/to/definition/files');
+
+$container = ContainerBuilder::build($configuration);
 ```
 
 #### PHP-DI settings
@@ -87,27 +86,27 @@ $configuration->setDefinitions('/path/to/definitions/file.php');
 * `proxiesPath`, path where PHP-DI creates its proxy files (none by default)
 * `compilationPath`, path to where PHP-DI creates its compiled container (none by default)
 
-Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations.
+Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations
 
 In order for you to use annotations you have to `require doctrine/annotations`. [See here](http://php-di.org/doc/annotations.html)
 
 #### Additional settings
 
-* `containerClass`, container class that will be built. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
 * `definitions`, an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
+* `containerClass`, container class that will be built. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
 
 ## Array value access shorthand
 
-Default `\Jgut\Slim\PHPDI\Container` container allows shorthand to access array values by concatenating array keys with dots. If any key in the chain is not defined normal container's `Psr\Container\NotFoundExceptionInterface` is thrown
+Default `\Jgut\Slim\PHPDI\Container` container allows shorthand array values access by concatenating array keys with dots. If any key in the chain is not defined normal container's `Psr\Container\NotFoundExceptionInterface` is thrown
 
 ```php
 $container->get('configs')['database']['dsn']; // given configs is an array
-$container->get('configs.database.dsn'); // same as before
+$container->get('configs.database.dsn'); // same as above
 ```
 
 #### Notice
 
-Be careful though not to shadow any array keys by using dots in keys
+Be careful though not to shadow any array key by using dots in keys itself
 
 ```php
 $configs = [
@@ -124,14 +123,14 @@ $container->get('configs.foo.bar'); // bang!
 $container->get('configs.foo.bar.baz'); // NotFoundExceptionInterface thrown
 ```
 
-_The easiest way to avoid this from ever happening is by NOT using dots in keys_
+_The easiest way to avoid this from ever happening is by NOT using dots in array keys_
 
 ## Invocation strategy
 
-By default `Jgut\Slim\PHPDI\AppFactory` sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it is quite handy and lets you do things like this
+By default slim-php-di sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it is quite handy and lets you do things like this
 
 ```php
-$app = AppFactory::create();
+$app = $container->get(App::class);
 
 $app->get('/hello/{name}', function (ResponseInterface $response, string $name, CustomDbConnection $connection): ResponseInterface {
     // $name will be injected from request arguments
@@ -145,18 +144,26 @@ $app->get('/hello/{name}', function (ResponseInterface $response, string $name, 
 $app->run();
 ```
 
-If you prefer default Slim's `Slim\Handlers\Strategies\RequestResponse` strategy or any of your choosing you only have to add it to AppFactory
+If you prefer default Slim's `Slim\Handlers\Strategies\RequestResponse` strategy or any other of your choosing you only have to set it in a definition file
 
 ```php
-AppFactory::setInvocationStrategy(new RequestResponse());
+use Slim\Handlers\Strategies\RequestResponse;
+use Slim\Interfaces\InvocationStrategyInterface;
+
+use function DI\create;
+
+return [
+    InvocationStrategyInterface::class => create(RequestResponse::class),
+];
 ```
 
 ## Migration from 2.x
 
 * Minimum Slim version is now 4.0
-* Slim 4 does not have ANY definition on container, so default definitions have been removed. PHP-DI container by default only provides the Configuration object used on building the container itself. Refer to Slim's [documentation](http://www.slimframework.com/docs/v4/)
+* PHP-DI container now provides only the Configuration object used on building the container itself and implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
+* You can extract Slim's App directly from container or seed AppFactory from container
 * Slim's App is not extended any more
-* Service definitions à la Pimple support has been kept but its use is discouraged, use PHP-DI's methods
+* Service definitions à la Pimple support has been kept but its use is discouraged, use PHP-DI's methods instead
 
 ## Contributing
 
