@@ -22,16 +22,22 @@ use Jgut\Slim\PHPDI\CallableStrategy;
 use Jgut\Slim\PHPDI\Configuration;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\DispatcherInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
+use Slim\Interfaces\MiddlewareDispatcherInterface;
 use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteResolverInterface;
+use Slim\MiddlewareDispatcher;
 use Slim\Routing\Dispatcher;
 use Slim\Routing\RouteCollector;
 use Slim\Routing\RouteResolver;
+use Slim\Routing\RouteRunner;
 
 return [
     // Replaced by used configuration
@@ -81,13 +87,34 @@ return [
         );
     },
 
+    MiddlewareDispatcherInterface::class => function (ContainerInterface $container): MiddlewareDispatcherInterface {
+        $requestHandler = new class() implements RequestHandlerInterface {
+            /**
+             * {@inheritdoc}
+             */
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                // @codeCoverageIgnoreStart
+                throw new  \RuntimeException('This RequestHandler is replaced by ' . RouteRunner::class);
+                // @codeCoverageIgnoreEnd
+            }
+        };
+
+        return new MiddlewareDispatcher(
+            $requestHandler,
+            $container->get(CallableResolverInterface::class),
+            $container
+        );
+    },
+
     App::class => function (ContainerInterface $container): App {
         return new App(
             $container->get(ResponseFactoryInterface::class),
             $container,
             $container->get(CallableResolverInterface::class),
             $container->get(RouteCollectorInterface::class),
-            $container->get(RouteResolverInterface::class)
+            $container->get(RouteResolverInterface::class),
+            $container->get(MiddlewareDispatcherInterface::class)
         );
     },
 ];

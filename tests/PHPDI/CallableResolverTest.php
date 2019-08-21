@@ -14,22 +14,35 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI\Tests;
 
 use Invoker\CallableResolver as InvokerResolver;
+use Invoker\Exception\NotCallableException;
 use Jgut\Slim\PHPDI\CallableResolver;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * CallableResolver tests.
  */
 class CallableResolverTest extends TestCase
 {
-    public function testInvocable(): void
-    {
+    /**
+     * @dataProvider getResolvableList
+     *
+     * @param string                $resolveMethod
+     * @param string|mixed[]|object $toResolve
+     * @param mixed[]               $expectedResolvable
+     */
+    public function testResolveFromString(
+        string $resolveMethod,
+        $toResolve,
+        array $expectedResolvable
+    ): void {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoker->expects(static::once())
             ->method('resolve')
-            ->with('Controller::method')
+            ->with($expectedResolvable)
             ->will(self::returnValue(function () {
                 return 'ok';
             }));
@@ -37,27 +50,86 @@ class CallableResolverTest extends TestCase
 
         $resolver = new CallableResolver($invoker);
 
-        $invocable = $resolver->resolve('Controller::method');
-
-        static::assertEquals('ok', $invocable());
+        $resolver->{$resolveMethod}($toResolve);
     }
 
-    public function testNotInvocable(): void
+    /**
+     * @return mixed[]
+     */
+    public function getResolvableList(): array
     {
+        $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
+        $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
+
+        return [
+            ['resolve', 'Service', ['Service', '__invoke']],
+            ['resolve', 'Service:method', ['Service', 'method']],
+            ['resolve', 'Service::method', ['Service', 'method']],
+            ['resolve', ['Service', 'method'], ['Service', 'method']],
+
+            ['resolveRoute', 'Controller', ['Controller', 'handle']],
+            ['resolveRoute', $controller, [$controller, 'handle']],
+            ['resolveRoute', [$controller, 'method'], [$controller, 'method']],
+
+            ['resolveMiddleware', 'Middleware', ['Middleware', 'process']],
+            ['resolveMiddleware', $middleware, [$middleware, 'process']],
+            ['resolveMiddleware', [$middleware, 'method'], [$middleware, 'method']],
+        ];
+    }
+
+    /**
+     * @dataProvider getNotResolvableList
+     *
+     * @param string                $resolveMethod
+     * @param string|mixed[]|object $toResolve
+     * @param mixed[]               $expectedResolvable
+     */
+    public function testNotResolvable(
+        string $resolveMethod,
+        $toResolve,
+        array $expectedResolvable,
+        string $expectedEsceptionType
+    ): void {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable', $expectedEsceptionType));
+
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoker->expects(static::once())
             ->method('resolve')
-            ->with('Controller::method');
+            ->with($expectedResolvable)
+            ->will(self::throwException(new NotCallableException()));
         /* @var InvokerResolver $invoker */
 
         $resolver = new CallableResolver($invoker);
 
-        try {
-            $resolver->resolve('Controller::method');
-        } catch (\RuntimeException $exception) {
-            static::assertEquals('"Controller::method" is not resolvable', $exception->getMessage());
-        }
+        $resolver->{$resolveMethod}($toResolve);
+    }
+
+    public function getNotResolvableList(): array
+    {
+        $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
+        $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
+
+        return [
+            ['resolve', 'Service', ['Service', '__invoke'], 'Service'],
+            ['resolve', 'Service:method', ['Service', 'method'], 'Service:method'],
+            ['resolve', 'Service::method', ['Service', 'method'], 'Service::method'],
+            ['resolve', ['Service', 'method'], ['Service', 'method'], \json_encode(['Service', 'method'])],
+
+            ['resolveRoute', 'Controller', ['Controller', 'handle'], 'Controller'],
+            ['resolveRoute', $controller, [$controller, 'handle'], \get_class($controller)],
+            ['resolveRoute', [$controller, 'method'], [$controller, 'method'], \json_encode([$controller, 'method'])],
+
+            ['resolveMiddleware', 'Middleware', ['Middleware', 'process'], 'Middleware'],
+            ['resolveMiddleware', $middleware, [$middleware, 'process'], \get_class($middleware)],
+            [
+                'resolveMiddleware',
+                [$middleware, 'method'],
+                [$middleware, 'method'],
+                \json_encode([$middleware, 'method']),
+            ],
+        ];
     }
 }

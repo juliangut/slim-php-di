@@ -25,8 +25,9 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.1",
+    "ext-json": "*",
     "php-di/php-di": "^6.0.5",
-    "slim/slim": "^4.0"
+    "slim/slim": "^4.2"
   },
   "require-dev": {
     "brainmaestro/composer-git-hooks": "^2.1",

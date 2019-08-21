@@ -19,6 +19,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
 use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
+use Slim\Interfaces\MiddlewareDispatcherInterface;
 use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteResolverInterface;
 
@@ -44,5 +45,6 @@ class AppTest extends TestCase
             $app->getRouteCollector()->getDefaultInvocationStrategy()
         );
         static::assertSame($container->get(RouteResolverInterface::class), $app->getRouteResolver());
+        static::assertSame($container->get(MiddlewareDispatcherInterface::class), $app->getMiddlewareDispatcher());
     }
 }
