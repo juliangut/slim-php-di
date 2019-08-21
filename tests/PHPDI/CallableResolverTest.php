@@ -30,12 +30,12 @@ class CallableResolverTest extends TestCase
      *
      * @param string                $resolveMethod
      * @param string|mixed[]|object $toResolve
-     * @param mixed[]               $expectedResolvable
+     * @param string|mixed[]        $expectedResolvable
      */
     public function testResolveFromString(
         string $resolveMethod,
         $toResolve,
-        array $expectedResolvable
+        $expectedResolvable
     ): void {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
@@ -62,7 +62,7 @@ class CallableResolverTest extends TestCase
         $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
 
         return [
-            ['resolve', 'Service', ['Service', '__invoke']],
+            ['resolve', 'Service', 'Service'],
             ['resolve', 'Service:method', ['Service', 'method']],
             ['resolve', 'Service::method', ['Service', 'method']],
             ['resolve', ['Service', 'method'], ['Service', 'method']],
@@ -82,12 +82,12 @@ class CallableResolverTest extends TestCase
      *
      * @param string                $resolveMethod
      * @param string|mixed[]|object $toResolve
-     * @param mixed[]               $expectedResolvable
+     * @param string|mixed[]        $expectedResolvable
      */
     public function testNotResolvable(
         string $resolveMethod,
         $toResolve,
-        array $expectedResolvable,
+        $expectedResolvable,
         string $expectedEsceptionType
     ): void {
         $this->expectException(\RuntimeException::class);
@@ -113,7 +113,7 @@ class CallableResolverTest extends TestCase
         $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
 
         return [
-            ['resolve', 'Service', ['Service', '__invoke'], 'Service'],
+            ['resolve', 'Service', 'Service', 'Service'],
             ['resolve', 'Service:method', ['Service', 'method'], 'Service:method'],
             ['resolve', 'Service::method', ['Service', 'method'], 'Service::method'],
             ['resolve', ['Service', 'method'], ['Service', 'method'], \json_encode(['Service', 'method'])],

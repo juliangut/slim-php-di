@@ -54,7 +54,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
         $resolvable = $toResolve;
 
         if (\is_string($resolvable)) {
-            $resolvable = $this->callableFromStringNotation($resolvable, '__invoke');
+            $resolvable = $this->callableFromStringNotation($resolvable);
         }
 
         return $this->resolveCallable($resolvable, $toResolve);
@@ -128,15 +128,18 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get callable from string callable notation.
      *
-     * @param string $toResolve
-     * @param string $defaultMethod
+     * @param string      $toResolve
+     * @param string|null $defaultMethod
      *
-     * @return string[]
+     * @return string|string[]
      */
-    private function callableFromStringNotation(string $toResolve, string $defaultMethod): array
+    private function callableFromStringNotation(string $toResolve, ?string $defaultMethod = null)
     {
         \preg_match(static::CALLABLE_PATTERN, $toResolve, $matches);
+        if ($matches) {
+            return [$matches[1], $matches[2]];
+        }
 
-        return $matches ? [$matches[1], $matches[2]] : [$toResolve, $defaultMethod];
+        return $defaultMethod !== null ? [$toResolve, $defaultMethod] : $toResolve;
     }
 }
