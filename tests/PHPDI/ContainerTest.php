@@ -141,7 +141,7 @@ class ContainerTest extends TestCase
     public function testUnset(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('It is not possible to unset container definitions');
+        $this->expectExceptionMessage('It is not possible to unset a container definitions');
 
         unset($this->container->foo);
     }
@@ -149,7 +149,7 @@ class ContainerTest extends TestCase
     public function testUnsetArray(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('It is not possible to unset container definitions');
+        $this->expectExceptionMessage('It is not possible to unset a container definitions');
 
         unset($this->container['foo']);
     }

@@ -38,7 +38,6 @@ use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Slim\App;
-use Slim\Factory\AppFactory;
 
 $settings = [
     'definitions' => '/path/to/definitions/files',
@@ -46,7 +45,7 @@ $settings = [
 $container = ContainerBuilder::build(new Configuration($settings));
 
 $app = $container->get(App::class);
-// or $app = AppFactory::createFromContainer($container);
+// or $app = \Slim\Factory\AppFactory::createFromContainer($container);
 
 // Register your services if not provided as definitions
 $container->set('service_one', function (ContainerInterface $container) {
@@ -162,10 +161,10 @@ return [
 ## Migration from 2.x
 
 * Minimum Slim version is now 4.2
-* PHP-DI container now provides only the Configuration object used on building the container itself and implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
+* Container only provides implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
 * You can extract Slim's App directly from container or seed AppFactory from container
 * Slim's App is not extended any more
-* Service definitions à la Pimple support has been kept but its use is discouraged, use PHP-DI's methods instead
+* ArrayAccess and magic methods on default container have been kept but are deprecated, use PSR-11 and PHP-DI's methods instead
 
 ## Contributing
 

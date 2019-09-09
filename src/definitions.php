@@ -43,12 +43,12 @@ return [
     // Replaced by used configuration
     Configuration::class => null,
 
+    // Replaced by container itself
+    ContainerInterface::class => null,
+
     ResponseFactoryInterface::class => function (): ResponseFactoryInterface {
         return AppFactory::determineResponseFactory();
     },
-
-    // Replaced by container itself
-    ContainerInterface::class => null,
 
     CallableResolverInterface::class => function (ContainerInterface $container): CallableResolverInterface {
         return new CallableResolver(new InvokerCallableResolver($container));

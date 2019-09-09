@@ -125,7 +125,7 @@ trait ContainerTrait
     public function offsetSet($name, $value): void
     {
         @\trigger_error(
-            'ArrayAccess set method is deprecated since 3.0, use PHP-DI methods instead.',
+            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED
         );
 
@@ -146,6 +146,11 @@ trait ContainerTrait
      */
     public function offsetGet($name)
     {
+        @\trigger_error(
+            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         return $this->get($name);
     }
 
@@ -162,6 +167,11 @@ trait ContainerTrait
      */
     public function offsetExists($name): bool
     {
+        @\trigger_error(
+            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         return $this->has($name);
     }
 
@@ -176,7 +186,12 @@ trait ContainerTrait
      */
     public function offsetUnset($name): void
     {
-        throw new \RuntimeException('It is not possible to unset container definitions');
+        @\trigger_error(
+            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
+        throw new \RuntimeException('It is not possible to unset a container definitions');
     }
 
     /**
@@ -187,6 +202,11 @@ trait ContainerTrait
      */
     public function __set(string $name, $value): void
     {
+        @\trigger_error(
+            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         $this->set($name, $value);
     }
 
@@ -202,6 +222,11 @@ trait ContainerTrait
      */
     public function __get(string $name)
     {
+        @\trigger_error(
+            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         return $this->get($name);
     }
 
@@ -214,6 +239,11 @@ trait ContainerTrait
      */
     public function __isset(string $name): bool
     {
+        @\trigger_error(
+            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         return $this->has($name);
     }
 
@@ -228,6 +258,11 @@ trait ContainerTrait
      */
     public function __unset(string $name): void
     {
-        throw new \RuntimeException('It is not possible to unset container definitions');
+        @\trigger_error(
+            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            \E_USER_DEPRECATED
+        );
+
+        throw new \RuntimeException('It is not possible to unset a container definitions');
     }
 }
