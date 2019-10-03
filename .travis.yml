@@ -29,13 +29,12 @@ matrix:
         - TEST_VERSION=true
         - COMPOSER_FLAGS="--prefer-stable --prefer-dist"
   allow_failures:
-    - php: 7.4snapshot
     - php: nightly
 
 before_install:
   - echo 'extension=apcu.so' >> /home/travis/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo 'apc.enable_cli=1' >> /home/travis/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - if [[ -z $TEST_VERSION && -f "/home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini" ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ -z $TEST_VERSION && -f "/home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini" ]]; then phpenv config-rm xdebug.ini ; fi
   - composer global require hirak/prestissimo
   - composer self-update --stable --no-progress
 
