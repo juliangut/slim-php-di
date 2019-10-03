@@ -83,12 +83,12 @@ class Configuration
      */
     public function __construct($configurations = [])
     {
-        if (!\is_array($configurations) && !$configurations instanceof \Traversable) {
-            throw new \InvalidArgumentException('Configurations must be a traversable');
-        }
-
         if ($configurations instanceof \Traversable) {
             $configurations = \iterator_to_array($configurations);
+        }
+
+        if (!\is_array($configurations)) {
+            throw new \InvalidArgumentException('Configurations must be a traversable');
         }
 
         $configs = \array_keys(\get_object_vars($this));

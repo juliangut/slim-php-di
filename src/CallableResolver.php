@@ -135,8 +135,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
      */
     private function callableFromStringNotation(string $toResolve, ?string $defaultMethod = null)
     {
-        \preg_match(static::CALLABLE_PATTERN, $toResolve, $matches);
-        if ($matches) {
+        if (\preg_match(static::CALLABLE_PATTERN, $toResolve, $matches) === 1) {
             return [$matches[1], $matches[2]];
         }
 
