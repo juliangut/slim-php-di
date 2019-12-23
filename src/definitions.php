@@ -24,15 +24,19 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Factory\Psr17\Psr17FactoryProvider;
+use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\DispatcherInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 use Slim\Interfaces\MiddlewareDispatcherInterface;
 use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteResolverInterface;
+use Slim\Interfaces\ServerRequestCreatorInterface;
 use Slim\MiddlewareDispatcher;
 use Slim\Routing\Dispatcher;
 use Slim\Routing\RouteCollector;
@@ -46,8 +50,21 @@ return [
     // Replaced by container itself
     ContainerInterface::class => null,
 
+    ServerRequestCreatorInterface::class => function (): ServerRequestCreatorInterface {
+        return ServerRequestCreatorFactory::create();
+    },
     ResponseFactoryInterface::class => function (): ResponseFactoryInterface {
         return AppFactory::determineResponseFactory();
+    },
+    StreamFactoryInterface::class => function (): StreamFactoryInterface {
+        /** @var \Slim\Factory\Psr17\Psr17Factory $psr17factory */
+        foreach (Psr17FactoryProvider::getFactories() as $psr17factory) {
+            if ($psr17factory::isStreamFactoryAvailable()) {
+                return $psr17factory::getStreamFactory();
+            }
+        }
+
+        throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation');
     },
 
     CallableResolverInterface::class => function (ContainerInterface $container): CallableResolverInterface {
