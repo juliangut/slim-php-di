@@ -90,7 +90,7 @@ class ContainerBuilder
     /**
      * Parse definitions.
      *
-     * @param string[] $definitions
+     * @param mixed[] $definitions
      *
      * @throws \RuntimeException
      *
@@ -103,7 +103,7 @@ class ContainerBuilder
         }
 
         return \array_map(
-            function ($definition) {
+            function ($definition): array {
                 if (\is_array($definition)) {
                     return $definition;
                 }

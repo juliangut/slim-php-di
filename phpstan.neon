@@ -2,5 +2,6 @@ parameters:
   level: max
   paths:
     - src
+  checkGenericClassInNonGenericObjectType: false
   ignoreErrors:
     - '/^In method "Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::has", caught "Throwable" must be rethrown\./'

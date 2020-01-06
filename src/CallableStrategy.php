@@ -51,7 +51,7 @@ class CallableStrategy implements InvocationStrategyInterface
      * @param callable               $callable
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
-     * @param array                  $routeArguments
+     * @param mixed[]                $routeArguments
      *
      * @return ResponseInterface
      */
@@ -62,8 +62,8 @@ class CallableStrategy implements InvocationStrategyInterface
         array $routeArguments
     ): ResponseInterface {
         if ($this->appendRouteArguments) {
-            foreach ($routeArguments as $k => $v) {
-                $request = $request->withAttribute($k, $v);
+            foreach ($routeArguments as $argument => $value) {
+                $request = $request->withAttribute($argument, $value);
             }
         }
 

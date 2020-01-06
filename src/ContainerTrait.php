@@ -78,8 +78,8 @@ trait ContainerTrait
     }
 
     /**
-     * @param string     $key
-     * @param array|null $parent
+     * @param string       $key
+     * @param mixed[]|null $parent
      *
      * @throws NotFoundException
      *
