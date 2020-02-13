@@ -132,7 +132,7 @@ class Configuration
      *
      * @return static
      */
-    public function setContainerClass(string $containerClass)
+    public function setContainerClass(string $containerClass): self
     {
         if (!\class_exists($containerClass)
             || (
@@ -167,7 +167,7 @@ class Configuration
      *
      * @return static
      */
-    public function setUseAutoWiring(bool $useAutoWiring)
+    public function setUseAutoWiring(bool $useAutoWiring): self
     {
         $this->useAutoWiring = $useAutoWiring;
 
@@ -191,7 +191,7 @@ class Configuration
      *
      * @return static
      */
-    public function setUseAnnotations(bool $useAnnotations)
+    public function setUseAnnotations(bool $useAnnotations): self
     {
         $this->useAnnotations = $useAnnotations;
 
@@ -213,9 +213,9 @@ class Configuration
      *
      * @param bool $useDefinitionCache
      *
-     * @return $this
+     * @return static
      */
-    public function setUseDefinitionCache(bool $useDefinitionCache)
+    public function setUseDefinitionCache(bool $useDefinitionCache): self
     {
         $this->useDefinitionCache = $useDefinitionCache;
 
@@ -239,7 +239,7 @@ class Configuration
      *
      * @return static
      */
-    public function setIgnorePhpDocErrors(bool $ignorePhpDocErrors)
+    public function setIgnorePhpDocErrors(bool $ignorePhpDocErrors): self
     {
         $this->ignorePhpDocErrors = $ignorePhpDocErrors;
 
@@ -263,7 +263,7 @@ class Configuration
      *
      * @return static
      */
-    public function setWrapContainer(ContainerInterface $wrapContainer)
+    public function setWrapContainer(ContainerInterface $wrapContainer): self
     {
         $this->wrapContainer = $wrapContainer;
 
@@ -289,7 +289,7 @@ class Configuration
      *
      * @return static
      */
-    public function setProxiesPath(string $proxiesPath)
+    public function setProxiesPath(string $proxiesPath): self
     {
         if (!\file_exists($proxiesPath) || !\is_dir($proxiesPath) || !\is_writable($proxiesPath)) {
             throw new \RuntimeException(\sprintf('%s directory does not exist or is write protected', $proxiesPath));
@@ -319,7 +319,7 @@ class Configuration
      *
      * @return static
      */
-    public function setCompilationPath(string $compilationPath)
+    public function setCompilationPath(string $compilationPath): self
     {
         if (!\file_exists($compilationPath) || !\is_dir($compilationPath) || !\is_writable($compilationPath)) {
             throw new \RuntimeException(\sprintf(
@@ -352,7 +352,7 @@ class Configuration
      *
      * @return static
      */
-    public function setCompiledContainerClass(string $compiledContainerClass)
+    public function setCompiledContainerClass(string $compiledContainerClass): self
     {
         if (!\class_exists($compiledContainerClass)
             || (
@@ -389,7 +389,7 @@ class Configuration
      *
      * @return static
      */
-    public function setDefinitions($definitions)
+    public function setDefinitions($definitions): self
     {
         if (\is_string($definitions)) {
             $definitions = [$definitions];
