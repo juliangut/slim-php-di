@@ -15,10 +15,10 @@ namespace Jgut\Slim\PHPDI\Tests;
 
 use Invoker\Invoker;
 use Jgut\Slim\PHPDI\CallableStrategy;
+use Laminas\Diactoros\ServerRequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * Route callback strategy tests.
@@ -33,7 +33,6 @@ class CallableStrategyTest extends TestCase
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var ResponseInterface $response */
 
         $callable = function (ServerRequestInterface $request, $param): void {
             static::assertEquals('value', $request->getAttribute('attribute'));
@@ -48,7 +47,6 @@ class CallableStrategyTest extends TestCase
             ->method('call')
             ->with($callable)
             ->willReturn($response);
-        /* @var \Invoker\InvokerInterface $invoker */
 
         $strategy = new CallableStrategy($invoker);
 
@@ -63,7 +61,6 @@ class CallableStrategyTest extends TestCase
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var ResponseInterface $response */
 
         $callable = function (ServerRequestInterface $request, $param): void {
             static::assertEquals('value', $request->getAttribute('attribute'));
@@ -78,7 +75,6 @@ class CallableStrategyTest extends TestCase
             ->method('call')
             ->with($callable)
             ->willReturn($response);
-        /* @var \Invoker\InvokerInterface $invoker */
 
         $strategy = new CallableStrategy($invoker, true);
 

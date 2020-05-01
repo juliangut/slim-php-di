@@ -85,7 +85,7 @@ trait ContainerTrait
      *
      * @return mixed
      */
-    private function getRecursive(string $key, array $parent = null)
+    private function getRecursive(string $key, ?array $parent = null)
     {
         if ($parent !== null ? \array_key_exists($key, $parent) : parent::has($key)) {
             return $parent !== null ? $parent[$key] : parent::get($key);

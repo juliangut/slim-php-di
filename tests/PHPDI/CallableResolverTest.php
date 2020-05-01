@@ -46,7 +46,6 @@ class CallableResolverTest extends TestCase
             ->will(self::returnValue(function () {
                 return 'ok';
             }));
-        /* @var InvokerResolver $invoker */
 
         $resolver = new CallableResolver($invoker);
 
@@ -100,7 +99,6 @@ class CallableResolverTest extends TestCase
             ->method('resolve')
             ->with($expectedResolvable)
             ->will(self::throwException(new NotCallableException()));
-        /* @var InvokerResolver $invoker */
 
         $resolver = new CallableResolver($invoker);
 
