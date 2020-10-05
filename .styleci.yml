@@ -8,7 +8,6 @@ finder:
     - build
 
 enabled:
-  - alpha_ordered_imports
   - binary_operator_spaces
   - blank_line_after_opening_tag
   - cast_spaces
