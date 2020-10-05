@@ -81,7 +81,6 @@ class ContainerBuilderTest extends TestCase
 
         $container = ContainerBuilder::build(new Configuration($configuration));
 
-        static::assertInstanceOf(Container::class, $container);
         static::assertTrue($container->has('foo'));
         static::assertEquals('baz', $container->get('foo'));
         static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');

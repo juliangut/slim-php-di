@@ -61,7 +61,7 @@ trait ContainerTrait
      *
      * @return bool
      */
-    public function has($name)
+    public function has($name): bool
     {
         if (\strpos($name, '.') === false) {
             return parent::has($name);

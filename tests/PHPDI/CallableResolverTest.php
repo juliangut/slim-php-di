@@ -43,9 +43,9 @@ class CallableResolverTest extends TestCase
         $invoker->expects(static::once())
             ->method('resolve')
             ->with($expectedResolvable)
-            ->will(self::returnValue(function () {
+            ->willReturn(function () {
                 return 'ok';
-            }));
+            });
 
         $resolver = new CallableResolver($invoker);
 
@@ -82,15 +82,16 @@ class CallableResolverTest extends TestCase
      * @param string                $resolveMethod
      * @param string|mixed[]|object $toResolve
      * @param string|mixed[]        $expectedResolvable
+     * @param string                $expectedExceptionType
      */
     public function testNotResolvable(
         string $resolveMethod,
         $toResolve,
         $expectedResolvable,
-        string $expectedEsceptionType
+        string $expectedExceptionType
     ): void {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable', $expectedEsceptionType));
+        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable', $expectedExceptionType));
 
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()

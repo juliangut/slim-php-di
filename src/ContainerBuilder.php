@@ -103,7 +103,7 @@ class ContainerBuilder
         }
 
         return \array_map(
-            function ($definition): array {
+            static function ($definition): array {
                 if (\is_array($definition)) {
                     return $definition;
                 }

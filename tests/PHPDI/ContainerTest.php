@@ -20,6 +20,8 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+use function DI\create;
+
 /**
  * Container tests.
  */
@@ -110,7 +112,7 @@ class ContainerTest extends TestCase
 
         $configuration = new Configuration([
             'definitions' => [
-                ['foo' => \DI\create('\\Unknown\\Foo\\Bar')],
+                ['foo' => create('\\Unknown\\Foo\\Bar')],
             ],
         ]);
 
