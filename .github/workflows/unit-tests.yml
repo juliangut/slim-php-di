@@ -54,6 +54,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: apcu
+          ini-values: apc.enabled=1, apc.enable_cli=1
           coverage: none
 
       - name: Composer install
