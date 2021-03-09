@@ -53,6 +53,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          extensions: apcu
           coverage: none
 
       - name: Composer install
@@ -60,5 +61,5 @@ jobs:
         with:
           composer-options: "--prefer-dist"
 
-      - name: Unit tests
+      - name: Unit test
         run: make test-phpunit
