@@ -44,17 +44,17 @@ jobs:
         php: ${{ fromJson(needs.prepare_env.outputs.php) }}
         actions:
           - name: PHP Linting
-            run: composer lint-php
+            run: make lint-php
           - name: Check Style
-            run: composer lint-phpcs && make lint-phpcs-fixer
+            run: make lint-phpcs && make lint-phpcs-fixer
           - name: Copy/paste detection
-            run: composer qa-phpcpd
+            run: make qa-phpcpd
           - name: Mess detection
-            run: composer qa-phpmd
+            run: make qa-phpmd
           - name: Magic number detection
-            run: composer qa-phpmnd
+            run: make qa-phpmnd
           - name: Static analysis
-            run: composer qa-phpstan
+            run: make qa-phpstan
 
     name: ${{ matrix.actions.name }} on PHP ${{ matrix.php }}
 
