@@ -36,7 +36,7 @@ class ContainerBuilderTest extends TestCase
     public function testInvalidDefinitionsFile(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/^Definitions file should return an array. ".+" returned$/');
+        $this->expectExceptionMessageMatches('/^Definitions file should return an array. ".+" returned$/');
 
         ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
     }

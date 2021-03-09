@@ -23,6 +23,8 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Configuration tests.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ConfigurationTest extends TestCase
 {
@@ -93,7 +95,7 @@ class ConfigurationTest extends TestCase
     public function testInvalidContainerClass(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/^class ".+" must extend DI\\\Container/');
+        $this->expectExceptionMessageMatches('/^class ".+" must extend DI\\\Container/');
 
         new Configuration(['containerClass' => 'NonExistingClass']);
     }
@@ -128,7 +130,7 @@ class ConfigurationTest extends TestCase
     public function testInvalidCompiledContainerClass(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/^class ".+" must extend DI\\\CompiledContainer/');
+        $this->expectExceptionMessageMatches('/^class ".+" must extend DI\\\CompiledContainer/');
 
         new Configuration(['compiledContainerClass' => 'NonExistingClass']);
     }

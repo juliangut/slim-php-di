@@ -1,0 +1,83 @@
+name: Code Analysis
+
+on:
+  pull_request: null
+  push:
+    branches:
+      - master
+
+env:
+  COMPOSER_ROOT_VERSION: dev-master
+
+jobs:
+  prepare_env:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY_GITHUB }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS_GITHUB }}
+
+      - name: Composer install
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: "--prefer-dist"
+
+      - name: Install Symplify easy-ci
+        run: composer require --dev symplify/easy-ci --no-interaction --no-progress --ansi --prefer-stable --prefer-dist
+
+      - id: output_php
+        run: echo "::set-output name=matrix::$(vendor/bin/easy-ci php-versions-json)"
+
+    outputs:
+      php: ${{ steps.output_php.outputs.matrix }}
+
+  code_analysis:
+    needs: prepare_env
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ${{ fromJson(needs.prepare_env.outputs.php) }}
+        actions:
+          - name: PHP Linting
+            run: composer lint-php
+          - name: Check Style
+            run: composer lint-phpcs && make lint-phpcs-fixer
+          - name: Copy/paste detection
+            run: composer qa-phpcpd
+          - name: Mess detection
+            run: composer qa-phpmd
+          - name: Magic number detection
+            run: composer qa-phpmnd
+          - name: Static analysis
+            run: composer qa-phpstan
+
+    name: ${{ matrix.actions.name }} on PHP ${{ matrix.php }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Composer install
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: "--prefer-dist"
+
+      - name: Run ${{ matrix.actions.name }}
+        run: ${{ matrix.actions.run }}

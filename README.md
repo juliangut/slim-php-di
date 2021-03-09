@@ -1,18 +1,13 @@
-[![PHP version](https://img.shields.io/badge/PHP-%3E%3D7.1-8892BF.svg?style=flat-square)](http://php.net)
+[![PHP version](https://img.shields.io/badge/PHP-%3E%3D7.3-8892BF.svg?style=flat-square)](http://php.net)
 [![Latest Version](https://img.shields.io/packagist/vpre/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di)
 [![License](https://img.shields.io/github/license/juliangut/slim-php-di.svg?style=flat-square)](https://github.com/juliangut/slim-php-di/blob/master/LICENSE)
-
-[![Build Status](https://img.shields.io/travis/juliangut/slim-php-di.svg?style=flat-square)](https://travis-ci.org/juliangut/slim-php-di)
-[![Style Check](https://styleci.io/repos/40728455/shield)](https://styleci.io/repos/40728455)
-[![Code Quality](https://img.shields.io/scrutinizer/g/juliangut/slim-php-di.svg?style=flat-square)](https://scrutinizer-ci.com/g/juliangut/slim-php-di)
-[![Code Coverage](https://img.shields.io/coveralls/juliangut/slim-php-di.svg?style=flat-square)](https://coveralls.io/github/juliangut/slim-php-di)
 
 [![Total Downloads](https://img.shields.io/packagist/dt/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di/stats)
 [![Monthly Downloads](https://img.shields.io/packagist/dm/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di/stats)
 
 # Slim Framework PHP-DI container integration
 
-PHP-DI (v6) dependency injection container integration for Slim framework.
+PHP-DI dependency injection container integration for Slim framework.
 
 ## Installation
 
@@ -33,7 +28,6 @@ require_once './vendor/autoload.php';
 Use `Jgut\Slim\PHPDI\ContainerBuilder` to create PHP-DI container and extract Slim's App from it
 
 ```php
-use App\ServiceOne;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
@@ -45,10 +39,10 @@ $settings = [
 $container = ContainerBuilder::build(new Configuration($settings));
 
 $app = $container->get(App::class);
-// or $app = \Slim\Factory\AppFactory::createFromContainer($container);
+// same as $app = \Slim\Factory\AppFactory::createFromContainer($container);
 
 // Register your services if not provided as definitions
-$container->set('service_one', function (ContainerInterface $container) {
+$container->set('service_one', function (ContainerInterface $container): ServiceOne {
     return new ServiceOne($container->get('service_two'));
 });
 
@@ -57,12 +51,13 @@ $container->set('service_one', function (ContainerInterface $container) {
 $app->run();
 ```
 
-In order to register services in the container it's way better to do it in definition files
+_In order to register services in the container it's way better to do it in definition files_
 
 ### Configuration
 
 ```php
 use Jgut\Slim\PHPDI\Configuration;
+use Jgut\Slim\PHPDI\ContainerBuilder;
 
 $settings = [
     'ignorePhpDocErrors' => true,
@@ -70,7 +65,7 @@ $settings = [
 ];
 $configuration = new Configuration($settings);
 
-// Can be set after configuration creation
+// Settings can be set after creation
 $configuration->setProxiesPath(sys_get_temp_dir());
 $configuration->setDefinitions('/path/to/definition/files');
 
@@ -79,28 +74,33 @@ $container = ContainerBuilder::build($configuration);
 
 #### PHP-DI settings
 
-* `useAutoWiring`, whether or not to use auto wiring (true by default)
-* `useAnnotations`, whether or not to use annotations (false by default)
+* `useAutoWiring` whether or not to use auto wiring (true by default)
+* `useAnnotations` whether or not to use annotations (false by default)
 * `useDefinitionCache`, whether or not to use definition cache (false by default)
 * `ignorePhpDocErrors`, whether or not to ignore phpDoc errors on annotations (false by default)
-* `wrapContainer`, wrapping container (none by default)
-* `proxiesPath`, path where PHP-DI creates its proxy files (none by default)
-* `compilationPath`, path to where PHP-DI creates its compiled container (none by default)
+* `wrapContainer` wrapping container (none by default)
+* `proxiesPath` path where PHP-DI creates its proxy files (none by default)
+* `compilationPath` path to where PHP-DI creates its compiled container (none by default)
 
 Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations
 
-In order for you to use annotations you have to `require doctrine/annotations`. [See here](http://php-di.org/doc/annotations.html)
+In order for you to use annotations you have to `require doctrine/annotations`. [Review documentation](http://php-di.org/doc/annotations.html)
 
 #### Additional settings
 
-* `definitions`, an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
-* `containerClass`, container class that will be built. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
+* `definitions` an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
+* `containerClass` container class used on the build. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
 
 ## Array value access shorthand
 
-Default `\Jgut\Slim\PHPDI\Container` container allows shorthand array values access by concatenating array keys with dots. If any key in the chain is not defined normal container's `Psr\Container\NotFoundExceptionInterface` is thrown
+Default `\Jgut\Slim\PHPDI\Container` container allows shorthand array values access by concatenating array keys with dots. If any key in the chain is not defined, normal `Psr\Container\NotFoundExceptionInterface` exception is thrown
 
 ```php
+use Jgut\Slim\PHPDI\Configuration;
+use Jgut\Slim\PHPDI\ContainerBuilder;
+
+$container = ContainerBuilder::build(new Configuration([]));
+
 $container->get('configs')['database']['dsn']; // given configs is an array
 $container->get('configs.database.dsn'); // same as above
 ```
@@ -110,13 +110,18 @@ $container->get('configs.database.dsn'); // same as above
 Be careful though not to shadow any array key by using dots in keys itself
 
 ```php
+use Jgut\Slim\PHPDI\Configuration;
+use Jgut\Slim\PHPDI\ContainerBuilder;
+
+$container = ContainerBuilder::build(new Configuration([]));
+
 $configs = [
     'foo' => [
         'bar' => [
             'baz' => 'shadowed!',
         ],
     ],
-    'foo.bar' => 'bang!',
+    'foo.bar' => 'bang!', // <== watch out!
 ];
 $container->set('configs', $configs);
 
@@ -128,12 +133,19 @@ _The easiest way to avoid this from ever happening is by NOT using dots in array
 
 ## Invocation strategy
 
-By default slim-php-di sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it is quite handy and lets you do things like this
+By default, slim-php-di sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it is quite handy and lets you do things like this
 
 ```php
+use Jgut\Slim\PHPDI\Configuration;
+use Jgut\Slim\PHPDI\ContainerBuilder;
+use Psr\Http\Message\ResponseInterface;
+use Slim\App;
+
+$container = ContainerBuilder::build(new Configuration([]));
+
 $app = $container->get(App::class);
 
-$app->get('/hello/{name}', function (ResponseInterface $response, string $name, CustomDbConnection $connection): ResponseInterface {
+$app->get('/hello/{name}', function (ResponseInterface $response, string $name, \PDO $connection): ResponseInterface {
     // $name will be injected from request arguments
     // $connection will be injected from the container
 
@@ -160,7 +172,7 @@ return [
 
 ## Migration from 2.x
 
-* Minimum Slim version is now 4.2
+* Minimum Slim version is now 4.7
 * Container only provides implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
 * You can extract Slim's App directly from container or seed AppFactory from container
 * Slim's App is not extended any more

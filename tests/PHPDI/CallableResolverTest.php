@@ -82,16 +82,16 @@ class CallableResolverTest extends TestCase
      * @param string                $resolveMethod
      * @param string|mixed[]|object $toResolve
      * @param string|mixed[]        $expectedResolvable
-     * @param string                $expectedExceptionType
+     * @param string                $expectedException
      */
     public function testNotResolvable(
         string $resolveMethod,
         $toResolve,
         $expectedResolvable,
-        string $expectedExceptionType
+        string $expectedException
     ): void {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable', $expectedExceptionType));
+        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable', $expectedException));
 
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
@@ -106,6 +106,9 @@ class CallableResolverTest extends TestCase
         $resolver->{$resolveMethod}($toResolve);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getNotResolvableList(): array
     {
         $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
