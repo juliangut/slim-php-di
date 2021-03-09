@@ -99,7 +99,7 @@ class CallableResolverTest extends TestCase
         $invoker->expects(static::once())
             ->method('resolve')
             ->with($expectedResolvable)
-            ->will(static::throwException(new NotCallableException()));
+            ->willThrowException(new NotCallableException());
 
         $resolver = new CallableResolver($invoker);
 
