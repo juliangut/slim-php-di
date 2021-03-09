@@ -1,4 +1,4 @@
-name: Code Analysis
+name: Unit test
 
 on:
   pull_request: null
@@ -20,12 +20,6 @@ jobs:
         with:
           php-version: 7.4
           coverage: none
-
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY_GITHUB }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS_GITHUB }}
 
       - name: Composer install
         uses: ramsey/composer-install@v1
