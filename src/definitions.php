@@ -50,13 +50,13 @@ return [
     // Replaced by container itself
     ContainerInterface::class => null,
 
-    ServerRequestCreatorInterface::class => function (): ServerRequestCreatorInterface {
+    ServerRequestCreatorInterface::class => static function (): ServerRequestCreatorInterface {
         return ServerRequestCreatorFactory::create();
     },
-    ResponseFactoryInterface::class => function (): ResponseFactoryInterface {
+    ResponseFactoryInterface::class => static function (): ResponseFactoryInterface {
         return AppFactory::determineResponseFactory();
     },
-    StreamFactoryInterface::class => function (): StreamFactoryInterface {
+    StreamFactoryInterface::class => static function (): StreamFactoryInterface {
         /** @var \Slim\Factory\Psr17\Psr17Factory $psr17factory */
         foreach (Psr17FactoryProvider::getFactories() as $psr17factory) {
             if ($psr17factory::isStreamFactoryAvailable()) {
@@ -67,11 +67,11 @@ return [
         throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation');
     },
 
-    CallableResolverInterface::class => function (ContainerInterface $container): CallableResolverInterface {
+    CallableResolverInterface::class => static function (ContainerInterface $container): CallableResolverInterface {
         return new CallableResolver(new InvokerCallableResolver($container));
     },
 
-    InvocationStrategyInterface::class => function (ContainerInterface $container): InvocationStrategyInterface {
+    InvocationStrategyInterface::class => static function (ContainerInterface $container): InvocationStrategyInterface {
         $resolveChain = new ResolverChain([
             // Inject parameters by name first
             new AssociativeArrayResolver(),
@@ -84,7 +84,7 @@ return [
         return new CallableStrategy(new Invoker($resolveChain, $container));
     },
 
-    RouteCollectorInterface::class => function (ContainerInterface $container): RouteCollectorInterface {
+    RouteCollectorInterface::class => static function (ContainerInterface $container): RouteCollectorInterface {
         return new RouteCollector(
             $container->get(ResponseFactoryInterface::class),
             $container->get(CallableResolverInterface::class),
@@ -93,18 +93,20 @@ return [
         );
     },
 
-    DispatcherInterface::class => function (ContainerInterface $container): DispatcherInterface {
+    DispatcherInterface::class => static function (ContainerInterface $container): DispatcherInterface {
         return new Dispatcher($container->get(RouteCollectorInterface::class));
     },
 
-    RouteResolverInterface::class => function (ContainerInterface $container): RouteResolverInterface {
+    RouteResolverInterface::class => static function (ContainerInterface $container): RouteResolverInterface {
         return new RouteResolver(
             $container->get(RouteCollectorInterface::class),
             $container->get(DispatcherInterface::class)
         );
     },
 
-    MiddlewareDispatcherInterface::class => function (ContainerInterface $container): MiddlewareDispatcherInterface {
+    MiddlewareDispatcherInterface::class => static function (
+        ContainerInterface $container
+    ): MiddlewareDispatcherInterface {
         $requestHandler = new class() implements RequestHandlerInterface {
             /**
              * {@inheritdoc}
@@ -124,7 +126,7 @@ return [
         );
     },
 
-    App::class => function (ContainerInterface $container): App {
+    App::class => static function (ContainerInterface $container): App {
         return new App(
             $container->get(ResponseFactoryInterface::class),
             $container,
