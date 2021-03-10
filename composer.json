@@ -34,7 +34,7 @@
     "friendsofphp/php-cs-fixer": "^2.17",
     "infection/infection": "^0.18|^0.21",
     "laminas/laminas-diactoros": "^2.2",
-    "overtrue/phplint": "^1.2",
+    "overtrue/phplint": "^2.3",
     "phpmd/phpmd": "^2.9",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpstan/extension-installer": "^1.1.0",
