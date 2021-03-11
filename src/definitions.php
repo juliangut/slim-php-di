@@ -64,7 +64,7 @@ return [
             }
         }
 
-        throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation');
+        throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation.');
     },
 
     CallableResolverInterface::class => static function (ContainerInterface $container): CallableResolverInterface {
@@ -114,7 +114,7 @@ return [
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 // @codeCoverageIgnoreStart
-                throw new  \RuntimeException('This RequestHandler is replaced by ' . RouteRunner::class);
+                throw new  \RuntimeException(\sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
                 // @codeCoverageIgnoreEnd
             }
         };

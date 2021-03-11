@@ -41,12 +41,16 @@ trait ContainerTrait
                 : $this->getRecursive($name);
         } catch (NotFoundException $exception) {
             throw new NotFoundException(
-                \sprintf('No entry or class found for "%s"', $name),
+                \sprintf('No entry or class found for "%s".', $name),
                 $exception->getCode(),
                 $exception
             );
         } catch (\Throwable $exception) {
-            throw new DependencyException($exception->getMessage(), $exception->getCode(), $exception);
+            throw new DependencyException(
+                \rtrim($exception->getMessage(), '.') . '.',
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 
@@ -191,7 +195,7 @@ trait ContainerTrait
             \E_USER_DEPRECATED
         );
 
-        throw new \RuntimeException('It is not possible to unset a container definitions');
+        throw new \RuntimeException('It is not possible to unset a container definitions.');
     }
 
     /**
@@ -263,6 +267,6 @@ trait ContainerTrait
             \E_USER_DEPRECATED
         );
 
-        throw new \RuntimeException('It is not possible to unset a container definitions');
+        throw new \RuntimeException('It is not possible to unset a container definitions.');
     }
 }

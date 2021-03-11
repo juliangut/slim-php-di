@@ -121,7 +121,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
                 $callable = \is_string($toResolve) ? $toResolve : \gettype($toResolve);
             }
 
-            throw new \RuntimeException(\sprintf('"%s" is not resolvable', $callable), 0, $exception);
+            throw new \RuntimeException(\sprintf('"%s" is not resolvable.', $callable), 0, $exception);
         }
     }
 

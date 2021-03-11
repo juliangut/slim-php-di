@@ -88,7 +88,7 @@ class Configuration
         }
 
         if (!\is_array($configurations)) {
-            throw new \InvalidArgumentException('Configurations must be a traversable');
+            throw new \InvalidArgumentException('Configurations must be a traversable.');
         }
 
         $configs = \array_keys(\get_object_vars($this));
@@ -97,7 +97,7 @@ class Configuration
         if (\count($unknownParameters) > 0) {
             throw new \InvalidArgumentException(
                 \sprintf(
-                    'The following configuration parameters are not recognized: %s',
+                    'The following configuration parameters are not recognized: %s.',
                     \implode(', ', $unknownParameters)
                 )
             );
@@ -141,7 +141,7 @@ class Configuration
             )
         ) {
             throw new \InvalidArgumentException(
-                \sprintf('class "%s" must extend %s', $containerClass, DIContainer::class)
+                \sprintf('class "%s" must extend "%s".', $containerClass, DIContainer::class)
             );
         }
 
@@ -292,7 +292,7 @@ class Configuration
     public function setProxiesPath(string $proxiesPath): self
     {
         if (!\file_exists($proxiesPath) || !\is_dir($proxiesPath) || !\is_writable($proxiesPath)) {
-            throw new \RuntimeException(\sprintf('%s directory does not exist or is write protected', $proxiesPath));
+            throw new \RuntimeException(\sprintf('%s directory does not exist or is write protected.', $proxiesPath));
         }
 
         $this->proxiesPath = $proxiesPath;
@@ -323,7 +323,7 @@ class Configuration
     {
         if (!\file_exists($compilationPath) || !\is_dir($compilationPath) || !\is_writable($compilationPath)) {
             throw new \RuntimeException(\sprintf(
-                '%s directory does not exist or is write protected',
+                '%s directory does not exist or is write protected.',
                 $compilationPath
             ));
         }
@@ -361,7 +361,7 @@ class Configuration
             )
         ) {
             throw new \InvalidArgumentException(
-                \sprintf('class "%s" must extend %s', $compiledContainerClass, DICompiledContainer::class)
+                \sprintf('class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class)
             );
         }
 
@@ -401,7 +401,7 @@ class Configuration
 
         if (!\is_array($definitions)) {
             throw new \InvalidArgumentException(
-                \sprintf('Definitions must be a string or traversable. %s given', \gettype($definitions))
+                \sprintf('Definitions must be a string or traversable. "%s" given.', \gettype($definitions))
             );
         }
 
@@ -411,7 +411,7 @@ class Configuration
                 if (!\is_array($definition) && !\is_string($definition)) {
                     throw new \InvalidArgumentException(
                         \sprintf(
-                            'A definition must be an array or a file or directory path. %s given',
+                            'A definition must be an array or a file or directory path. "%s" given.',
                             \gettype($definition)
                         )
                     );

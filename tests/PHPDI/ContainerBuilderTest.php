@@ -28,7 +28,7 @@ class ContainerBuilderTest extends TestCase
     public function testNonExistingDefinitionsPath(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Path "/fake/definitions/path" does not exist');
+        $this->expectExceptionMessage('Path "/fake/definitions/path" does not exist.');
 
         ContainerBuilder::build(new Configuration(['definitions' => '/fake/definitions/path']));
     }
@@ -36,7 +36,7 @@ class ContainerBuilderTest extends TestCase
     public function testInvalidDefinitionsFile(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageMatches('/^Definitions file should return an array. ".+" returned$/');
+        $this->expectExceptionMessageMatches('/^Definitions file should return an array. ".+" returned\.$/');
 
         ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
     }

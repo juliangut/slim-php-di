@@ -126,7 +126,7 @@ class ContainerBuilder
     private static function loadDefinitionsFromPath(string $path): array
     {
         if (!\file_exists($path)) {
-            throw new \RuntimeException(\sprintf('Path "%s" does not exist', $path));
+            throw new \RuntimeException(\sprintf('Path "%s" does not exist.', $path));
         }
 
         if (!\is_dir($path)) {
@@ -159,7 +159,7 @@ class ContainerBuilder
     {
         if (!\is_file($file) || !\is_readable($file)) {
             // @codeCoverageIgnoreStart
-            throw new \RuntimeException(\sprintf('"%s" must be a readable file', $file));
+            throw new \RuntimeException(\sprintf('"%s" must be a readable file.', $file));
             // @codeCoverageIgnoreEnd
         }
 
@@ -167,7 +167,7 @@ class ContainerBuilder
 
         if (!\is_array($definitions)) {
             throw new \RuntimeException(
-                \sprintf('Definitions file should return an array. "%s" returned', \gettype($definitions))
+                \sprintf('Definitions file should return an array. "%s" returned.', \gettype($definitions))
             );
         }
 
