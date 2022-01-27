@@ -33,10 +33,7 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 
-$settings = [
-    'definitions' => '/path/to/definitions/files',
-];
-$container = ContainerBuilder::build(new Configuration($settings));
+$container = ContainerBuilder::build(new Configuration());
 
 $app = $container->get(App::class);
 // same as $app = \Slim\Factory\AppFactory::createFromContainer($container);
@@ -74,13 +71,13 @@ $container = ContainerBuilder::build($configuration);
 
 #### PHP-DI settings
 
-* `useAutoWiring` whether or not to use auto wiring (true by default)
-* `useAnnotations` whether or not to use annotations (false by default)
-* `useDefinitionCache`, whether or not to use definition cache (false by default)
-* `ignorePhpDocErrors`, whether or not to ignore phpDoc errors on annotations (false by default)
+* `useAutoWiring` whether to use auto wiring (true by default)
+* `useAnnotations` whether to use annotations (false by default)
+* `useDefinitionCache`, whether to use definition cache (false by default)
+* `ignorePhpDocErrors`, whether to ignore phpDoc errors on annotations (false by default)
 * `wrapContainer` wrapping container (none by default)
 * `proxiesPath` path where PHP-DI creates its proxy files (none by default)
-* `compilationPath` path to where PHP-DI creates its compiled container (none by default)
+* `compilationPath` path where PHP-DI creates its compiled container (none by default)
 
 Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations
 
@@ -91,9 +88,9 @@ In order for you to use annotations you have to `require doctrine/annotations`. 
 * `definitions` an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
 * `containerClass` container class used on the build. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
 
-## Array value access shorthand
+## Container array access shorthand
 
-Default `\Jgut\Slim\PHPDI\Container` container allows shorthand array values access by concatenating array keys with dots. If any key in the chain is not defined, normal `Psr\Container\NotFoundExceptionInterface` exception is thrown
+Default `\Jgut\Slim\PHPDI\Container` container allows shorthand array access by concatenating array keys with dots. If any key in the chain is not defined, normal `Psr\Container\NotFoundExceptionInterface` exception is thrown
 
 ```php
 use Jgut\Slim\PHPDI\Configuration;
@@ -101,7 +98,7 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 
 $container = ContainerBuilder::build(new Configuration([]));
 
-$container->get('configs')['database']['dsn']; // given configs is an array
+$container->get('configs')['database']['dsn']; // given "configs" is an array
 $container->get('configs.database.dsn'); // same as above
 ```
 
@@ -118,14 +115,14 @@ $container = ContainerBuilder::build(new Configuration([]));
 $configs = [
     'foo' => [
         'bar' => [
-            'baz' => 'shadowed!',
+            'baz' => 'shadowed!', // <== watch out!
         ],
     ],
-    'foo.bar' => 'bang!', // <== watch out!
+    'foo.bar' => 'bingo!',
 ];
 $container->set('configs', $configs);
 
-$container->get('configs.foo.bar'); // bang!
+$container->get('configs.foo.bar'); // bingo!
 $container->get('configs.foo.bar.baz'); // NotFoundExceptionInterface thrown
 ```
 
@@ -175,8 +172,8 @@ return [
 * Minimum Slim version is now 4.7
 * Container only provides implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
 * You can extract Slim's App directly from container or seed AppFactory from container
-* Slim's App is not extended any more
-* ArrayAccess and magic methods on default container have been kept but are deprecated, use PSR-11 and PHP-DI's methods instead
+* Slim's App is not extended anymore
+* ArrayAccess and magic methods on default container are deprecated and will be removed on next major release. Use PSR-11 and PHP-DI's methods instead
 
 ## Contributing
 

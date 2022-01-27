@@ -8,3 +8,9 @@ parameters:
       paths:
         - src/AbstractCompiledContainer.php
         - src/Container.php
+    - message: '/^Method Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::(getRecursive|offsetGet|__get)\(\) has no return type specified\.$/'
+      path: src/ContainerTrait.php
+    - message: '/^Method Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::offset(Set|Get|Unset|Exists)\(\) has parameter \$name with no type specified\.$/'
+      path: src/ContainerTrait.php
+    - message: '/^Method Jgut\\Slim\\PHPDI\\(AbstractCompiled)?Container::(offsetSet|__set)\(\) has parameter \$value with no type specified\.$/'
+      path: src/ContainerTrait.php

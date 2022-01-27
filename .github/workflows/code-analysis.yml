@@ -42,21 +42,8 @@ jobs:
       fail-fast: false
       matrix:
         php: ${{ fromJson(needs.prepare_env.outputs.php) }}
-        actions:
-          - name: PHP Linting
-            run: make lint-php
-          - name: Check Style
-            run: make lint-phpcs && make lint-phpcs-fixer
-          - name: Copy/paste detection
-            run: make qa-phpcpd
-          - name: Mess detection
-            run: make qa-phpmd
-          - name: Magic number detection
-            run: make qa-phpmnd
-          - name: Static analysis
-            run: make qa-phpstan
 
-    name: ${{ matrix.actions.name }} on PHP ${{ matrix.php }}
+    name: Analysis on PHP ${{ matrix.php }}
 
     runs-on: ubuntu-latest
 
@@ -73,5 +60,23 @@ jobs:
         with:
           composer-options: "--prefer-dist"
 
-      - name: Run ${{ matrix.actions.name }}
-        run: ${{ matrix.actions.run }}
+      - name: Run PHP linting
+        run: make lint-php
+
+      - name: Run check style
+        run: make lint-phpcs && make lint-phpcs-fixer
+
+      - name: Run copy/paste detection
+        run: make qa-phpcpd
+
+      - name: Run mess detection
+        run: make qa-phpmd
+
+      - name: Run magic number detection
+        run: make qa-phpmnd
+
+      - name: Run PHP compatibility
+        run: make qa-compatibility
+
+      - name: Run static analysis
+        run: make qa-phpstan

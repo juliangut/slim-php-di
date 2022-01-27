@@ -28,6 +28,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Factory\Psr17\Psr17Factory;
 use Slim\Factory\Psr17\Psr17FactoryProvider;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Interfaces\CallableResolverInterface;
@@ -57,7 +58,7 @@ return [
         return AppFactory::determineResponseFactory();
     },
     StreamFactoryInterface::class => static function (): StreamFactoryInterface {
-        /** @var \Slim\Factory\Psr17\Psr17Factory $psr17factory */
+        /** @var Psr17Factory $psr17factory */
         foreach (Psr17FactoryProvider::getFactories() as $psr17factory) {
             if ($psr17factory::isStreamFactoryAvailable()) {
                 return $psr17factory::getStreamFactory();
@@ -89,7 +90,7 @@ return [
             $container->get(ResponseFactoryInterface::class),
             $container->get(CallableResolverInterface::class),
             $container,
-            $container->get(InvocationStrategyInterface::class)
+            $container->get(InvocationStrategyInterface::class),
         );
     },
 
@@ -100,21 +101,21 @@ return [
     RouteResolverInterface::class => static function (ContainerInterface $container): RouteResolverInterface {
         return new RouteResolver(
             $container->get(RouteCollectorInterface::class),
-            $container->get(DispatcherInterface::class)
+            $container->get(DispatcherInterface::class),
         );
     },
 
     MiddlewareDispatcherInterface::class => static function (
         ContainerInterface $container
     ): MiddlewareDispatcherInterface {
-        $requestHandler = new class() implements RequestHandlerInterface {
+        $requestHandler = new class () implements RequestHandlerInterface {
             /**
-             * {@inheritdoc}
+             * @inheritDoc
              */
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 // @codeCoverageIgnoreStart
-                throw new  \RuntimeException(\sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
+                throw new  RuntimeException(sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
                 // @codeCoverageIgnoreEnd
             }
         };
@@ -122,7 +123,7 @@ return [
         return new MiddlewareDispatcher(
             $requestHandler,
             $container->get(CallableResolverInterface::class),
-            $container
+            $container,
         );
     },
 
@@ -133,7 +134,7 @@ return [
             $container->get(CallableResolverInterface::class),
             $container->get(RouteCollectorInterface::class),
             $container->get(RouteResolverInterface::class),
-            $container->get(MiddlewareDispatcherInterface::class)
+            $container->get(MiddlewareDispatcherInterface::class),
         );
     },
 ];

@@ -19,31 +19,28 @@ use Jgut\Slim\PHPDI\CallableResolver;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use RuntimeException;
 
 /**
- * CallableResolver tests.
+ * @internal
  */
 class CallableResolverTest extends TestCase
 {
     /**
      * @dataProvider getResolvableList
      *
-     * @param string                $resolveMethod
-     * @param string|mixed[]|object $toResolve
-     * @param string|mixed[]        $expectedResolvable
+     * @param string|array<mixed>|object $toResolve
+     * @param string|array<mixed>        $expectedResolvable
      */
-    public function testResolveFromString(
-        string $resolveMethod,
-        $toResolve,
-        $expectedResolvable
-    ): void {
+    public function testResolveFromString(string $resolveMethod, $toResolve, $expectedResolvable): void
+    {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoker->expects(static::once())
             ->method('resolve')
             ->with($expectedResolvable)
-            ->willReturn(function () {
+            ->willReturn(static function () {
                 return 'ok';
             });
 
@@ -53,7 +50,7 @@ class CallableResolverTest extends TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function getResolvableList(): array
     {
@@ -79,10 +76,8 @@ class CallableResolverTest extends TestCase
     /**
      * @dataProvider getNotResolvableList
      *
-     * @param string                $resolveMethod
-     * @param string|mixed[]|object $toResolve
-     * @param string|mixed[]        $expectedResolvable
-     * @param string                $expectedException
+     * @param string|array<mixed>|object $toResolve
+     * @param string|array<mixed>        $expectedResolvable
      */
     public function testNotResolvable(
         string $resolveMethod,
@@ -90,8 +85,8 @@ class CallableResolverTest extends TestCase
         $expectedResolvable,
         string $expectedException
     ): void {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable', $expectedException));
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(sprintf('"%s" is not resolvable', $expectedException));
 
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
@@ -107,7 +102,7 @@ class CallableResolverTest extends TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function getNotResolvableList(): array
     {
@@ -118,11 +113,11 @@ class CallableResolverTest extends TestCase
             ['resolve', 'Service', 'Service', 'Service'],
             ['resolve', 'Service:method', ['Service', 'method'], 'Service:method'],
             ['resolve', 'Service::method', ['Service', 'method'], 'Service::method'],
-            ['resolve', ['Service', 'method'], ['Service', 'method'], \json_encode(['Service', 'method'])],
+            ['resolve', ['Service', 'method'], ['Service', 'method'], json_encode(['Service', 'method'])],
 
             ['resolveRoute', 'Controller', ['Controller', 'handle'], 'Controller'],
             ['resolveRoute', $controller, [$controller, 'handle'], \get_class($controller)],
-            ['resolveRoute', [$controller, 'method'], [$controller, 'method'], \json_encode([$controller, 'method'])],
+            ['resolveRoute', [$controller, 'method'], [$controller, 'method'], json_encode([$controller, 'method'])],
 
             ['resolveMiddleware', 'Middleware', ['Middleware', 'process'], 'Middleware'],
             ['resolveMiddleware', $middleware, [$middleware, 'process'], \get_class($middleware)],
@@ -130,7 +125,7 @@ class CallableResolverTest extends TestCase
                 'resolveMiddleware',
                 [$middleware, 'method'],
                 [$middleware, 'method'],
-                \json_encode([$middleware, 'method']),
+                json_encode([$middleware, 'method']),
             ],
         ];
     }

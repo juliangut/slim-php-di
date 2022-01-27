@@ -20,17 +20,20 @@ use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use ArrayIterator;
+use RuntimeException;
+use InvalidArgumentException;
 
 /**
- * Configuration tests.
- *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ *
+ * @internal
  */
 class ConfigurationTest extends TestCase
 {
     public function testInvalidConfigurations(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Configurations must be a traversable.');
 
         new Configuration('');
@@ -52,7 +55,7 @@ class ConfigurationTest extends TestCase
 
     public function testUnknownParameter(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The following configuration parameters are not recognized: unknown.');
 
         new Configuration(['unknown' => 'unknown']);
@@ -60,7 +63,6 @@ class ConfigurationTest extends TestCase
 
     public function testCreationConfigurations(): void
     {
-        /** @var ContainerInterface $containerStub */
         $containerStub = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,13 +74,13 @@ class ConfigurationTest extends TestCase
             'useDefinitionCache' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
-            'proxiesPath' => \sys_get_temp_dir(),
+            'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__,
             'compiledContainerClass' => DICompiledContainer::class,
             'definitions' => __DIR__ . '/files/definitions/valid/definitions.php',
         ];
 
-        $configuration = new Configuration(new \ArrayIterator($configs));
+        $configuration = new Configuration(new ArrayIterator($configs));
 
         static::assertEquals(DIContainer::class, $configuration->getContainerClass());
         static::assertFalse($configuration->doesUseAutowiring());
@@ -86,7 +88,7 @@ class ConfigurationTest extends TestCase
         static::assertTrue($configuration->doesUseDefinitionCache());
         static::assertTrue($configuration->doesIgnorePhpDocErrors());
         static::assertEquals($containerStub, $configuration->getWrapContainer());
-        static::assertEquals(\sys_get_temp_dir(), $configuration->getProxiesPath());
+        static::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
         static::assertEquals(__DIR__, $configuration->getCompilationPath());
         static::assertEquals(DICompiledContainer::class, $configuration->getCompiledContainerClass());
         static::assertEquals([__DIR__ . '/files/definitions/valid/definitions.php'], $configuration->getDefinitions());
@@ -94,7 +96,7 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidContainerClass(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/^class ".+" must extend "DI\\\Container"\.$/');
 
         new Configuration(['containerClass' => 'NonExistingClass']);
@@ -103,7 +105,7 @@ class ConfigurationTest extends TestCase
     public function testTraversableDefinitionType(): void
     {
         $configs = [
-            'definitions' => new \ArrayIterator([__DIR__ . '/files/definitions/valid/definitions.php']),
+            'definitions' => new ArrayIterator([__DIR__ . '/files/definitions/valid/definitions.php']),
         ];
 
         $configuration = new Configuration($configs);
@@ -113,23 +115,23 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidProxyPath(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('/fake/proxies/path/ directory does not exist or is write protected.');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('directory "/fake/proxies/path/" does not exist or is write protected.');
 
         new Configuration(['proxiesPath' => '/fake/proxies/path/']);
     }
 
     public function testInvalidCompilationPath(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('/fake/compilation/path/ directory does not exist or is write protected.');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('directory "/fake/compilation/path/" does not exist or is write protected.');
 
         new Configuration(['compilationPath' => '/fake/compilation/path/']);
     }
 
     public function testInvalidCompiledContainerClass(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/^class ".+" must extend "DI\\\CompiledContainer"\.$/');
 
         new Configuration(['compiledContainerClass' => 'NonExistingClass']);
@@ -137,7 +139,7 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidArrayDefinitionType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('A definition must be an array or a file or directory path. "integer" given.');
 
         new Configuration(['definitions' => [10]]);
@@ -145,7 +147,7 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidDefinitionType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Definitions must be a string or traversable. "integer" given.');
 
         new Configuration(['definitions' => 10]);

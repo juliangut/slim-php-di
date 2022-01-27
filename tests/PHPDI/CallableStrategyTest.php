@@ -21,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Route callback strategy tests.
+ * @internal
  */
 class CallableStrategyTest extends TestCase
 {
@@ -34,7 +34,7 @@ class CallableStrategyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $callable = function (ServerRequestInterface $request, $param): void {
+        $callable = static function (ServerRequestInterface $request, $param): void {
             static::assertEquals('value', $request->getAttribute('attribute'));
             static::assertNull('value', $request->getAttribute('param'));
             static::assertEquals('value', $param);
@@ -62,7 +62,7 @@ class CallableStrategyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $callable = function (ServerRequestInterface $request, $param): void {
+        $callable = static function (ServerRequestInterface $request, $param): void {
             static::assertEquals('value', $request->getAttribute('attribute'));
             static::assertEquals('value', $request->getAttribute('param'));
             static::assertEquals('value', $param);

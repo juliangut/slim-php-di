@@ -19,15 +19,16 @@ use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 
 /**
- * Container builder tests.
+ * @internal
  */
 class ContainerBuilderTest extends TestCase
 {
     public function testNonExistingDefinitionsPath(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Path "/fake/definitions/path" does not exist.');
 
         ContainerBuilder::build(new Configuration(['definitions' => '/fake/definitions/path']));
@@ -35,7 +36,7 @@ class ContainerBuilderTest extends TestCase
 
     public function testInvalidDefinitionsFile(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/^Definitions file should return an array. ".+" returned\.$/');
 
         ContainerBuilder::build(new Configuration(['definitions' => __DIR__ . '/files/definitions/invalid']));
@@ -51,7 +52,6 @@ class ContainerBuilderTest extends TestCase
 
     public function testCreation(): void
     {
-        /** @var ContainerInterface $containerStub */
         $containerStub = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -63,7 +63,7 @@ class ContainerBuilderTest extends TestCase
             'useDefinitionCache' => true,
             'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
-            'proxiesPath' => \sys_get_temp_dir(),
+            'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__ . '/files',
             'compiledContainerClass' => AbstractCompiledContainer::class,
             'definitions' => [
@@ -75,7 +75,7 @@ class ContainerBuilderTest extends TestCase
             ],
         ];
 
-        if (\ini_get('apc.enabled') === '0') {
+        if (ini_get('apc.enabled') === '0') {
             unset($configuration['useDefinitionCache']);
         }
 
@@ -85,6 +85,6 @@ class ContainerBuilderTest extends TestCase
         static::assertEquals('baz', $container->get('foo'));
         static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
 
-        \unlink(__DIR__ . '/files/CompiledContainer.php');
+        unlink(__DIR__ . '/files/CompiledContainer.php');
     }
 }

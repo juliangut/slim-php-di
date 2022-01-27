@@ -13,29 +13,31 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
+use DI\Container;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use RuntimeException;
 
 use function DI\create;
 
 /**
- * Container tests.
+ * @internal
  */
 class ContainerTest extends TestCase
 {
     /**
-     * @var \Jgut\Slim\PHPDI\Container
+     * @var Container
      */
     protected $container;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->container = ContainerBuilder::build();
     }
@@ -49,7 +51,7 @@ class ContainerTest extends TestCase
         $this->container['baz'];
     }
 
-    public function testGetNonExistentWithDots(): void
+    public function testGetNonExistentRecursive(): void
     {
         $this->expectException(NotFoundExceptionInterface::class);
         $this->expectExceptionMessage('No entry or class found for "settings.baz"');
@@ -69,18 +71,18 @@ class ContainerTest extends TestCase
                     'baz' => 'shadowed!',
                 ],
             ],
-            'foo.bar' => 'bang!',
+            'foo.bar' => 'bingo!',
         ];
         $this->container->set('settings', $settings);
 
         static::assertTrue($this->container->has('settings.foo.bar'));
-        static::assertEquals('bang!', $this->container->get('settings.foo.bar'));
+        static::assertEquals('bingo!', $this->container->get('settings.foo.bar'));
 
         static::assertFalse($this->container->has('settings.foo.bar.baz'));
         $this->container->get('settings.foo.bar.baz');
     }
 
-    public function testSettingsAccess(): void
+    public function testRecursiveAccess(): void
     {
         $settings = [
             'foo' => [
@@ -142,7 +144,7 @@ class ContainerTest extends TestCase
 
     public function testUnset(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('It is not possible to unset a container definitions');
 
         unset($this->container->foo);
@@ -150,7 +152,7 @@ class ContainerTest extends TestCase
 
     public function testUnsetArray(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('It is not possible to unset a container definitions');
 
         unset($this->container['foo']);

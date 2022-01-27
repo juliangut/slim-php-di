@@ -16,11 +16,9 @@ namespace Jgut\Slim\PHPDI;
 use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Slim\Interfaces\InvocationStrategyInterface;
 
-/**
- * Route callback strategy with PHP-DI.
- */
 class CallableStrategy implements InvocationStrategyInterface
 {
     /**
@@ -33,12 +31,6 @@ class CallableStrategy implements InvocationStrategyInterface
      */
     protected $appendRouteArguments;
 
-    /**
-     * CallableStrategy constructor.
-     *
-     * @param InvokerInterface $invoker
-     * @param bool             $appendRouteArguments
-     */
     public function __construct(InvokerInterface $invoker, bool $appendRouteArguments = false)
     {
         $this->invoker = $invoker;
@@ -46,14 +38,7 @@ class CallableStrategy implements InvocationStrategyInterface
     }
 
     /**
-     * Invoke a route callable.
-     *
-     * @param callable               $callable
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
-     * @param mixed[]                $routeArguments
-     *
-     * @return ResponseInterface
+     * @param array<mixed> $routeArguments
      */
     public function __invoke(
         callable $callable,
@@ -81,6 +66,15 @@ class CallableStrategy implements InvocationStrategyInterface
         // Inject the attributes defined on the request
         $parameters += $request->getAttributes();
 
-        return $this->invoker->call($callable, $parameters);
+        $invocationResponse = $this->invoker->call($callable, $parameters);
+        if (!$invocationResponse instanceof ResponseInterface) {
+            throw new RuntimeException(sprintf(
+                'Response should be an instance of "%s", "%s" returned.',
+                ResponseInterface::class,
+                \is_object($invocationResponse) ? \get_class($invocationResponse) : \gettype($invocationResponse),
+            ));
+        }
+
+        return $invocationResponse;
     }
 }

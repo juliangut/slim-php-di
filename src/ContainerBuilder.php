@@ -15,6 +15,7 @@ namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
 use DI\ContainerBuilder as DIContainerBuilder;
+use RuntimeException;
 
 /**
  * Helper to create and configure a Container.
@@ -26,11 +27,7 @@ class ContainerBuilder
     /**
      * Build PHP-DI container.
      *
-     * @param Configuration|null $configuration
-     *
-     * @throws \RuntimeException
-     *
-     * @return DIContainer
+     * @throws RuntimeException
      */
     public static function build(?Configuration $configuration = null): DIContainer
     {
@@ -38,9 +35,9 @@ class ContainerBuilder
             $configuration = new Configuration();
         }
 
-        $defaultDefinitions = \array_merge(
+        $defaultDefinitions = array_merge(
             require __DIR__ . '/definitions.php',
-            [Configuration::class => $configuration]
+            [Configuration::class => $configuration],
         );
         $customDefinitions = self::parseDefinitions($configuration->getDefinitions());
 
@@ -51,10 +48,6 @@ class ContainerBuilder
 
     /**
      * Get configured container builder.
-     *
-     * @param Configuration $configuration
-     *
-     * @return DIContainerBuilder
      */
     private static function getContainerBuilder(Configuration $configuration): DIContainerBuilder
     {
@@ -80,7 +73,7 @@ class ContainerBuilder
             $containerBuilder->enableCompilation(
                 $configuration->getCompilationPath(),
                 'CompiledContainer',
-                $configuration->getCompiledContainerClass()
+                $configuration->getCompiledContainerClass(),
             );
         }
 
@@ -90,19 +83,19 @@ class ContainerBuilder
     /**
      * Parse definitions.
      *
-     * @param mixed[] $definitions
+     * @param array<string|array<mixed>> $definitions
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
-     * @return mixed[]
+     * @return array<string, array<string, mixed>>
      */
     private static function parseDefinitions(array $definitions): array
     {
         if (\count($definitions) === 0) {
-            return $definitions;
+            return [];
         }
 
-        return \array_map(
+        return array_map(
             static function ($definition): array {
                 if (\is_array($definition)) {
                     return $definition;
@@ -110,64 +103,60 @@ class ContainerBuilder
 
                 return self::loadDefinitionsFromPath($definition);
             },
-            $definitions
+            $definitions,
         );
     }
 
     /**
      * Load definitions from path.
      *
-     * @param string $path
+     * @throws RuntimeException
      *
-     * @throws \RuntimeException
-     *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     private static function loadDefinitionsFromPath(string $path): array
     {
-        if (!\file_exists($path)) {
-            throw new \RuntimeException(\sprintf('Path "%s" does not exist.', $path));
+        if (!file_exists($path)) {
+            throw new RuntimeException(sprintf('Path "%s" does not exist.', $path));
         }
 
-        if (!\is_dir($path)) {
+        if (!is_dir($path)) {
             return self::loadDefinitionsFromFile($path);
         }
 
         $definitions = [];
-        $files = \glob($path . '/*.php', \GLOB_ERR);
+        $files = glob($path . '/*.php', \GLOB_ERR);
         if ($files !== false) {
             foreach ($files as $file) {
-                if (\is_file($file)) {
+                if (is_file($file)) {
                     $definitions[] = self::loadDefinitionsFromFile($file);
                 }
             }
         }
 
-        return \count($definitions) === 0 ? [] : \array_merge(...$definitions);
+        return \count($definitions) === 0 ? [] : array_merge(...$definitions);
     }
 
     /**
      * Load definitions from file.
      *
-     * @param string $file
+     * @throws RuntimeException
      *
-     * @throws \RuntimeException
-     *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     private static function loadDefinitionsFromFile(string $file): array
     {
-        if (!\is_file($file) || !\is_readable($file)) {
+        if (!is_file($file) || !is_readable($file)) {
             // @codeCoverageIgnoreStart
-            throw new \RuntimeException(\sprintf('"%s" must be a readable file.', $file));
+            throw new RuntimeException(sprintf('"%s" must be a readable file.', $file));
             // @codeCoverageIgnoreEnd
         }
 
         $definitions = require $file;
 
         if (!\is_array($definitions)) {
-            throw new \RuntimeException(
-                \sprintf('Definitions file should return an array. "%s" returned.', \gettype($definitions))
+            throw new RuntimeException(
+                sprintf('Definitions file should return an array. "%s" returned.', \gettype($definitions)),
             );
         }
 

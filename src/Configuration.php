@@ -16,10 +16,11 @@ namespace Jgut\Slim\PHPDI;
 use DI\CompiledContainer as DICompiledContainer;
 use DI\Container as DIContainer;
 use Psr\Container\ContainerInterface;
+use Traversable;
+use RuntimeException;
+use InvalidArgumentException;
 
 /**
- * Container builder configuration.
- *
  * @SuppressWarnings(PMD.LongVariable)
  */
 class Configuration
@@ -70,53 +71,49 @@ class Configuration
     protected $compiledContainerClass = AbstractCompiledContainer::class;
 
     /**
-     * @var string[]
+     * @var array<string|array<mixed>>
      */
     protected $definitions = [];
 
     /**
-     * Configuration constructor.
+     * @param Traversable|array<string, mixed>|mixed $configurations
      *
-     * @param mixed $configurations
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($configurations = [])
     {
-        if ($configurations instanceof \Traversable) {
-            $configurations = \iterator_to_array($configurations);
+        if ($configurations instanceof Traversable) {
+            $configurations = iterator_to_array($configurations);
         }
 
         if (!\is_array($configurations)) {
-            throw new \InvalidArgumentException('Configurations must be a traversable.');
+            throw new InvalidArgumentException('Configurations must be a traversable.');
         }
 
-        $configs = \array_keys(\get_object_vars($this));
+        $configs = array_keys(get_object_vars($this));
 
-        $unknownParameters = \array_diff(\array_keys($configurations), $configs);
+        $unknownParameters = array_diff(array_keys($configurations), $configs);
         if (\count($unknownParameters) > 0) {
-            throw new \InvalidArgumentException(
-                \sprintf(
+            throw new InvalidArgumentException(
+                sprintf(
                     'The following configuration parameters are not recognized: %s.',
-                    \implode(', ', $unknownParameters)
-                )
+                    implode(', ', $unknownParameters),
+                ),
             );
         }
 
         foreach ($configs as $config) {
             if (isset($configurations[$config])) {
                 /** @var callable $callback */
-                $callback = [$this, 'set' . \ucfirst($config)];
+                $callback = [$this, 'set' . ucfirst($config)];
 
-                \call_user_func($callback, $configurations[$config]);
+                $callback($configurations[$config]);
             }
         }
     }
 
     /**
      * Get container class.
-     *
-     * @return string
      */
     public function getContainerClass(): string
     {
@@ -124,24 +121,21 @@ class Configuration
     }
 
     /**
-     * Set container class.
-     *
-     * @param string $containerClass
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return static
      */
     public function setContainerClass(string $containerClass): self
     {
-        if (!\class_exists($containerClass)
+        if (
+            !class_exists($containerClass)
             || (
                 $containerClass !== DIContainer::class
-                && !\is_subclass_of($containerClass, DIContainer::class)
+                && !is_subclass_of($containerClass, DIContainer::class)
             )
         ) {
-            throw new \InvalidArgumentException(
-                \sprintf('class "%s" must extend "%s".', $containerClass, DIContainer::class)
+            throw new InvalidArgumentException(
+                sprintf('class "%s" must extend "%s".', $containerClass, DIContainer::class),
             );
         }
 
@@ -152,8 +146,6 @@ class Configuration
 
     /**
      * Is auto wiring enabled.
-     *
-     * @return bool
      */
     public function doesUseAutowiring(): bool
     {
@@ -162,8 +154,6 @@ class Configuration
 
     /**
      * Set auto wiring.
-     *
-     * @param bool $useAutoWiring
      *
      * @return static
      */
@@ -176,8 +166,6 @@ class Configuration
 
     /**
      * Are annotations enabled.
-     *
-     * @return bool
      */
     public function doesUseAnnotations(): bool
     {
@@ -186,8 +174,6 @@ class Configuration
 
     /**
      * Set annotations.
-     *
-     * @param bool $useAnnotations
      *
      * @return static
      */
@@ -200,8 +186,6 @@ class Configuration
 
     /**
      * Is definition cache used.
-     *
-     * @return bool
      */
     public function doesUseDefinitionCache(): bool
     {
@@ -210,8 +194,6 @@ class Configuration
 
     /**
      * Set definition cache usage.
-     *
-     * @param bool $useDefinitionCache
      *
      * @return static
      */
@@ -224,8 +206,6 @@ class Configuration
 
     /**
      * Are PhpDoc errors ignored.
-     *
-     * @return bool
      */
     public function doesIgnorePhpDocErrors(): bool
     {
@@ -234,8 +214,6 @@ class Configuration
 
     /**
      * Set ignoring PhpDoc errors.
-     *
-     * @param bool $ignorePhpDocErrors
      *
      * @return static
      */
@@ -248,8 +226,6 @@ class Configuration
 
     /**
      * Get wrapping container.
-     *
-     * @return ContainerInterface|null
      */
     public function getWrapContainer(): ?ContainerInterface
     {
@@ -258,8 +234,6 @@ class Configuration
 
     /**
      * Set wrapping container.
-     *
-     * @param ContainerInterface $wrapContainer
      *
      * @return static
      */
@@ -272,8 +246,6 @@ class Configuration
 
     /**
      * Get proxies path.
-     *
-     * @return string|null
      */
     public function getProxiesPath(): ?string
     {
@@ -283,16 +255,14 @@ class Configuration
     /**
      * Set proxies path.
      *
-     * @param string $proxiesPath
-     *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return static
      */
     public function setProxiesPath(string $proxiesPath): self
     {
-        if (!\file_exists($proxiesPath) || !\is_dir($proxiesPath) || !\is_writable($proxiesPath)) {
-            throw new \RuntimeException(\sprintf('%s directory does not exist or is write protected.', $proxiesPath));
+        if (!file_exists($proxiesPath) || !is_dir($proxiesPath) || !is_writable($proxiesPath)) {
+            throw new RuntimeException(sprintf('directory "%s" does not exist or is write protected.', $proxiesPath));
         }
 
         $this->proxiesPath = $proxiesPath;
@@ -302,8 +272,6 @@ class Configuration
 
     /**
      * Get compilation path.
-     *
-     * @return string|null
      */
     public function getCompilationPath(): ?string
     {
@@ -313,18 +281,16 @@ class Configuration
     /**
      * Set compilation path.
      *
-     * @param string $compilationPath
-     *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return static
      */
     public function setCompilationPath(string $compilationPath): self
     {
-        if (!\file_exists($compilationPath) || !\is_dir($compilationPath) || !\is_writable($compilationPath)) {
-            throw new \RuntimeException(\sprintf(
-                '%s directory does not exist or is write protected.',
-                $compilationPath
+        if (!file_exists($compilationPath) || !is_dir($compilationPath) || !is_writable($compilationPath)) {
+            throw new RuntimeException(sprintf(
+                'directory "%s" does not exist or is write protected.',
+                $compilationPath,
             ));
         }
 
@@ -335,8 +301,6 @@ class Configuration
 
     /**
      * Get compiled container class.
-     *
-     * @return string
      */
     public function getCompiledContainerClass(): string
     {
@@ -346,22 +310,21 @@ class Configuration
     /**
      * Set compiled container class.
      *
-     * @param string $compiledContainerClass
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return static
      */
     public function setCompiledContainerClass(string $compiledContainerClass): self
     {
-        if (!\class_exists($compiledContainerClass)
+        if (
+            !class_exists($compiledContainerClass)
             || (
                 $compiledContainerClass !== DICompiledContainer::class
-                && !\is_subclass_of($compiledContainerClass, DICompiledContainer::class)
+                && !is_subclass_of($compiledContainerClass, DICompiledContainer::class)
             )
         ) {
-            throw new \InvalidArgumentException(
-                \sprintf('class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class)
+            throw new InvalidArgumentException(
+                sprintf('class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class),
             );
         }
 
@@ -373,7 +336,7 @@ class Configuration
     /**
      * Get definitions.
      *
-     * @return string[]
+     * @return array<string|array<mixed>>
      */
     public function getDefinitions(): array
     {
@@ -383,9 +346,9 @@ class Configuration
     /**
      * Set definitions.
      *
-     * @param mixed $definitions
+     * @param string|Traversable|array<string, mixed>|mixed $definitions
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return static
      */
@@ -395,28 +358,28 @@ class Configuration
             $definitions = [$definitions];
         }
 
-        if ($definitions instanceof \Traversable) {
-            $definitions = \iterator_to_array($definitions);
+        if ($definitions instanceof Traversable) {
+            $definitions = iterator_to_array($definitions);
         }
 
         if (!\is_array($definitions)) {
-            throw new \InvalidArgumentException(
-                \sprintf('Definitions must be a string or traversable. "%s" given.', \gettype($definitions))
+            throw new InvalidArgumentException(
+                sprintf('Definitions must be a string or traversable. "%s" given.', \gettype($definitions)),
             );
         }
 
-        \array_walk(
+        array_walk(
             $definitions,
             static function ($definition): void {
                 if (!\is_array($definition) && !\is_string($definition)) {
-                    throw new \InvalidArgumentException(
-                        \sprintf(
+                    throw new InvalidArgumentException(
+                        sprintf(
                             'A definition must be an array or a file or directory path. "%s" given.',
-                            \gettype($definition)
-                        )
+                            \gettype($definition),
+                        ),
                     );
                 }
-            }
+            },
         );
 
         $this->definitions = $definitions;

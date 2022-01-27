@@ -14,14 +14,12 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI;
 
 use DI\Container as DIContainer;
+use ArrayAccess;
 
 /**
- * PHP-DI Dependency Injection Container.
- * Implements ArrayAccess to accommodate to default Slim container based in Pimple.
- *
  * @see \Slim\Container
  */
-class Container extends DIContainer implements \ArrayAccess
+class Container extends DIContainer implements ArrayAccess
 {
     use ContainerTrait;
 }

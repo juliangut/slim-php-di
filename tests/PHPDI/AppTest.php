@@ -24,7 +24,7 @@ use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteResolverInterface;
 
 /**
- * App tests.
+ * @internal
  */
 class AppTest extends TestCase
 {
@@ -42,7 +42,7 @@ class AppTest extends TestCase
         static::assertSame($container->get(RouteCollectorInterface::class), $app->getRouteCollector());
         static::assertSame(
             $container->get(InvocationStrategyInterface::class),
-            $app->getRouteCollector()->getDefaultInvocationStrategy()
+            $app->getRouteCollector()->getDefaultInvocationStrategy(),
         );
         static::assertSame($container->get(RouteResolverInterface::class), $app->getRouteResolver());
         static::assertSame($container->get(MiddlewareDispatcherInterface::class), $app->getMiddlewareDispatcher());
