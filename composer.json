@@ -34,7 +34,7 @@
     "dealerdirect/phpcodesniffer-composer-installer": "~0.7",
     "grifart/phpstan-oneline": "~0.4",
     "juliangut/php-cs-fixer-config": "dev-master",
-    "infection/infection": "~0.24",
+    "infection/infection": "~0.18|~0.24",
     "laminas/laminas-diactoros": "^2.2",
     "overtrue/phplint": "^3.0|^4.0",
     "phpcompatibility/php-compatibility": "^9.3",
