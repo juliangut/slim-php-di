@@ -25,55 +25,28 @@ use InvalidArgumentException;
  */
 class Configuration
 {
-    /**
-     * @var string
-     */
-    protected $containerClass = Container::class;
+    protected string $containerClass = Container::class;
 
-    /**
-     * @var bool
-     */
-    protected $useAutoWiring = true;
+    protected bool $useAutoWiring = true;
 
-    /**
-     * @var bool
-     */
-    protected $useAnnotations = false;
+    protected bool $useAnnotations = false;
 
-    /**
-     * @var bool
-     */
-    protected $useDefinitionCache = false;
+    protected bool $useDefinitionCache = false;
 
-    /**
-     * @var bool
-     */
-    protected $ignorePhpDocErrors = false;
+    protected bool $ignorePhpDocErrors = false;
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $wrapContainer;
+    protected ?ContainerInterface $wrapContainer = null;
 
-    /**
-     * @var string
-     */
-    protected $proxiesPath;
+    protected ?string $proxiesPath = null;
 
-    /**
-     * @var string
-     */
-    protected $compilationPath;
+    protected ?string $compilationPath = null;
 
-    /**
-     * @var string
-     */
-    protected $compiledContainerClass = AbstractCompiledContainer::class;
+    protected string $compiledContainerClass = AbstractCompiledContainer::class;
 
     /**
      * @var array<string|array<mixed>>
      */
-    protected $definitions = [];
+    protected array $definitions = [];
 
     /**
      * @param Traversable|array<string, mixed>|mixed $configurations

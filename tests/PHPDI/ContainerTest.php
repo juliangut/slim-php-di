@@ -29,10 +29,7 @@ use function DI\create;
  */
 class ContainerTest extends TestCase
 {
-    /**
-     * @var Container
-     */
-    protected $container;
+    protected Container $container;
 
     /**
      * @inheritDoc

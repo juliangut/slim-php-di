@@ -24,8 +24,6 @@ trait ContainerTrait
     /**
      * @see \DI\Container::get
      *
-     * @param string $name
-     *
      * @throws DependencyException
      * @throws NotFoundException
      */
@@ -52,8 +50,6 @@ trait ContainerTrait
 
     /**
      * @see \DI\Container::has
-     *
-     * @param string $name
      *
      * @throws InvalidArgumentException
      */

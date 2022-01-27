@@ -21,15 +21,9 @@ use Slim\Interfaces\InvocationStrategyInterface;
 
 class CallableStrategy implements InvocationStrategyInterface
 {
-    /**
-     * @var InvokerInterface
-     */
-    private $invoker;
+    private InvokerInterface $invoker;
 
-    /**
-     * @var bool
-     */
-    protected $appendRouteArguments;
+    protected bool $appendRouteArguments;
 
     public function __construct(InvokerInterface $invoker, bool $appendRouteArguments = false)
     {

@@ -24,10 +24,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
 {
     protected const CALLABLE_PATTERN = '!^([^\:]+)\:{1,2}([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
 
-    /**
-     * @var InvokerResolver
-     */
-    private $callableResolver;
+    private InvokerResolver $callableResolver;
 
     public function __construct(InvokerResolver $callableResolver)
     {
