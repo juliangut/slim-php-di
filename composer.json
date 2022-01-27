@@ -34,7 +34,7 @@
     "dealerdirect/phpcodesniffer-composer-installer": "~0.7",
     "grifart/phpstan-oneline": "~0.4",
     "juliangut/php-cs-fixer-config": "dev-master",
-    "infection/infection": "~0.18|~0.24",
+    "infection/infection": "^0.18|~0.24",
     "laminas/laminas-diactoros": "^2.2",
     "overtrue/phplint": "^3.0|^4.0",
     "phpcompatibility/php-compatibility": "^9.3",
@@ -43,7 +43,7 @@
     "phpstan/phpstan": "^1.0",
     "phpstan/phpstan-deprecation-rules": "^1.0",
     "phpstan/phpstan-strict-rules": "^1.0",
-    "phpunit/phpunit": "^9.5",
+    "phpunit/phpunit": "^7.5|^9.5",
     "povils/phpmnd": "^2.5",
     "roave/security-advisories": "dev-master",
     "sebastian/phpcpd": "^6.0",
@@ -62,6 +62,11 @@
   },
   "config": {
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "infection/extension-installer": true,
+      "phpstan/extension-installer": true
+    }
   }
 }
