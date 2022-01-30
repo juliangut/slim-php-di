@@ -6,7 +6,7 @@ Make your contributions through Pull Requests
 
 Find here a few rules to follow in order to keep the code clean and easy to review and merge:
 
-- Follow **[PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)** coding standard
+- Follow **[PSR-12](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-12-extended-coding-style-guide.md)** coding standard
 - **Unit test everything** and run the test suite
 - Try not to bring **code coverage** down
 - Keep documentation **updated**
