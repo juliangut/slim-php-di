@@ -11,7 +11,7 @@ Find here a few rules to follow in order to keep the code clean and easy to revi
 - Try not to bring **code coverage** down
 - Keep documentation **updated**
 - Just **one pull request per feature** at a time
-- Check that **[Travis CI](https://travis-ci.org/juliangut/slim-php-di)** build passed
+- Check that **[GitHub Actions](https://github.com/juliangut/slim-php-di/actions)** build passed
 
 Composer scripts are provided to help you keep code quality and run the test suite:
 
