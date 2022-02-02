@@ -110,7 +110,7 @@ trait ContainerTrait
     public function offsetSet($name, $value): void
     {
         @trigger_error(
-            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'ArrayAccess is deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -129,7 +129,7 @@ trait ContainerTrait
     public function offsetGet($name)
     {
         @trigger_error(
-            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'ArrayAccess is deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -146,7 +146,7 @@ trait ContainerTrait
     public function offsetExists($name): bool
     {
         @trigger_error(
-            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'ArrayAccess is deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -163,7 +163,7 @@ trait ContainerTrait
     public function offsetUnset($name): void
     {
         @trigger_error(
-            'ArrayAccess is deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'ArrayAccess is deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -176,7 +176,7 @@ trait ContainerTrait
     public function __set(string $name, $value): void
     {
         @trigger_error(
-            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'Magic methods are deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -192,7 +192,7 @@ trait ContainerTrait
     public function __get(string $name)
     {
         @trigger_error(
-            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'Magic methods are deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -205,7 +205,7 @@ trait ContainerTrait
     public function __isset(string $name): bool
     {
         @trigger_error(
-            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'Magic methods are deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
@@ -222,7 +222,7 @@ trait ContainerTrait
     public function __unset(string $name): void
     {
         @trigger_error(
-            'Magic methods are deprecated since 3.0, use PSR-11 and PHP-DI methods instead.',
+            'Magic methods are deprecated since 3.0 and will be removed in 4.0. Use PSR-11 and PHP-DI methods instead.',
             \E_USER_DEPRECATED,
         );
 
