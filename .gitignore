@@ -4,5 +4,3 @@ vendor/
 *.cache
 infection-log.*
 build/
-.idea/
-.vscode/
