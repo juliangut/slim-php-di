@@ -13,7 +13,7 @@ Find here a few rules to follow in order to keep the code clean and easy to revi
 - Just **one pull request per feature** at a time
 - Check that **[GitHub Actions](https://github.com/juliangut/slim-php-di/actions)** build passed
 
-Makefile commands are provided to help you keep code quality and run the test suite:
+Makefile targets are provided to help you keep code quality and run the test suite:
 
 - `make lint` will run PHP linting and [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) and [PHP-CS-Fixer](https://github.com/FriendsOfPhp/PHP-CS-Fixer) for coding style guidelines check
 - `make fix` will run [PHP-CS-Fixer](https://github.com/FriendsOfPhp/PHP-CS-Fixer) trying to fix coding styles
