@@ -86,7 +86,7 @@ In order for you to use annotations you have to `require doctrine/annotations`. 
 #### Additional settings
 
 * `definitions` an array of paths to definition files/directories or arrays of definitions. _Definitions are loaded in order of appearance_
-* `containerClass` container class used on the build. Must implement `\Interop\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
+* `containerClass` container class used on the build. Must implement `\Psr\Container\ContainerInterface`, `\DI\FactoryInterface` and `\DI\InvokerInterface` (`\Jgut\Slim\PHPDI\Container` by default)
 
 ## Container array access shorthand
 

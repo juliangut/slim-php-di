@@ -57,6 +57,7 @@ qa:
 	make --no-print-directory qa-compatibility && \
 	make --no-print-directory qa-phpstan
 
+
 .PHONY: test-phpunit
 test-phpunit:
 	vendor/bin/phpunit
