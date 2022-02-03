@@ -22,7 +22,8 @@ use Slim\Interfaces\AdvancedCallableResolverInterface;
 
 class CallableResolver implements AdvancedCallableResolverInterface
 {
-    protected const CALLABLE_PATTERN = '!^(?P<class>[^\:]+)\:{1,2}(?P<method>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+    protected const CALLABLE_PATTERN
+        = '!^(?P<class>[^\:]+)\:{1,2}(?P<method>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
 
     private InvokerResolver $callableResolver;
 
