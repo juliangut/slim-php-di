@@ -15,10 +15,10 @@ namespace Jgut\Slim\PHPDI;
 
 use DI\CompiledContainer as DICompiledContainer;
 use DI\Container as DIContainer;
-use Psr\Container\ContainerInterface;
-use Traversable;
-use RuntimeException;
 use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
+use RuntimeException;
+use Traversable;
 
 /**
  * @SuppressWarnings(PMD.LongVariable)

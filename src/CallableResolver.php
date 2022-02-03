@@ -17,8 +17,8 @@ use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Exception\NotCallableException;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Interfaces\AdvancedCallableResolverInterface;
 use RuntimeException;
+use Slim\Interfaces\AdvancedCallableResolverInterface;
 
 class CallableResolver implements AdvancedCallableResolverInterface
 {

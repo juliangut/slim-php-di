@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
+use ArrayIterator;
 use DI\CompiledContainer as DICompiledContainer;
 use DI\Container as DIContainer;
+use InvalidArgumentException;
 use Jgut\Slim\PHPDI\AbstractCompiledContainer;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use ArrayIterator;
 use RuntimeException;
-use InvalidArgumentException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)

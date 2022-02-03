@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
-use DI\Container as DIContainer;
 use ArrayAccess;
+use DI\Container as DIContainer;
 
 /**
  * @see \Slim\Container

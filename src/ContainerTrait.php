@@ -15,9 +15,9 @@ namespace Jgut\Slim\PHPDI;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Throwable;
 use InvalidArgumentException;
 use RuntimeException;
+use Throwable;
 
 trait ContainerTrait
 {

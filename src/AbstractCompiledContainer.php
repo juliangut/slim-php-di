@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
-use DI\CompiledContainer as DICompiledContainer;
 use ArrayAccess;
+use DI\CompiledContainer as DICompiledContainer;
 
 /**
  * PHP-DI compiled Dependency Injection Container.
