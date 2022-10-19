@@ -5,28 +5,23 @@ default: lint
 lint-php:
 	vendor/bin/phplint --configuration=.phplint.yml --ansi
 
-.PHONY: lint-phpcs
-lint-phpcs:
-	vendor/bin/phpcs --standard=PSR12 src tests
-
-.PHONY: lint-phpcs-fixer
-lint-phpcs-fixer:
-	vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --verbose --ansi
+.PHONY: lint-ecs
+lint-ecs:
+	vendor/bin/ecs check --verbose --ansi
 
 .PHONY: lint
 lint:
 	make --no-print-directory lint-php && \
-	make --no-print-directory lint-phpcs && \
-	make --no-print-directory lint-phpcs-fixer
+	make --no-print-directory lint-ecs
 
 
-.PHONY: fix-phpcs-fixer
-fix-phpcs-fixer:
-	vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --verbose --ansi
+.PHONY: fix-ecs
+fix-ecs:
+	vendor/bin/ecs check --fix --verbose --ansi
 
 .PHONY: fix
 fix:
-	make --no-print-directory fix-phpcs-fixer
+	make --no-print-directory fix-ecs
 
 
 .PHONY: qa-phpcpd

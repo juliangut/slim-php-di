@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -22,12 +22,12 @@ jobs:
           coverage: none
 
       - name: Composer install
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
         with:
           composer-options: "--prefer-dist"
 
       - name: Install Symplify easy-ci
-        run: composer require --dev symplify/easy-ci --no-interaction --no-progress --ansi --prefer-stable --prefer-dist
+        run: composer require --dev symplify/easy-ci:11.1.5 --no-interaction --no-progress --ansi --prefer-stable --prefer-dist
 
       - id: output_php
         run: echo "::set-output name=matrix::$(vendor/bin/easy-ci php-versions-json)"
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -56,7 +56,7 @@ jobs:
           coverage: none
 
       - name: Composer install
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
         with:
           composer-options: "--prefer-dist"
 

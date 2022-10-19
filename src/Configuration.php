@@ -76,7 +76,7 @@ class Configuration
         }
 
         foreach ($configs as $config) {
-            if (isset($configurations[$config])) {
+            if (\array_key_exists($config, $configurations)) {
                 /** @var callable $callback */
                 $callback = [$this, 'set' . ucfirst($config)];
 
@@ -108,7 +108,7 @@ class Configuration
             )
         ) {
             throw new InvalidArgumentException(
-                sprintf('class "%s" must extend "%s".', $containerClass, DIContainer::class),
+                sprintf('Class "%s" must extend "%s".', $containerClass, DIContainer::class),
             );
         }
 
@@ -146,8 +146,6 @@ class Configuration
     }
 
     /**
-     * Set annotations.
-     *
      * @return static
      */
     public function setUseAnnotations(bool $useAnnotations): self
@@ -235,7 +233,7 @@ class Configuration
     public function setProxiesPath(string $proxiesPath): self
     {
         if (!file_exists($proxiesPath) || !is_dir($proxiesPath) || !is_writable($proxiesPath)) {
-            throw new RuntimeException(sprintf('directory "%s" does not exist or is write protected.', $proxiesPath));
+            throw new RuntimeException(sprintf('Directory "%s" does not exist or is write protected.', $proxiesPath));
         }
 
         $this->proxiesPath = $proxiesPath;
@@ -262,7 +260,7 @@ class Configuration
     {
         if (!file_exists($compilationPath) || !is_dir($compilationPath) || !is_writable($compilationPath)) {
             throw new RuntimeException(sprintf(
-                'directory "%s" does not exist or is write protected.',
+                'Directory "%s" does not exist or is write protected.',
                 $compilationPath,
             ));
         }
@@ -297,7 +295,7 @@ class Configuration
             )
         ) {
             throw new InvalidArgumentException(
-                sprintf('class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class),
+                sprintf('Class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class),
             );
         }
 
@@ -307,8 +305,6 @@ class Configuration
     }
 
     /**
-     * Get definitions.
-     *
      * @return array<string|array<mixed>>
      */
     public function getDefinitions(): array
@@ -317,8 +313,6 @@ class Configuration
     }
 
     /**
-     * Set definitions.
-     *
      * @param string|Traversable|array<string, mixed>|mixed $definitions
      *
      * @throws InvalidArgumentException

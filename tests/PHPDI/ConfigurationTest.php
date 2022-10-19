@@ -97,7 +97,7 @@ class ConfigurationTest extends TestCase
     public function testInvalidContainerClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/^class ".+" must extend "DI\\\Container"\.$/');
+        $this->expectExceptionMessageMatches('/^Class ".+" must extend "DI\\\Container"\.$/');
 
         new Configuration(['containerClass' => 'NonExistingClass']);
     }
@@ -116,7 +116,7 @@ class ConfigurationTest extends TestCase
     public function testInvalidProxyPath(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('directory "/fake/proxies/path/" does not exist or is write protected.');
+        $this->expectExceptionMessage('Directory "/fake/proxies/path/" does not exist or is write protected.');
 
         new Configuration(['proxiesPath' => '/fake/proxies/path/']);
     }
@@ -124,7 +124,7 @@ class ConfigurationTest extends TestCase
     public function testInvalidCompilationPath(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('directory "/fake/compilation/path/" does not exist or is write protected.');
+        $this->expectExceptionMessage('Directory "/fake/compilation/path/" does not exist or is write protected.');
 
         new Configuration(['compilationPath' => '/fake/compilation/path/']);
     }
@@ -132,7 +132,7 @@ class ConfigurationTest extends TestCase
     public function testInvalidCompiledContainerClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/^class ".+" must extend "DI\\\CompiledContainer"\.$/');
+        $this->expectExceptionMessageMatches('/^Class ".+" must extend "DI\\\CompiledContainer"\.$/');
 
         new Configuration(['compiledContainerClass' => 'NonExistingClass']);
     }

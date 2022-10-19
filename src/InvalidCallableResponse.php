@@ -13,16 +13,8 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
-use ArrayAccess;
-use DI\CompiledContainer as DICompiledContainer;
+use RuntimeException;
 
-/**
- * @see \Slim\Container
- *
- * @implements ArrayAccess<string, mixed>
- */
-abstract class AbstractCompiledContainer extends DICompiledContainer implements ArrayAccess
+class InvalidCallableResponse extends RuntimeException
 {
-    /** @phpstan-use ContainerTrait<object> */
-    use ContainerTrait;
 }

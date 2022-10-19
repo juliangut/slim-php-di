@@ -51,12 +51,9 @@ return [
     // Replaced by container itself
     ContainerInterface::class => null,
 
-    ServerRequestCreatorInterface::class => static function (): ServerRequestCreatorInterface {
-        return ServerRequestCreatorFactory::create();
-    },
-    ResponseFactoryInterface::class => static function (): ResponseFactoryInterface {
-        return AppFactory::determineResponseFactory();
-    },
+    ServerRequestCreatorInterface::class
+        => static fn (): ServerRequestCreatorInterface => ServerRequestCreatorFactory::create(),
+    ResponseFactoryInterface::class => static fn (): ResponseFactoryInterface => AppFactory::determineResponseFactory(),
     StreamFactoryInterface::class => static function (): StreamFactoryInterface {
         /** @var Psr17Factory $psr17factory */
         foreach (Psr17FactoryProvider::getFactories() as $psr17factory) {
@@ -68,9 +65,10 @@ return [
         throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation.');
     },
 
-    CallableResolverInterface::class => static function (ContainerInterface $container): CallableResolverInterface {
-        return new CallableResolver(new InvokerCallableResolver($container));
-    },
+    CallableResolverInterface::class
+        => static fn (ContainerInterface $container): CallableResolverInterface => new CallableResolver(
+            new InvokerCallableResolver($container),
+        ),
 
     InvocationStrategyInterface::class => static function (ContainerInterface $container): InvocationStrategyInterface {
         $resolveChain = new ResolverChain([
@@ -94,9 +92,9 @@ return [
         );
     },
 
-    DispatcherInterface::class => static function (ContainerInterface $container): DispatcherInterface {
-        return new Dispatcher($container->get(RouteCollectorInterface::class));
-    },
+    DispatcherInterface::class => static fn (ContainerInterface $container): DispatcherInterface => new Dispatcher(
+        $container->get(RouteCollectorInterface::class),
+    ),
 
     RouteResolverInterface::class => static function (ContainerInterface $container): RouteResolverInterface {
         return new RouteResolver(
@@ -108,14 +106,11 @@ return [
     MiddlewareDispatcherInterface::class => static function (
         ContainerInterface $container
     ): MiddlewareDispatcherInterface {
-        $requestHandler = new class () implements RequestHandlerInterface {
-            /**
-             * @inheritDoc
-             */
+        $requestHandler = new class() implements RequestHandlerInterface {
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 // @codeCoverageIgnoreStart
-                throw new  RuntimeException(sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
+                throw new RuntimeException(sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
                 // @codeCoverageIgnoreEnd
             }
         };

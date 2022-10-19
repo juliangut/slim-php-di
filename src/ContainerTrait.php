@@ -16,16 +16,24 @@ namespace Jgut\Slim\PHPDI;
 use DI\DependencyException;
 use DI\NotFoundException;
 use InvalidArgumentException;
+use ReturnTypeWillChange;
 use RuntimeException;
 use Throwable;
 
+/**
+ * @template T of object
+ */
 trait ContainerTrait
 {
     /**
      * @see \DI\Container::get
      *
+     * @param string|class-string<T> $name
+     *
      * @throws DependencyException
      * @throws NotFoundException
+     *
+     * @return mixed|T
      */
     public function get($name)
     {
@@ -51,6 +59,8 @@ trait ContainerTrait
     /**
      * @see \DI\Container::has
      *
+     * @param string|class-string<T> $name
+     *
      * @throws InvalidArgumentException
      */
     public function has($name): bool
@@ -61,6 +71,7 @@ trait ContainerTrait
 
         try {
             $this->getRecursive($name);
+            // @phpstan-ignore-next-line
         } catch (Throwable $exception) {
             // @ignoreException
             return false;
@@ -70,9 +81,12 @@ trait ContainerTrait
     }
 
     /**
-     * @param array<mixed>|null $parent
+     * @param string|class-string<T> $key
+     * @param array<mixed>|null      $parent
      *
      * @throws NotFoundException
+     *
+     * @return mixed|T
      */
     private function getRecursive(string $key, ?array $parent = null)
     {
@@ -105,6 +119,10 @@ trait ContainerTrait
      * Define an object or a value in the container.
      *
      * @see \DI\Container::set
+     *
+     * @param mixed|string|class-string<T> $name
+     * @param mixed|T                      $value
+     *
      * @deprecated since 3.0
      */
     public function offsetSet($name, $value): void
@@ -123,9 +141,14 @@ trait ContainerTrait
      *
      * @see \DI\Container::get
      *
+     * @param mixed|string|class-string<T> $name
+     *
+     * @phpstan-return mixed
+     *
      * @throws DependencyException
      * @throws NotFoundException
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         @trigger_error(
@@ -133,6 +156,7 @@ trait ContainerTrait
             \E_USER_DEPRECATED,
         );
 
+        /** @var string|class-string<T> $name */
         return $this->get($name);
     }
 
@@ -140,6 +164,8 @@ trait ContainerTrait
      * Test if the container can provide something for the given name.
      *
      * @see \DI\Container::has
+     *
+     * @param mixed|string|class-string<T> $name
      *
      * @throws InvalidArgumentException
      */
@@ -150,11 +176,14 @@ trait ContainerTrait
             \E_USER_DEPRECATED,
         );
 
+        /** @var string|class-string<T> $name */
         return $this->has($name);
     }
 
     /**
      * Unset a container entry by its name.
+     *
+     * @param mixed|string|class-string<T> $name
      *
      * @throws RuntimeException
      *
@@ -172,6 +201,9 @@ trait ContainerTrait
 
     /**
      * @see \DI\Container::set
+     *
+     * @param string|class-string<T> $name
+     * @param mixed|T                $value
      */
     public function __set(string $name, $value): void
     {
@@ -186,8 +218,12 @@ trait ContainerTrait
     /**
      * @see \DI\Container::get
      *
+     * @param string|class-string<T> $name
+     *
      * @throws DependencyException
      * @throws NotFoundException
+     *
+     * @return mixed|T
      */
     public function __get(string $name)
     {

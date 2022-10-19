@@ -18,8 +18,11 @@ use DI\Container as DIContainer;
 
 /**
  * @see \Slim\Container
+ *
+ * @implements ArrayAccess<string, mixed>
  */
 class Container extends DIContainer implements ArrayAccess
 {
+    /** @phpstan-use ContainerTrait<object> */
     use ContainerTrait;
 }

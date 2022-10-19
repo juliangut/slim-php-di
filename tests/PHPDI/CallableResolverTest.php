@@ -27,7 +27,7 @@ use RuntimeException;
 class CallableResolverTest extends TestCase
 {
     /**
-     * @dataProvider getResolvableList
+     * @dataProvider resolveFromStringProvider
      *
      * @param string|array<mixed>|object $toResolve
      * @param string|array<mixed>        $expectedResolvable
@@ -40,9 +40,7 @@ class CallableResolverTest extends TestCase
         $invoker->expects(static::once())
             ->method('resolve')
             ->with($expectedResolvable)
-            ->willReturn(static function () {
-                return 'ok';
-            });
+            ->willReturn(static fn () => 'ok');
 
         $resolver = new CallableResolver($invoker);
 
@@ -52,7 +50,7 @@ class CallableResolverTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getResolvableList(): array
+    public function resolveFromStringProvider(): array
     {
         $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
@@ -74,7 +72,7 @@ class CallableResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getNotResolvableList
+     * @dataProvider notResolvableProvider
      *
      * @param string|array<mixed>|object $toResolve
      * @param string|array<mixed>        $expectedResolvable
@@ -86,7 +84,7 @@ class CallableResolverTest extends TestCase
         string $expectedException
     ): void {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('"%s" is not resolvable', $expectedException));
+        $this->expectExceptionMessage(sprintf('"%s" is not resolvable.', $expectedException));
 
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
@@ -104,7 +102,7 @@ class CallableResolverTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getNotResolvableList(): array
+    public function notResolvableProvider(): array
     {
         $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
         $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();

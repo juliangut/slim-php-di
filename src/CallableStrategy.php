@@ -16,7 +16,6 @@ namespace Jgut\Slim\PHPDI;
 use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
 use Slim\Interfaces\InvocationStrategyInterface;
 
 class CallableStrategy implements InvocationStrategyInterface
@@ -33,6 +32,8 @@ class CallableStrategy implements InvocationStrategyInterface
 
     /**
      * @param array<mixed> $routeArguments
+     *
+     * @throws InvalidCallableResponse
      */
     public function __invoke(
         callable $callable,
@@ -62,7 +63,7 @@ class CallableStrategy implements InvocationStrategyInterface
 
         $invocationResponse = $this->invoker->call($callable, $parameters);
         if (!$invocationResponse instanceof ResponseInterface) {
-            throw new RuntimeException(sprintf(
+            throw new InvalidCallableResponse(sprintf(
                 'Response should be an instance of "%s", "%s" returned.',
                 ResponseInterface::class,
                 \is_object($invocationResponse) ? \get_class($invocationResponse) : \gettype($invocationResponse),

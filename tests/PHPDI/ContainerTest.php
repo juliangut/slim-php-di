@@ -31,9 +31,6 @@ class ContainerTest extends TestCase
 {
     protected Container $container;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->container = ContainerBuilder::build();
@@ -42,7 +39,7 @@ class ContainerTest extends TestCase
     public function testGetNonExistent(): void
     {
         $this->expectException(NotFoundExceptionInterface::class);
-        $this->expectExceptionMessage('No entry or class found for "baz"');
+        $this->expectExceptionMessage('No entry or class found for "baz".');
 
         static::assertFalse($this->container->has('baz'));
         $this->container['baz'];
@@ -51,7 +48,7 @@ class ContainerTest extends TestCase
     public function testGetNonExistentRecursive(): void
     {
         $this->expectException(NotFoundExceptionInterface::class);
-        $this->expectExceptionMessage('No entry or class found for "settings.baz"');
+        $this->expectExceptionMessage('No entry or class found for "settings.baz".');
 
         static::assertFalse($this->container->has('settings.baz'));
         $this->container['settings.baz'];
@@ -60,7 +57,7 @@ class ContainerTest extends TestCase
     public function testGetShadowed(): void
     {
         $this->expectException(NotFoundExceptionInterface::class);
-        $this->expectExceptionMessage('No entry or class found for "settings.foo.bar.baz"');
+        $this->expectExceptionMessage('No entry or class found for "settings.foo.bar.baz".');
 
         $settings = [
             'foo' => [
@@ -127,7 +124,7 @@ class ContainerTest extends TestCase
         static::assertEquals('bar', $this->container->get('foo'));
 
         $this->container['bar'] = 'baz';
-        static::assertTrue(isset($this->container['bar']));
+        static::assertArrayHasKey('bar', $this->container);
         static::assertEquals('baz', $this->container['bar']);
 
         $this->container['baz'] = 'bam';
@@ -142,7 +139,7 @@ class ContainerTest extends TestCase
     public function testUnset(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('It is not possible to unset a container definitions');
+        $this->expectExceptionMessage('It is not possible to unset a container definitions.');
 
         unset($this->container->foo);
     }
@@ -150,7 +147,7 @@ class ContainerTest extends TestCase
     public function testUnsetArray(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('It is not possible to unset a container definitions');
+        $this->expectExceptionMessage('It is not possible to unset a container definitions.');
 
         unset($this->container['foo']);
     }

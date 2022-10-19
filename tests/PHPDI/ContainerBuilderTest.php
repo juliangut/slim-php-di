@@ -75,7 +75,7 @@ class ContainerBuilderTest extends TestCase
             ],
         ];
 
-        if (ini_get('apc.enabled') === '0') {
+        if (\ini_get('apc.enabled') === '0') {
             unset($configuration['useDefinitionCache']);
         }
 
