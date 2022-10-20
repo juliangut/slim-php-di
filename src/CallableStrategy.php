@@ -31,8 +31,8 @@ class CallableStrategy implements InvocationStrategyInterface
     }
 
     /**
+     * @param array<mixed>      $routeArguments
      * @param callable(): mixed $callable
-     * @param array<mixed> $routeArguments
      *
      * @throws InvalidCallableResponse
      */

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
+use InvalidArgumentException;
 use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Exception\NotCallableException;
 use Psr\Http\Message\ResponseInterface;
@@ -69,10 +70,10 @@ class CallableResolver implements AdvancedCallableResolverInterface
         if (\is_string($resolvable)) {
             $resolvable = $this->callableFromStringNotation($resolvable, 'handle');
         }
-        if (is_object($resolvable)) {
+        if (\is_object($resolvable)) {
             if (!$resolvable instanceof RequestHandlerInterface) {
-                throw new \InvalidArgumentException(
-                    sprintf('Route class should implement "%s".', RequestHandlerInterface::class)
+                throw new InvalidArgumentException(
+                    sprintf('Route class should implement "%s".', RequestHandlerInterface::class),
                 );
             }
 
@@ -101,8 +102,8 @@ class CallableResolver implements AdvancedCallableResolverInterface
         }
         if (\is_object($resolvable)) {
             if (!$resolvable instanceof MiddlewareInterface) {
-                throw new \InvalidArgumentException(
-                    sprintf('Middleware class should implement "%s".', MiddlewareInterface::class)
+                throw new InvalidArgumentException(
+                    sprintf('Middleware class should implement "%s".', MiddlewareInterface::class),
                 );
             }
 
@@ -128,7 +129,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
         try {
             return $this->callableResolver->resolve($resolvable);
         } catch (NotCallableException $exception) {
-            if (\is_callable($toResolve) || is_array($toResolve)) {
+            if (\is_callable($toResolve) || \is_array($toResolve)) {
                 $callable = json_encode($toResolve, \JSON_THROW_ON_ERROR);
             } elseif (\is_object($toResolve)) {
                 $callable = \get_class($toResolve);
