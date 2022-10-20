@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI\Tests;
 
+use InvalidArgumentException;
 use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Exception\NotCallableException;
 use Jgut\Slim\PHPDI\CallableResolver;
@@ -83,7 +84,7 @@ class CallableResolverTest extends TestCase
         $expectedResolvable,
         string $expectedException
     ): void {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf('"%s" is not resolvable.', $expectedException));
 
         $invoker = $this->getMockBuilder(InvokerResolver::class)
