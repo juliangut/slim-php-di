@@ -20,7 +20,6 @@ use Jgut\Slim\PHPDI\CallableResolver;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use RuntimeException;
 
 /**
  * @internal
