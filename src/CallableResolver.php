@@ -15,6 +15,7 @@ namespace Jgut\Slim\PHPDI;
 
 use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Exception\NotCallableException;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
@@ -35,7 +36,11 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * @inheritDoc
      *
+     * @param string|callable(): mixed $toResolve
+     *
      * @throws RuntimeException
+     *
+     * @return callable(): ResponseInterface
      */
     public function resolve($toResolve): callable
     {
@@ -51,7 +56,11 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * @inheritDoc
      *
+     * @param string|callable(): mixed|object $toResolve
+     *
      * @throws RuntimeException
+     *
+     * @return callable(): ResponseInterface
      */
     public function resolveRoute($toResolve): callable
     {
@@ -60,7 +69,14 @@ class CallableResolver implements AdvancedCallableResolverInterface
         if (\is_string($resolvable)) {
             $resolvable = $this->callableFromStringNotation($resolvable, 'handle');
         }
-        if ($resolvable instanceof RequestHandlerInterface) {
+        if (is_object($resolvable)) {
+            if (!$resolvable instanceof RequestHandlerInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Route class should implement "%s".', RequestHandlerInterface::class)
+                );
+            }
+
+            /** @var callable():mixed $resolvable */
             $resolvable = [$resolvable, 'handle'];
         }
 
@@ -70,7 +86,11 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * @inheritDoc
      *
+     * @param string|callable(): mixed|object $toResolve
+     *
      * @throws RuntimeException
+     *
+     * @return callable(): ResponseInterface
      */
     public function resolveMiddleware($toResolve): callable
     {
@@ -79,8 +99,14 @@ class CallableResolver implements AdvancedCallableResolverInterface
         if (\is_string($resolvable)) {
             $resolvable = $this->callableFromStringNotation($resolvable, 'process');
         }
-        if (\is_object($resolvable) && $resolvable instanceof MiddlewareInterface) {
-            /** @var callable $resolvable */
+        if (\is_object($resolvable)) {
+            if (!$resolvable instanceof MiddlewareInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Middleware class should implement "%s".', MiddlewareInterface::class)
+                );
+            }
+
+            /** @var callable():mixed $resolvable */
             $resolvable = [$resolvable, 'process'];
         }
 
@@ -90,17 +116,19 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get resolved callable.
      *
-     * @param string|callable                      $resolvable
-     * @param string|callable|array<string>|object $toResolve
+     * @param string|callable(): mixed        $resolvable
+     * @param string|callable(): mixed|object $toResolve
      *
      * @throws RuntimeException
+     *
+     * @return callable(): ResponseInterface
      */
     protected function resolveCallable($resolvable, $toResolve): callable
     {
         try {
             return $this->callableResolver->resolve($resolvable);
         } catch (NotCallableException $exception) {
-            if (\is_callable($toResolve) || \is_array($toResolve)) {
+            if (\is_callable($toResolve)) {
                 $callable = json_encode($toResolve, \JSON_THROW_ON_ERROR);
             } elseif (\is_object($toResolve)) {
                 $callable = \get_class($toResolve);
@@ -115,16 +143,17 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get callable from string callable notation.
      *
-     * @return string|callable
+     * @return string|callable(): mixed
      */
     private function callableFromStringNotation(string $toResolve, ?string $defaultMethod = null)
     {
         $callable = $toResolve;
+
         if (preg_match(self::CALLABLE_PATTERN, $toResolve, $matches) === 1) {
-            /** @var callable $callable */
+            /** @var callable(): mixed $callable */
             $callable = [$matches['class'], $matches['method']];
         } elseif ($defaultMethod !== null) {
-            /** @var callable $callable */
+            /** @var callable(): mixed $callable */
             $callable = [$toResolve, $defaultMethod];
         }
 
