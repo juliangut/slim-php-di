@@ -19,7 +19,6 @@ use Invoker\Exception\NotCallableException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use RuntimeException;
 use Slim\Interfaces\AdvancedCallableResolverInterface;
 
 class CallableResolver implements AdvancedCallableResolverInterface
@@ -39,7 +38,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
      *
      * @param string|callable(): mixed $toResolve
      *
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      *
      * @return callable(): ResponseInterface
      */
@@ -59,7 +58,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
      *
      * @param string|callable(): mixed|object $toResolve
      *
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      *
      * @return callable(): ResponseInterface
      */
@@ -89,7 +88,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
      *
      * @param string|callable(): mixed|object $toResolve
      *
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      *
      * @return callable(): ResponseInterface
      */
@@ -120,7 +119,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
      * @param string|callable(): mixed                      $resolvable
      * @param string|callable(): mixed|array<string>|object $toResolve
      *
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      *
      * @return callable(): ResponseInterface
      */
@@ -137,7 +136,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
                 $callable = $toResolve;
             }
 
-            throw new RuntimeException(sprintf('"%s" is not resolvable.', $callable), 0, $exception);
+            throw new InvalidArgumentException(sprintf('"%s" is not resolvable.', $callable), 0, $exception);
         }
     }
 
