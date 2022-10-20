@@ -116,8 +116,8 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get resolved callable.
      *
-     * @param string|callable(): mixed        $resolvable
-     * @param string|callable(): mixed|object $toResolve
+     * @param string|callable(): mixed                      $resolvable
+     * @param string|callable(): mixed|array<string>|object $toResolve
      *
      * @throws RuntimeException
      *
@@ -128,7 +128,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
         try {
             return $this->callableResolver->resolve($resolvable);
         } catch (NotCallableException $exception) {
-            if (\is_callable($toResolve)) {
+            if (\is_callable($toResolve) || is_array($toResolve)) {
                 $callable = json_encode($toResolve, \JSON_THROW_ON_ERROR);
             } elseif (\is_object($toResolve)) {
                 $callable = \get_class($toResolve);
