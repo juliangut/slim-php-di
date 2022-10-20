@@ -30,7 +30,7 @@ jobs:
         run: composer require --dev symplify/easy-ci:11.1.5 --no-interaction --no-progress --ansi --prefer-stable --prefer-dist
 
       - id: output_php
-        run: echo "::set-output name=matrix::$(vendor/bin/easy-ci php-versions-json)"
+        run: echo "matrix=$(vendor/bin/easy-ci php-versions-json)" >> $GITHUB_OUTPUT
 
     outputs:
       php: ${{ steps.output_php.outputs.matrix }}

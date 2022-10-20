@@ -42,7 +42,7 @@ qa-compatibility:
 
 .PHONY: qa-phpstan
 qa-phpstan:
-	vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=2G --no-progress --error-format compact
+	vendor/bin/phpstan analyse --memory-limit=2G --no-progress
 
 .PHONY: qa
 qa:
