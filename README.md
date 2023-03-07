@@ -167,13 +167,10 @@ return [
 ];
 ```
 
-## Migration from 2.x
+## Migration from 3.x
 
-* Minimum Slim version is now 4.8
-* Container only provides implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
-* You can extract Slim's App directly from container or seed AppFactory from container
-* Slim's App is not extended anymore
-* ArrayAccess and magic methods on default container are deprecated and will be removed on next major release. Use PSR-11 and PHP-DI's methods instead
+* PHP minimum required version is PHP 8.0
+* Moved to PHP-DI 7. Annotations have been removed, use attributes
 
 ## Contributing
 

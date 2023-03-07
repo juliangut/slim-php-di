@@ -25,15 +25,16 @@ use Traversable;
  */
 class Configuration
 {
+    /**
+     * @var class-string<DIContainer>
+     */
     protected string $containerClass = Container::class;
 
     protected bool $useAutoWiring = true;
 
-    protected bool $useAnnotations = false;
+    protected bool $useAttributes = false;
 
     protected bool $useDefinitionCache = false;
-
-    protected bool $ignorePhpDocErrors = false;
 
     protected ?ContainerInterface $wrapContainer = null;
 
@@ -41,6 +42,9 @@ class Configuration
 
     protected ?string $compilationPath = null;
 
+    /**
+     * @var class-string<DICompiledContainer>
+     */
     protected string $compiledContainerClass = AbstractCompiledContainer::class;
 
     /**
@@ -87,6 +91,8 @@ class Configuration
 
     /**
      * Get container class.
+     *
+     * @return class-string<DIContainer>
      */
     public function getContainerClass(): string
     {
@@ -138,19 +144,19 @@ class Configuration
     }
 
     /**
-     * Are annotations enabled.
+     * Are attributes enabled.
      */
-    public function doesUseAnnotations(): bool
+    public function doesUseAttributes(): bool
     {
-        return $this->useAnnotations;
+        return $this->useAttributes;
     }
 
     /**
      * @return static
      */
-    public function setUseAnnotations(bool $useAnnotations): self
+    public function setUseAttributes(bool $useAttributes): self
     {
-        $this->useAnnotations = $useAnnotations;
+        $this->useAttributes = $useAttributes;
 
         return $this;
     }
@@ -171,26 +177,6 @@ class Configuration
     public function setUseDefinitionCache(bool $useDefinitionCache): self
     {
         $this->useDefinitionCache = $useDefinitionCache;
-
-        return $this;
-    }
-
-    /**
-     * Are PhpDoc errors ignored.
-     */
-    public function doesIgnorePhpDocErrors(): bool
-    {
-        return $this->ignorePhpDocErrors;
-    }
-
-    /**
-     * Set ignoring PhpDoc errors.
-     *
-     * @return static
-     */
-    public function setIgnorePhpDocErrors(bool $ignorePhpDocErrors): self
-    {
-        $this->ignorePhpDocErrors = $ignorePhpDocErrors;
 
         return $this;
     }
@@ -272,6 +258,8 @@ class Configuration
 
     /**
      * Get compiled container class.
+     *
+     * @return class-string<DICompiledContainer>
      */
     public function getCompiledContainerClass(): string
     {

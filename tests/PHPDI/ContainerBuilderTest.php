@@ -56,12 +56,10 @@ class ContainerBuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configuration = [
+        $configs = [
             'containerClass' => Container::class,
             'useAutoWiring' => true,
-            'useAnnotations' => true,
             'useDefinitionCache' => true,
-            'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__ . '/files',
@@ -76,15 +74,17 @@ class ContainerBuilderTest extends TestCase
         ];
 
         if (\ini_get('apc.enabled') === '0') {
-            unset($configuration['useDefinitionCache']);
+            unset($configs['useDefinitionCache']);
         }
 
-        $container = ContainerBuilder::build(new Configuration($configuration));
+        $container = ContainerBuilder::build(new Configuration($configs));
 
-        static::assertTrue($container->has('foo'));
-        static::assertEquals('baz', $container->get('foo'));
-        static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
-
-        unlink(__DIR__ . '/files/CompiledContainer.php');
+        try {
+            static::assertTrue($container->has('foo'));
+            static::assertEquals('baz', $container->get('foo'));
+            static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
+        } finally {
+            unlink(__DIR__ . '/files/CompiledContainer.php');
+        }
     }
 }

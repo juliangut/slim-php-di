@@ -35,7 +35,7 @@ trait ContainerTrait
      *
      * @return mixed|T
      */
-    public function get($name)
+    public function get(string $name): mixed
     {
         try {
             return mb_strpos($name, '.') === false
@@ -63,7 +63,7 @@ trait ContainerTrait
      *
      * @throws InvalidArgumentException
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
         if (mb_strpos($name, '.') === false) {
             return parent::has($name);

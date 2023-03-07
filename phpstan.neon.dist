@@ -11,5 +11,5 @@ parameters:
   paths:
     - src
   ignoreErrors:
-    - message: '/^Parameter #2 \.\.\.\$definitions of method DI\\ContainerBuilder::addDefinitions\(\) expects array\|DI\\Definition\\Source\\DefinitionSource\|string, mixed given\.$/'
+    - message: '/^Parameter #2 \.\.\.\$definitions of method DI\\ContainerBuilder(<DI\\Container>)?::addDefinitions\(\) expects array\|DI\\Definition\\Source\\DefinitionSource\|string, mixed given\.$/'
       path: src/ContainerBuilder.php

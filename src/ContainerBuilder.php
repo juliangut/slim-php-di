@@ -48,14 +48,15 @@ class ContainerBuilder
 
     /**
      * Get configured container builder.
+     *
+     * @return DIContainerBuilder<DIContainer>
      */
     private static function getContainerBuilder(Configuration $configuration): DIContainerBuilder
     {
         $containerBuilder = new DIContainerBuilder($configuration->getContainerClass());
 
         $containerBuilder->useAutowiring($configuration->doesUseAutowiring());
-        $containerBuilder->useAnnotations($configuration->doesUseAnnotations());
-        $containerBuilder->ignorePhpDocErrors($configuration->doesIgnorePhpDocErrors());
+        $containerBuilder->useAttributes($configuration->doesUseAttributes());
 
         if ($configuration->doesUseDefinitionCache()) {
             $containerBuilder->enableDefinitionCache();
