@@ -89,10 +89,24 @@ class ContainerTest extends TestCase
         $this->container->set('settings', $settings);
 
         static::assertTrue($this->container->has('settings.foo'));
-        static::assertEquals(['bar' => ['baz' => 'found!', 'bam' => []]], $this->container->get('settings.foo'));
+        static::assertEquals(
+            [
+                'bar' => [
+                    'baz' => 'found!',
+                    'bam' => [],
+                ],
+            ],
+            $this->container->get('settings.foo'),
+        );
 
         static::assertTrue($this->container->has('settings.foo.bar'));
-        static::assertEquals(['baz' => 'found!', 'bam' => []], $this->container->get('settings.foo.bar'));
+        static::assertEquals(
+            [
+                'baz' => 'found!',
+                'bam' => [],
+            ],
+            $this->container->get('settings.foo.bar'),
+        );
 
         static::assertTrue($this->container->has('settings.foo.bar.baz'));
         static::assertEquals('found!', $this->container->get('settings.foo.bar.baz'));
