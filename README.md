@@ -169,7 +169,7 @@ return [
 
 ## Migration from 2.x
 
-* Minimum Slim version is now 4.7
+* Minimum Slim version is now 4.8
 * Container only provides implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
 * You can extract Slim's App directly from container or seed AppFactory from container
 * Slim's App is not extended anymore
