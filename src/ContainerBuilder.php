@@ -83,11 +83,11 @@ class ContainerBuilder
     /**
      * Parse definitions.
      *
-     * @param array<string|array<mixed>> $definitions
+     * @param array<string|array<string, mixed>> $definitions
      *
      * @throws RuntimeException
      *
-     * @return array<string, array<string, mixed>>
+     * @return array<string, mixed>
      */
     private static function parseDefinitions(array $definitions): array
     {
@@ -160,6 +160,7 @@ class ContainerBuilder
             );
         }
 
+        /** @var array<string, array<string, mixed>> $definitions */
         return $definitions;
     }
 }

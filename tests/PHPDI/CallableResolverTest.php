@@ -40,7 +40,7 @@ class CallableResolverTest extends TestCase
         $invoker->expects(static::once())
             ->method('resolve')
             ->with($expectedResolvable)
-            ->willReturn(static fn () => 'ok');
+            ->willReturn(static fn() => 'ok');
 
         $resolver = new CallableResolver($invoker);
 

@@ -44,7 +44,7 @@ class Configuration
     protected string $compiledContainerClass = AbstractCompiledContainer::class;
 
     /**
-     * @var array<string|array<mixed>>
+     * @var array<string|array<string, mixed>>
      */
     protected array $definitions = [];
 
@@ -305,7 +305,7 @@ class Configuration
     }
 
     /**
-     * @return array<string|array<mixed>>
+     * @return array<string|array<string, mixed>>
      */
     public function getDefinitions(): array
     {
@@ -349,6 +349,7 @@ class Configuration
             },
         );
 
+        /** @var array<string|array<string, mixed>> $definitions */
         $this->definitions = $definitions;
 
         return $this;

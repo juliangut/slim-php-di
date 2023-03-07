@@ -52,10 +52,10 @@ return [
     ContainerInterface::class => null,
 
     ServerRequestCreatorInterface::class
-        => static fn (): ServerRequestCreatorInterface => ServerRequestCreatorFactory::create(),
-    ResponseFactoryInterface::class => static fn (): ResponseFactoryInterface => AppFactory::determineResponseFactory(),
+        => static fn(): ServerRequestCreatorInterface => ServerRequestCreatorFactory::create(),
+    ResponseFactoryInterface::class => static fn(): ResponseFactoryInterface => AppFactory::determineResponseFactory(),
     StreamFactoryInterface::class => static function (): StreamFactoryInterface {
-        /** @var Psr17Factory $psr17factory */
+        /** @var class-string<Psr17Factory> $psr17factory */
         foreach (Psr17FactoryProvider::getFactories() as $psr17factory) {
             if ($psr17factory::isStreamFactoryAvailable()) {
                 return $psr17factory::getStreamFactory();
@@ -66,7 +66,7 @@ return [
     },
 
     CallableResolverInterface::class
-        => static fn (ContainerInterface $container): CallableResolverInterface => new CallableResolver(
+        => static fn(ContainerInterface $container): CallableResolverInterface => new CallableResolver(
             new InvokerCallableResolver($container),
         ),
 
@@ -92,7 +92,7 @@ return [
         );
     },
 
-    DispatcherInterface::class => static fn (ContainerInterface $container): DispatcherInterface => new Dispatcher(
+    DispatcherInterface::class => static fn(ContainerInterface $container): DispatcherInterface => new Dispatcher(
         $container->get(RouteCollectorInterface::class),
     ),
 
