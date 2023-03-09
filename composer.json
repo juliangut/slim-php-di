@@ -28,7 +28,7 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "php-di/php-di": "^7.0",
-    "psr/container": "^1.1",
+    "psr/container": "^2.0",
     "slim/slim": "^4.8"
   },
   "require-dev": {
@@ -41,7 +41,7 @@
     "phpcompatibility/php-compatibility": "^9.3",
     "phpmd/phpmd": "^2.10",
     "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan": "^1.0",
+    "phpstan/phpstan": "^1.10",
     "phpstan/phpstan-deprecation-rules": "^1.0",
     "phpstan/phpstan-strict-rules": "^1.0",
     "phpunit/phpunit": "^9.5",
