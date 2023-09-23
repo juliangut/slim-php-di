@@ -106,9 +106,9 @@ return [
     },
 
     MiddlewareDispatcherInterface::class => static function (
-        ContainerInterface $container
+        ContainerInterface $container,
     ): MiddlewareDispatcherInterface {
-        $requestHandler = new class() implements RequestHandlerInterface {
+        $requestHandler = new class () implements RequestHandlerInterface {
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 // @codeCoverageIgnoreStart
