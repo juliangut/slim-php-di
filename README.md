@@ -1,4 +1,4 @@
-[![PHP version](https://img.shields.io/badge/PHP-%3E%3D8.0-8892BF.svg?style=flat-square)](http://php.net)
+[![PHP version](https://img.shields.io/badge/PHP-%3E%3D8.1-8892BF.svg?style=flat-square)](http://php.net)
 [![Latest Version](https://img.shields.io/packagist/vpre/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di)
 [![License](https://img.shields.io/github/license/juliangut/slim-php-di.svg?style=flat-square)](https://github.com/juliangut/slim-php-di/blob/master/LICENSE)
 
@@ -173,7 +173,7 @@ return [
 
 ## Migration from 3.x
 
-* PHP minimum required version is PHP 8.0
+* PHP minimum required version is PHP 8.1
 * Moved to PHP-DI 7. Annotations have been removed, use attributes
 
 ## Contributing

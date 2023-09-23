@@ -82,6 +82,8 @@ class ContainerBuilderTest extends TestCase
         try {
             static::assertTrue($container->has('foo'));
             static::assertEquals('baz', $container->get('foo'));
+            static::assertEquals('definition', $container->get('valid'));
+
             static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
         } finally {
             unlink(__DIR__ . '/files/CompiledContainer.php');

@@ -24,10 +24,6 @@ fix:
 	make --no-print-directory fix-ecs
 
 
-.PHONY: qa-phpcpd
-qa-phpcpd:
-	vendor/bin/phpcpd src tests
-
 .PHONY: qa-phpmd
 qa-phpmd:
 	vendor/bin/phpmd src,tests ansi unusedcode,naming,design,controversial,codesize
@@ -46,7 +42,6 @@ qa-phpstan:
 
 .PHONY: qa
 qa:
-	make --no-print-directory qa-phpcpd && \
 	make --no-print-directory qa-phpmd && \
 	make --no-print-directory qa-phpmnd && \
 	make --no-print-directory qa-compatibility && \

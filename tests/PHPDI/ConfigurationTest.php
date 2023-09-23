@@ -23,6 +23,7 @@ use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
+use TypeError;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -31,14 +32,6 @@ use RuntimeException;
  */
 class ConfigurationTest extends TestCase
 {
-    public function testInvalidConfigurations(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Configurations must be a traversable.');
-
-        new Configuration('');
-    }
-
     public function testDefaults(): void
     {
         $configuration = new Configuration();
@@ -143,8 +136,10 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidDefinitionType(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Definitions must be a string or traversable. "integer" given.');
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessageMatches(
+            '/^.+setDefinitions\(\): Argument #1 \(\$definitions\) must be of type .+, int given/',
+        );
 
         new Configuration(['definitions' => 10]);
     }

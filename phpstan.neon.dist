@@ -1,15 +1,9 @@
 includes:
-  - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+  - %rootDir%/../../juliangut/phpstan-config/phpstan.neon
 
 parameters:
   level: max
-  checkMissingCallableSignature: true
-  tipsOfTheDay: false
-  errorFormat: compact
   parallel:
     maximumNumberOfProcesses: 7
   paths:
     - src
-  ignoreErrors:
-    - message: '/^Parameter #2 \.\.\.\$definitions of method DI\\ContainerBuilder(<DI\\Container>)?::addDefinitions\(\) expects array\|DI\\Definition\\Source\\DefinitionSource\|string, mixed given\.$/'
-      path: src/ContainerBuilder.php

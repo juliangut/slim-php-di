@@ -62,7 +62,9 @@ return [
             }
         }
 
+        // @codeCoverageIgnoreStart
         throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation.');
+        // @codeCoverageIgnoreEnd
     },
 
     CallableResolverInterface::class

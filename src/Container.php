@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
-use ArrayAccess;
 use DI\Container as DIContainer;
 
 /**
  * @see \Slim\Container
- *
- * @implements ArrayAccess<string, mixed>
  */
-class Container extends DIContainer implements ArrayAccess
+class Container extends DIContainer
 {
     /** @phpstan-use ContainerTrait<object> */
     use ContainerTrait;

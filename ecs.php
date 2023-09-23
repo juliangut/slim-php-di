@@ -11,8 +11,7 @@
 
 declare(strict_types=1);
 
-use Jgut\ECS\Config\ConfigSet74;
-use PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\NoSilencedErrorsSniff;
+use Jgut\ECS\Config\ConfigSet81;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 $header = <<<'HEADER'
@@ -31,13 +30,8 @@ return static function (ECSConfig $ecsConfig) use ($header): void {
         __DIR__ . '/tests',
     ]);
 
-    (new ConfigSet74())
+    (new ConfigSet81())
         ->setHeader($header)
         ->enablePhpUnitRules()
-        ->setAdditionalSkips([
-            NoSilencedErrorsSniff::class . '.Discouraged' => [
-                __DIR__ . '/src/ContainerTrait.php', // Temporal while deprecating container's ArrayAccess
-            ],
-        ])
         ->configure($ecsConfig);
 };
