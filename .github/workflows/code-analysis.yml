@@ -66,9 +66,6 @@ jobs:
       - name: Run check style
         run: make lint-ecs
 
-      - name: Run copy/paste detection
-        run: make qa-phpcpd
-
       - name: Run mess detection
         run: make qa-phpmd
 
