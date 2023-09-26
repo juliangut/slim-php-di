@@ -1,5 +1,5 @@
 includes:
-  - %rootDir%/../../juliangut/phpstan-config/phpstan.neon
+  - %rootDir%/../../juliangut/phpstan-config/phpstan-phpunit.neon
 
 parameters:
   level: max
