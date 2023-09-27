@@ -118,8 +118,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
     protected function resolveCallable(
         string|callable|array $resolvable,
         string|callable|array|object $toResolve,
-    ): callable
-    {
+    ): callable {
         try {
             return $this->callableResolver->resolve($resolvable);
         } catch (NotCallableException $exception) {
