@@ -28,7 +28,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
         = '!^(?P<class>[^\:]+)\:{1,2}(?P<method>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
 
     public function __construct(
-        private readonly InvokerResolver $callableResolver,
+        private InvokerResolver $callableResolver,
     ) {}
 
     /**
@@ -118,7 +118,8 @@ class CallableResolver implements AdvancedCallableResolverInterface
     protected function resolveCallable(
         string|callable|array $resolvable,
         string|callable|array|object $toResolve,
-    ): callable {
+    ): callable
+    {
         try {
             return $this->callableResolver->resolve($resolvable);
         } catch (NotCallableException $exception) {

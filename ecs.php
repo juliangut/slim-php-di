@@ -11,8 +11,7 @@
 
 declare(strict_types=1);
 
-use Jgut\ECS\Config\ConfigSet81;
-use PhpCsFixer\Fixer\ArrayNotation\ReturnToYieldFromFixer;
+use Jgut\ECS\Config\ConfigSet80;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 $header = <<<'HEADER'
@@ -31,11 +30,8 @@ return static function (ECSConfig $ecsConfig) use ($header): void {
         __DIR__ . '/tests',
     ]);
 
-    (new ConfigSet81())
+    (new ConfigSet80())
         ->setHeader($header)
         ->enablePhpUnitRules()
-        ->setAdditionalSkips([
-            ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php', // Fails on file-wide array return
-        ])
         ->configure($ecsConfig);
 };
