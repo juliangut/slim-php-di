@@ -173,8 +173,8 @@ return [
 
 ## Migration from 3.x
 
-* PHP minimum required version is PHP 8.1
-* Moved to PHP-DI 7. Annotations have been removed, use attributes
+* PHP minimum required version is PHP 8.0
+* Moved to PHP-DI 7. Annotations have been removed, use Attributes
 
 ## Contributing
 

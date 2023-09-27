@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use Jgut\ECS\Config\ConfigSet80;
 use PhpCsFixer\Fixer\ArrayNotation\ReturnToYieldFromFixer;
+use PhpCsFixer\Fixer\Basic\CurlyBracesPositionFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 $header = <<<'HEADER'
@@ -31,11 +32,16 @@ return static function (ECSConfig $ecsConfig) use ($header): void {
         __DIR__ . '/tests',
     ]);
 
+    $skipRules = [
+        ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php',
+    ];
+    if (\PHP_VERSION_ID === 80_000) {
+        $skipRules[CurlyBracesPositionFixer::class] = __DIR__ . '/src/CallableResolver.php';
+    }
+
     (new ConfigSet80())
         ->setHeader($header)
         ->enablePhpUnitRules()
-        ->setAdditionalSkips([
-            ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php',
-        ])
+        ->setAdditionalSkips($skipRules)
         ->configure($ecsConfig);
 };
