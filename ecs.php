@@ -35,7 +35,7 @@ return static function (ECSConfig $ecsConfig) use ($header): void {
     $skipRules = [
         ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php',
     ];
-    if (\PHP_VERSION_ID === 80_000) {
+    if (\PHP_VERSION_ID < 80_100) {
         $skipRules[CurlyBracesPositionFixer::class] = __DIR__ . '/src/CallableResolver.php';
     }
 
