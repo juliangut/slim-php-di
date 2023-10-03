@@ -7,3 +7,5 @@ parameters:
     maximumNumberOfProcesses: 7
   paths:
     - src
+  ignoreErrors:
+    - message: '/^Method Jgut\\Slim\\PHPDI\\Command\\ListCommand::__construct\(\) has a parameter \$container with a type declaration of DI\\Container, but containers should not be injected\.$/'

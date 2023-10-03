@@ -43,7 +43,11 @@
     "phpstan/phpstan": "^1.11",
     "phpunit/phpunit": "^9.6.13|^10.3",
     "povils/phpmnd": "^3.2",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-master",
+    "symfony/console": "^6.0"
+  },
+  "suggest": {
+    "symfony/console": "In order to use console commands (>=5.1)"
   },
   "autoload": {
     "psr-4": {

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI\Tests;
 
 use DI\Container;
+use DI\Definition\Source\SourceCache;
 use Jgut\Slim\PHPDI\AbstractCompiledContainer;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
@@ -59,7 +60,7 @@ class ContainerBuilderTest extends TestCase
         $configs = [
             'containerClass' => Container::class,
             'useAutoWiring' => true,
-            'useDefinitionCache' => true,
+            'useDefinitionCache' => SourceCache::isSupported(),
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__ . '/files',
@@ -72,10 +73,6 @@ class ContainerBuilderTest extends TestCase
                 ],
             ],
         ];
-
-        if (\ini_get('apc.enabled') === '0') {
-            unset($configs['useDefinitionCache']);
-        }
 
         $container = ContainerBuilder::build(new Configuration($configs));
 

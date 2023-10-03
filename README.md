@@ -171,6 +171,29 @@ return [
 ];
 ```
 
+## Console command
+
+```php
+use Symfony\Component\Console\Application;
+use Jgut\Slim\PHPDI\Command\ListCommand;
+
+/** @var \Slim\App $app */
+$container = $app->getContainer();
+
+$cli = new Application('Slim CLI');
+$cli->add(new ListCommand($container));
+
+$app->run();
+```
+
+### List container definitions
+
+List defined container definitions supporting searching
+
+```bash
+php -f cli.php slim:container:list --help
+```
+
 ## Migration from 3.x
 
 * PHP minimum required version is PHP 8.0
