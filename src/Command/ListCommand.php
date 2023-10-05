@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI\Command;
 
 use DI\Container;
+use DI\Definition\Exception\InvalidDefinition;
+use DI\NotFoundException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -125,10 +127,15 @@ class ListCommand extends Command
     private function getTableRows(array $entries, bool $fullDefinition): array
     {
         return array_map(
-            fn(string $entryName): array => [$entryName, $this->formatDefinition(
-                $this->container->debugEntry($entryName),
-                $fullDefinition,
-            )],
+            function (string $entryName) use ($fullDefinition): array {
+                try {
+                    $definition = $this->container->debugEntry($entryName);
+                } catch (InvalidDefinition | NotFoundException) {
+                    $definition = 'Invalid definition';
+                }
+
+                return [$entryName, $this->formatDefinition($definition, $fullDefinition)];
+            },
             $entries,
         );
     }
