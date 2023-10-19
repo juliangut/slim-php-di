@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
+use Closure;
 use DI\CompiledContainer as DICompiledContainer;
 use DI\Container as DIContainer;
 use InvalidArgumentException;
@@ -23,44 +24,44 @@ use Traversable;
 /**
  * @SuppressWarnings(PMD.LongVariable)
  */
-class Configuration
+final class Configuration
 {
-    protected string $containerClass = Container::class;
-
-    protected bool $useAutoWiring = true;
-
-    protected bool $useAnnotations = false;
-
-    protected bool $useDefinitionCache = false;
-
-    protected bool $ignorePhpDocErrors = false;
-
-    protected ?ContainerInterface $wrapContainer = null;
-
-    protected ?string $proxiesPath = null;
-
-    protected ?string $compilationPath = null;
-
-    protected string $compiledContainerClass = AbstractCompiledContainer::class;
-
     /**
-     * @var array<string|array<string, mixed>>
+     * @var class-string<DIContainer>
      */
-    protected array $definitions = [];
+    private string $containerClass = Container::class;
+
+    private bool $useAutoWiring = true;
+
+    private bool $useAttributes = false;
+
+    private bool $useDefinitionCache = false;
+
+    private ?ContainerInterface $wrapContainer = null;
+
+    private ?string $proxiesPath = null;
+
+    private ?string $compilationPath = null;
 
     /**
-     * @param Traversable|array<string, mixed>|mixed $configurations
+     * @var class-string<DICompiledContainer>
+     */
+    private string $compiledContainerClass = AbstractCompiledContainer::class;
+
+    /**
+     * @var list<string|array<string, scalar|object|Closure|null>>
+     */
+    private array $definitions = [];
+
+    /**
+     * @param iterable<string, mixed> $configurations
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($configurations = [])
+    public function __construct(iterable $configurations = [])
     {
         if ($configurations instanceof Traversable) {
             $configurations = iterator_to_array($configurations);
-        }
-
-        if (!\is_array($configurations)) {
-            throw new InvalidArgumentException('Configurations must be a traversable.');
         }
 
         $configs = array_keys(get_object_vars($this));
@@ -87,6 +88,8 @@ class Configuration
 
     /**
      * Get container class.
+     *
+     * @return class-string<DIContainer>
      */
     public function getContainerClass(): string
     {
@@ -138,19 +141,19 @@ class Configuration
     }
 
     /**
-     * Are annotations enabled.
+     * Are attributes enabled.
      */
-    public function doesUseAnnotations(): bool
+    public function doesUseAttributes(): bool
     {
-        return $this->useAnnotations;
+        return $this->useAttributes;
     }
 
     /**
      * @return static
      */
-    public function setUseAnnotations(bool $useAnnotations): self
+    public function setUseAttributes(bool $useAttributes): self
     {
-        $this->useAnnotations = $useAnnotations;
+        $this->useAttributes = $useAttributes;
 
         return $this;
     }
@@ -171,26 +174,6 @@ class Configuration
     public function setUseDefinitionCache(bool $useDefinitionCache): self
     {
         $this->useDefinitionCache = $useDefinitionCache;
-
-        return $this;
-    }
-
-    /**
-     * Are PhpDoc errors ignored.
-     */
-    public function doesIgnorePhpDocErrors(): bool
-    {
-        return $this->ignorePhpDocErrors;
-    }
-
-    /**
-     * Set ignoring PhpDoc errors.
-     *
-     * @return static
-     */
-    public function setIgnorePhpDocErrors(bool $ignorePhpDocErrors): self
-    {
-        $this->ignorePhpDocErrors = $ignorePhpDocErrors;
 
         return $this;
     }
@@ -272,6 +255,8 @@ class Configuration
 
     /**
      * Get compiled container class.
+     *
+     * @return class-string<DICompiledContainer>
      */
     public function getCompiledContainerClass(): string
     {
@@ -305,7 +290,7 @@ class Configuration
     }
 
     /**
-     * @return array<string|array<string, mixed>>
+     * @return list<string|array<string, scalar|object|Closure|null>>
      */
     public function getDefinitions(): array
     {
@@ -313,13 +298,13 @@ class Configuration
     }
 
     /**
-     * @param string|Traversable|array<string, mixed>|mixed $definitions
+     * @param string|iterable<string|array<string, scalar|object|Closure|null>|mixed> $definitions
      *
      * @throws InvalidArgumentException
      *
      * @return static
      */
-    public function setDefinitions($definitions): self
+    public function setDefinitions(string|iterable $definitions): self
     {
         if (\is_string($definitions)) {
             $definitions = [$definitions];
@@ -327,12 +312,6 @@ class Configuration
 
         if ($definitions instanceof Traversable) {
             $definitions = iterator_to_array($definitions);
-        }
-
-        if (!\is_array($definitions)) {
-            throw new InvalidArgumentException(
-                sprintf('Definitions must be a string or traversable. "%s" given.', \gettype($definitions)),
-            );
         }
 
         array_walk(
@@ -349,7 +328,7 @@ class Configuration
             },
         );
 
-        /** @var array<string|array<string, mixed>> $definitions */
+        /** @var list<string|array<string, scalar|object|Closure|null>> $definitions */
         $this->definitions = $definitions;
 
         return $this;

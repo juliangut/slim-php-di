@@ -17,7 +17,10 @@ use InvalidArgumentException;
 use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Exception\NotCallableException;
 use Jgut\Slim\PHPDI\CallableResolver;
+use Laminas\Diactoros\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -27,13 +30,16 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CallableResolverTest extends TestCase
 {
     /**
-     * @dataProvider resolveFromStringProvider
+     * @dataProvider provideResolveFromStringCases
      *
      * @param string|array<mixed>|object $toResolve
      * @param string|array<mixed>        $expectedResolvable
      */
-    public function testResolveFromString(string $resolveMethod, $toResolve, $expectedResolvable): void
-    {
+    public function testResolveFromString(
+        string $resolveMethod,
+        string|array|object $toResolve,
+        string|array $expectedResolvable,
+    ): void {
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,44 +50,54 @@ class CallableResolverTest extends TestCase
 
         $resolver = new CallableResolver($invoker);
 
-        $resolver->{$resolveMethod}($toResolve);
+        \call_user_func([$resolver, $resolveMethod], $toResolve);
     }
 
     /**
-     * @return array<mixed>
+     * @return iterable<int, array{string, string|array<mixed>|object, string|array<mixed>}>
      */
-    public function resolveFromStringProvider(): array
+    public static function provideResolveFromStringCases(): iterable
     {
-        $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
-        $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
+        $handler = new class () implements RequestHandlerInterface {
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                return new Response();
+            }
+        };
+        $middleware = new class () implements MiddlewareInterface {
+            public function process(
+                ServerRequestInterface $request,
+                RequestHandlerInterface $handler,
+            ): ResponseInterface {
+                return $handler->handle($request);
+            }
+        };
 
-        return [
-            ['resolve', 'Service', 'Service'],
-            ['resolve', 'Service:method', ['Service', 'method']],
-            ['resolve', 'Service::method', ['Service', 'method']],
-            ['resolve', ['Service', 'method'], ['Service', 'method']],
+        yield ['resolve', 'Service', 'Service'];
+        yield ['resolve', 'Service:method', ['Service', 'method']];
+        yield ['resolve', 'Service::method', ['Service', 'method']];
+        yield ['resolve', ['Service', 'method'], ['Service', 'method']];
 
-            ['resolveRoute', 'Controller', ['Controller', 'handle']],
-            ['resolveRoute', $controller, [$controller, 'handle']],
-            ['resolveRoute', [$controller, 'method'], [$controller, 'method']],
+        yield ['resolveRoute', 'Controller', ['Controller', 'handle']];
+        yield ['resolveRoute', $handler, [$handler, 'handle']];
+        yield ['resolveRoute', [$handler, 'method'], [$handler, 'method']];
 
-            ['resolveMiddleware', 'Middleware', ['Middleware', 'process']],
-            ['resolveMiddleware', $middleware, [$middleware, 'process']],
-            ['resolveMiddleware', [$middleware, 'method'], [$middleware, 'method']],
-        ];
+        yield ['resolveMiddleware', 'Middleware', ['Middleware', 'process']];
+        yield ['resolveMiddleware', $middleware, [$middleware, 'process']];
+        yield ['resolveMiddleware', [$middleware, 'method'], [$middleware, 'method']];
     }
 
     /**
-     * @dataProvider notResolvableProvider
+     * @dataProvider provideNotResolvableCases
      *
      * @param string|array<mixed>|object $toResolve
      * @param string|array<mixed>        $expectedResolvable
      */
     public function testNotResolvable(
         string $resolveMethod,
-        $toResolve,
-        $expectedResolvable,
-        string $expectedException
+        string|array|object $toResolve,
+        string|array $expectedResolvable,
+        string $expectedException,
     ): void {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf('"%s" is not resolvable.', $expectedException));
@@ -96,35 +112,55 @@ class CallableResolverTest extends TestCase
 
         $resolver = new CallableResolver($invoker);
 
-        $resolver->{$resolveMethod}($toResolve);
+        \call_user_func([$resolver, $resolveMethod], $toResolve);
     }
 
     /**
-     * @return array<mixed>
+     * @return iterable<int, array{string, string|array<mixed>|object, string|array<mixed>, string}>
      */
-    public function notResolvableProvider(): array
+    public static function provideNotResolvableCases(): iterable
     {
-        $controller = $this->getMockBuilder(RequestHandlerInterface::class)->getMock();
-        $middleware = $this->getMockBuilder(MiddlewareInterface::class)->getMock();
+        $handler = new class () implements RequestHandlerInterface {
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                return new Response();
+            }
+        };
+        $middleware = new class () implements MiddlewareInterface {
+            public function process(
+                ServerRequestInterface $request,
+                RequestHandlerInterface $handler,
+            ): ResponseInterface {
+                return $handler->handle($request);
+            }
+        };
 
-        return [
-            ['resolve', 'Service', 'Service', 'Service'],
-            ['resolve', 'Service:method', ['Service', 'method'], 'Service:method'],
-            ['resolve', 'Service::method', ['Service', 'method'], 'Service::method'],
-            ['resolve', ['Service', 'method'], ['Service', 'method'], json_encode(['Service', 'method'])],
+        yield ['resolve', 'Service', 'Service', 'Service'];
+        yield ['resolve', 'Service:method', ['Service', 'method'], 'Service:method'];
+        yield ['resolve', 'Service::method', ['Service', 'method'], 'Service::method'];
+        yield [
+            'resolve',
+            ['Service', 'method'],
+            ['Service', 'method'],
+            json_encode(['Service', 'method'], \JSON_THROW_ON_ERROR),
+        ];
 
-            ['resolveRoute', 'Controller', ['Controller', 'handle'], 'Controller'],
-            ['resolveRoute', $controller, [$controller, 'handle'], \get_class($controller)],
-            ['resolveRoute', [$controller, 'method'], [$controller, 'method'], json_encode([$controller, 'method'])],
+        yield ['resolveRoute', 'Controller', ['Controller', 'handle'], 'Controller'];
+        yield ['resolveRoute', $handler, [$handler, 'handle'], $handler::class];
+        yield [
+            'resolveRoute',
+            [$handler, 'method'],
+            [$handler, 'method'],
+            json_encode([$handler, 'method'], \JSON_THROW_ON_ERROR),
+        ];
 
-            ['resolveMiddleware', 'Middleware', ['Middleware', 'process'], 'Middleware'],
-            ['resolveMiddleware', $middleware, [$middleware, 'process'], \get_class($middleware)],
-            [
-                'resolveMiddleware',
-                [$middleware, 'method'],
-                [$middleware, 'method'],
-                json_encode([$middleware, 'method']),
-            ],
+        yield ['resolveMiddleware', 'Middleware', ['Middleware', 'process'], 'Middleware'];
+        yield ['resolveMiddleware', $middleware, [$middleware, 'process'], $middleware::class];
+        yield [
+            'resolveMiddleware',
+            [$middleware, 'method'],
+            [$middleware, 'method'],
+            json_encode([$middleware, 'method'], \JSON_THROW_ON_ERROR),
         ];
     }
 }

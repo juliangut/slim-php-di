@@ -20,19 +20,14 @@ use Slim\Interfaces\InvocationStrategyInterface;
 
 class CallableStrategy implements InvocationStrategyInterface
 {
-    private InvokerInterface $invoker;
-
-    protected bool $appendRouteArguments;
-
-    public function __construct(InvokerInterface $invoker, bool $appendRouteArguments = false)
-    {
-        $this->invoker = $invoker;
-        $this->appendRouteArguments = $appendRouteArguments;
-    }
+    public function __construct(
+        private InvokerInterface $invoker,
+        protected bool $appendRouteArguments = false,
+    ) {}
 
     /**
-     * @param array<mixed>      $routeArguments
      * @param callable(): mixed $callable
+     * @param array<mixed>      $routeArguments
      *
      * @throws InvalidCallableResponse
      */
@@ -40,7 +35,7 @@ class CallableStrategy implements InvocationStrategyInterface
         callable $callable,
         ServerRequestInterface $request,
         ResponseInterface $response,
-        array $routeArguments
+        array $routeArguments,
     ): ResponseInterface {
         if ($this->appendRouteArguments) {
             foreach ($routeArguments as $argument => $value) {
@@ -59,7 +54,7 @@ class CallableStrategy implements InvocationStrategyInterface
             $parameters += $routeArguments;
         }
 
-        // Inject the attributes defined on the request
+        // Inject the attributes defined in the request
         $parameters += $request->getAttributes();
 
         $invocationResponse = $this->invoker->call($callable, $parameters);
@@ -67,7 +62,7 @@ class CallableStrategy implements InvocationStrategyInterface
             throw new InvalidCallableResponse(sprintf(
                 'Response should be an instance of "%s", "%s" returned.',
                 ResponseInterface::class,
-                \is_object($invocationResponse) ? \get_class($invocationResponse) : \gettype($invocationResponse),
+                \is_object($invocationResponse) ? $invocationResponse::class : \gettype($invocationResponse),
             ));
         }
 

@@ -23,19 +23,15 @@ use Slim\Interfaces\AdvancedCallableResolverInterface;
 
 class CallableResolver implements AdvancedCallableResolverInterface
 {
+    /** @see https://regex101.com/r/lDdngD/1 */
     protected const CALLABLE_PATTERN
         = '!^(?P<class>[^\:]+)\:{1,2}(?P<method>[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
 
-    private InvokerResolver $callableResolver;
-
-    public function __construct(InvokerResolver $callableResolver)
-    {
-        $this->callableResolver = $callableResolver;
-    }
+    public function __construct(
+        private InvokerResolver $callableResolver,
+    ) {}
 
     /**
-     * @inheritDoc
-     *
      * @param string|callable(): mixed $toResolve
      *
      * @throws InvalidArgumentException
@@ -54,8 +50,6 @@ class CallableResolver implements AdvancedCallableResolverInterface
     }
 
     /**
-     * @inheritDoc
-     *
      * @param string|callable(): mixed|object $toResolve
      *
      * @throws InvalidArgumentException
@@ -84,8 +78,6 @@ class CallableResolver implements AdvancedCallableResolverInterface
     }
 
     /**
-     * @inheritDoc
-     *
      * @param string|callable(): mixed|object $toResolve
      *
      * @throws InvalidArgumentException
@@ -116,22 +108,24 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get resolved callable.
      *
-     * @param string|callable(): mixed                      $resolvable
+     * @param string|callable(): mixed|array<string>        $resolvable
      * @param string|callable(): mixed|array<string>|object $toResolve
      *
      * @throws InvalidArgumentException
      *
      * @return callable(): ResponseInterface
      */
-    protected function resolveCallable($resolvable, $toResolve): callable
-    {
+    protected function resolveCallable(
+        string|callable|array $resolvable,
+        string|callable|array|object $toResolve,
+    ): callable {
         try {
             return $this->callableResolver->resolve($resolvable);
         } catch (NotCallableException $exception) {
             if (\is_callable($toResolve) || \is_array($toResolve)) {
                 $callable = json_encode($toResolve, \JSON_THROW_ON_ERROR);
             } elseif (\is_object($toResolve)) {
-                $callable = \get_class($toResolve);
+                $callable = $toResolve::class;
             } else {
                 $callable = $toResolve;
             }
@@ -143,9 +137,9 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get callable from string callable notation.
      *
-     * @return string|callable(): mixed
+     * @return string|callable(): mixed|list<string>
      */
-    private function callableFromStringNotation(string $toResolve, ?string $defaultMethod = null)
+    private function callableFromStringNotation(string $toResolve, ?string $defaultMethod = null): string|callable|array
     {
         $callable = $toResolve;
 

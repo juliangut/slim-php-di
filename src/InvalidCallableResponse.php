@@ -15,6 +15,4 @@ namespace Jgut\Slim\PHPDI;
 
 use RuntimeException;
 
-class InvalidCallableResponse extends RuntimeException
-{
-}
+class InvalidCallableResponse extends RuntimeException {}

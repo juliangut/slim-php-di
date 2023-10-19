@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Jgut\Slim\PHPDI;
 
+use Closure;
 use DI\Container as DIContainer;
 use DI\ContainerBuilder as DIContainerBuilder;
 use RuntimeException;
@@ -20,9 +21,9 @@ use RuntimeException;
 /**
  * Helper to create and configure a Container.
  *
- * Default Slim services are included in the generated container.
+ * Default Slim services are included in the generated container as well as the container itself.
  */
-class ContainerBuilder
+final class ContainerBuilder
 {
     /**
      * Build PHP-DI container.
@@ -35,6 +36,7 @@ class ContainerBuilder
             $configuration = new Configuration();
         }
 
+        /** @var array<string, string|object|Closure|null> $defaultDefinitions */
         $defaultDefinitions = array_merge(
             require __DIR__ . '/definitions.php',
             [Configuration::class => $configuration],
@@ -48,14 +50,15 @@ class ContainerBuilder
 
     /**
      * Get configured container builder.
+     *
+     * @return DIContainerBuilder<DIContainer>
      */
     private static function getContainerBuilder(Configuration $configuration): DIContainerBuilder
     {
         $containerBuilder = new DIContainerBuilder($configuration->getContainerClass());
 
         $containerBuilder->useAutowiring($configuration->doesUseAutowiring());
-        $containerBuilder->useAnnotations($configuration->doesUseAnnotations());
-        $containerBuilder->ignorePhpDocErrors($configuration->doesIgnorePhpDocErrors());
+        $containerBuilder->useAttributes($configuration->doesUseAttributes());
 
         if ($configuration->doesUseDefinitionCache()) {
             $containerBuilder->enableDefinitionCache();
@@ -83,11 +86,11 @@ class ContainerBuilder
     /**
      * Parse definitions.
      *
-     * @param array<string|array<string, mixed>> $definitions
+     * @param list<string|array<string, scalar|object|Closure|null>> $definitions
      *
      * @throws RuntimeException
      *
-     * @return array<string, mixed>
+     * @return list<array<string, scalar|object|Closure|null>>
      */
     private static function parseDefinitions(array $definitions): array
     {
@@ -112,7 +115,7 @@ class ContainerBuilder
      *
      * @throws RuntimeException
      *
-     * @return array<string, mixed>
+     * @return array<string, scalar|object|Closure|null>
      */
     private static function loadDefinitionsFromPath(string $path): array
     {
@@ -142,7 +145,7 @@ class ContainerBuilder
      *
      * @throws RuntimeException
      *
-     * @return array<string, mixed>
+     * @return array<string, scalar|object|Closure|null>
      */
     private static function loadDefinitionsFromFile(string $file): array
     {
@@ -160,7 +163,7 @@ class ContainerBuilder
             );
         }
 
-        /** @var array<string, array<string, mixed>> $definitions */
+        /** @var array<string, scalar|object|Closure|null> $definitions */
         return $definitions;
     }
 }

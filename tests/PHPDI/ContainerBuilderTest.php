@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Jgut\Slim\PHPDI\Tests;
 
 use DI\Container;
+use DI\Definition\Source\SourceCache;
 use Jgut\Slim\PHPDI\AbstractCompiledContainer;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
@@ -56,12 +57,10 @@ class ContainerBuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configuration = [
+        $configs = [
             'containerClass' => Container::class,
             'useAutoWiring' => true,
-            'useAnnotations' => true,
-            'useDefinitionCache' => true,
-            'ignorePhpDocErrors' => true,
+            'useDefinitionCache' => SourceCache::isSupported(),
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__ . '/files',
@@ -75,16 +74,16 @@ class ContainerBuilderTest extends TestCase
             ],
         ];
 
-        if (\ini_get('apc.enabled') === '0') {
-            unset($configuration['useDefinitionCache']);
+        $container = ContainerBuilder::build(new Configuration($configs));
+
+        try {
+            static::assertTrue($container->has('foo'));
+            static::assertEquals('baz', $container->get('foo'));
+            static::assertEquals('definition', $container->get('valid'));
+
+            static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
+        } finally {
+            unlink(__DIR__ . '/files/CompiledContainer.php');
         }
-
-        $container = ContainerBuilder::build(new Configuration($configuration));
-
-        static::assertTrue($container->has('foo'));
-        static::assertEquals('baz', $container->get('foo'));
-        static::assertFileExists(__DIR__ . '/files/CompiledContainer.php');
-
-        unlink(__DIR__ . '/files/CompiledContainer.php');
     }
 }

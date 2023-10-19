@@ -1,4 +1,4 @@
-[![PHP version](https://img.shields.io/badge/PHP-%3E%3D7.4-8892BF.svg?style=flat-square)](http://php.net)
+[![PHP version](https://img.shields.io/badge/PHP-%3E%3D8.0-8892BF.svg?style=flat-square)](http://php.net)
 [![Latest Version](https://img.shields.io/packagist/vpre/juliangut/slim-php-di.svg?style=flat-square)](https://packagist.org/packages/juliangut/slim-php-di)
 [![License](https://img.shields.io/github/license/juliangut/slim-php-di.svg?style=flat-square)](https://github.com/juliangut/slim-php-di/blob/master/LICENSE)
 
@@ -57,7 +57,7 @@ use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
 
 $settings = [
-    'ignorePhpDocErrors' => true,
+    'useAttributes' => true,
     'compilationPath' => '/path/to/compiled/container',
 ];
 $configuration = new Configuration($settings);
@@ -72,16 +72,13 @@ $container = ContainerBuilder::build($configuration);
 #### PHP-DI settings
 
 * `useAutoWiring` whether to use auto wiring (true by default)
-* `useAnnotations` whether to use annotations (false by default)
+* `useAttributes` whether to use attributes (false by default)
 * `useDefinitionCache`, whether to use definition cache (false by default)
-* `ignorePhpDocErrors`, whether to ignore phpDoc errors on annotations (false by default)
 * `wrapContainer` wrapping container (none by default)
 * `proxiesPath` path where PHP-DI creates its proxy files (none by default)
 * `compilationPath` path where PHP-DI creates its compiled container (none by default)
 
 Refer to [PHP-DI documentation](http://php-di.org/doc/) to learn more about container configurations
-
-In order for you to use annotations you have to `require doctrine/annotations`. [Review documentation](http://php-di.org/doc/annotations.html)
 
 #### Additional settings
 
@@ -98,13 +95,20 @@ use Jgut\Slim\PHPDI\ContainerBuilder;
 
 $container = ContainerBuilder::build(new Configuration([]));
 
-$container->get('configs')['database']['dsn']; // given "configs" is an array
+$configs = [
+    'database' => [
+        'dsn' => 'mysql://root:pass@localhost/my_ddbb',
+    ],
+];
+$container->set('configs', $configs);
+
+$container->get('configs')['database']['dsn'];
 $container->get('configs.database.dsn'); // same as above
 ```
 
 #### Notice
 
-Be careful though not to shadow any array key by using dots in keys itself
+Be careful though not to shadow any array key by using dots in keys themselves
 
 ```php
 use Jgut\Slim\PHPDI\Configuration;
@@ -130,7 +134,7 @@ _The easiest way to avoid this from ever happening is by NOT using dots in array
 
 ## Invocation strategy
 
-By default, slim-php-di sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it is quite handy and lets you do things like this
+By default, slim-php-di sets a custom invocation strategy that employs PHP-DI's Invoker to fulfill callable parameters, it lets you do things like this
 
 ```php
 use Jgut\Slim\PHPDI\Configuration;
@@ -144,7 +148,7 @@ $app = $container->get(App::class);
 
 $app->get('/hello/{name}', function (ResponseInterface $response, string $name, \PDO $connection): ResponseInterface {
     // $name will be injected from request arguments
-    // $connection will be injected from the container
+    // $connection will be injected directly from the container
 
     $response->getBody()->write('Hello ' . $name);
 
@@ -167,13 +171,33 @@ return [
 ];
 ```
 
-## Migration from 2.x
+## Console command
 
-* Minimum Slim version is now 4.8
-* Container only provides implementations of the interfaces needed to instantiate an App. Refer to [Slim's documentation](http://www.slimframework.com/docs/v4/)
-* You can extract Slim's App directly from container or seed AppFactory from container
-* Slim's App is not extended anymore
-* ArrayAccess and magic methods on default container are deprecated and will be removed on next major release. Use PSR-11 and PHP-DI's methods instead
+```php
+use Symfony\Component\Console\Application;
+use Jgut\Slim\PHPDI\Command\ListCommand;
+
+/** @var \Slim\App $app */
+$container = $app->getContainer();
+
+$cli = new Application('Slim CLI');
+$cli->add(new ListCommand($container));
+
+$app->run();
+```
+
+### List container definitions
+
+List defined container definitions supporting searching
+
+```bash
+php -f cli.php slim:container:list --help
+```
+
+## Migration from 3.x
+
+* PHP minimum required version is PHP 8.0
+* Moved to PHP-DI 7. Annotations have been removed, use Attributes
 
 ## Contributing
 

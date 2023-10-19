@@ -23,6 +23,7 @@ use Jgut\Slim\PHPDI\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
+use TypeError;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -31,22 +32,12 @@ use RuntimeException;
  */
 class ConfigurationTest extends TestCase
 {
-    public function testInvalidConfigurations(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Configurations must be a traversable.');
-
-        new Configuration('');
-    }
-
     public function testDefaults(): void
     {
         $configuration = new Configuration();
 
         static::assertEquals(Container::class, $configuration->getContainerClass());
         static::assertTrue($configuration->doesUseAutowiring());
-        static::assertFalse($configuration->doesUseAnnotations());
-        static::assertFalse($configuration->doesIgnorePhpDocErrors());
         static::assertNull($configuration->getProxiesPath());
         static::assertNull($configuration->getCompilationPath());
         static::assertEquals(AbstractCompiledContainer::class, $configuration->getCompiledContainerClass());
@@ -70,9 +61,8 @@ class ConfigurationTest extends TestCase
         $configs = [
             'containerClass' => DIContainer::class,
             'useAutoWiring' => false,
-            'useAnnotations' => true,
+            'useAttributes' => true,
             'useDefinitionCache' => true,
-            'ignorePhpDocErrors' => true,
             'wrapContainer' => $containerStub,
             'proxiesPath' => sys_get_temp_dir(),
             'compilationPath' => __DIR__,
@@ -84,9 +74,8 @@ class ConfigurationTest extends TestCase
 
         static::assertEquals(DIContainer::class, $configuration->getContainerClass());
         static::assertFalse($configuration->doesUseAutowiring());
-        static::assertTrue($configuration->doesUseAnnotations());
+        static::assertTrue($configuration->doesUseAttributes());
         static::assertTrue($configuration->doesUseDefinitionCache());
-        static::assertTrue($configuration->doesIgnorePhpDocErrors());
         static::assertEquals($containerStub, $configuration->getWrapContainer());
         static::assertEquals(sys_get_temp_dir(), $configuration->getProxiesPath());
         static::assertEquals(__DIR__, $configuration->getCompilationPath());
@@ -147,8 +136,10 @@ class ConfigurationTest extends TestCase
 
     public function testInvalidDefinitionType(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Definitions must be a string or traversable. "integer" given.');
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessageMatches(
+            '/^.+setDefinitions\(\): Argument #1 \(\$definitions\) must be of type .+, int given/',
+        );
 
         new Configuration(['definitions' => 10]);
     }

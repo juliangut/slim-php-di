@@ -24,31 +24,30 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": "^7.4|^8.0",
+    "php": "^8.0",
     "ext-json": "*",
     "ext-mbstring": "*",
-    "php-di/php-di": "^6.3",
-    "psr/container": "^1.1",
+    "php-di/php-di": "^7.0.1",
+    "psr/container": "^2.0",
     "slim/slim": "^4.8"
   },
   "require-dev": {
     "bnf/phpstan-psr-container": "^1.0",
-    "grifart/phpstan-oneline": "~0.4",
-    "infection/infection": "~0.24",
-    "juliangut/easy-coding-standard-config": "^1.0",
-    "laminas/laminas-diactoros": "^2.2",
-    "overtrue/phplint": "^3.0|^4.0",
+    "infection/infection": "~0.25|~0.27",
+    "juliangut/easy-coding-standard-config": "^1.12",
+    "juliangut/phpstan-config": "^1.1",
+    "laminas/laminas-diactoros": "^2.20",
+    "overtrue/phplint": "^4.0|^5.0|^6.0",
     "phpcompatibility/php-compatibility": "^9.3",
-    "phpmd/phpmd": "^2.10",
-    "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan": "^1.0",
-    "phpstan/phpstan-deprecation-rules": "^1.0",
-    "phpstan/phpstan-strict-rules": "^1.0",
-    "phpunit/phpunit": "^9.5",
-    "povils/phpmnd": "^2.5",
+    "phpmd/phpmd": "^2.13",
+    "phpstan/phpstan": "^1.11",
+    "phpunit/phpunit": "^9.6.13|^10.3",
+    "povils/phpmnd": "^3.2",
     "roave/security-advisories": "dev-master",
-    "sebastian/phpcpd": "^6.0",
-    "thecodingmachine/phpstan-strict-rules": "^1.0"
+    "symfony/console": "^6.0"
+  },
+  "suggest": {
+    "symfony/console": "In order to use console commands (>=5.1)"
   },
   "autoload": {
     "psr-4": {

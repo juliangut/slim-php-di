@@ -62,7 +62,9 @@ return [
             }
         }
 
+        // @codeCoverageIgnoreStart
         throw new RuntimeException('Could not detect any PSR-17 StreamFactory implementation.');
+        // @codeCoverageIgnoreEnd
     },
 
     CallableResolverInterface::class
@@ -104,9 +106,9 @@ return [
     },
 
     MiddlewareDispatcherInterface::class => static function (
-        ContainerInterface $container
+        ContainerInterface $container,
     ): MiddlewareDispatcherInterface {
-        $requestHandler = new class() implements RequestHandlerInterface {
+        $requestHandler = new class () implements RequestHandlerInterface {
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 // @codeCoverageIgnoreStart

@@ -16,12 +16,15 @@ namespace Jgut\Slim\PHPDI\Tests;
 use DI\Container;
 use Jgut\Slim\PHPDI\Configuration;
 use Jgut\Slim\PHPDI\ContainerBuilder;
+use Laminas\Diactoros\ResponseFactory;
+use Laminas\Diactoros\StreamFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use RuntimeException;
 
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use function DI\create;
 
 /**
@@ -42,7 +45,7 @@ class ContainerTest extends TestCase
         $this->expectExceptionMessage('No entry or class found for "baz".');
 
         static::assertFalse($this->container->has('baz'));
-        $this->container['baz'];
+        $this->container->get('baz');
     }
 
     public function testGetNonExistentRecursive(): void
@@ -51,7 +54,7 @@ class ContainerTest extends TestCase
         $this->expectExceptionMessage('No entry or class found for "settings.baz".');
 
         static::assertFalse($this->container->has('settings.baz'));
-        $this->container['settings.baz'];
+        $this->container->get('settings.baz');
     }
 
     public function testGetShadowed(): void
@@ -133,41 +136,19 @@ class ContainerTest extends TestCase
 
     public function testSetterGetter(): void
     {
-        $this->container['foo'] = 'bar';
+        $this->container->set('foo', 'bar');
         static::assertTrue($this->container->has('foo'));
         static::assertEquals('bar', $this->container->get('foo'));
-
-        $this->container['bar'] = 'baz';
-        static::assertArrayHasKey('bar', $this->container);
-        static::assertEquals('baz', $this->container['bar']);
-
-        $this->container['baz'] = 'bam';
-        static::assertTrue(isset($this->container->baz));
-        static::assertEquals('bam', $this->container->baz);
-
-        $this->container->bam = 'foo';
-        static::assertTrue($this->container->has('bam'));
-        static::assertEquals('foo', $this->container->bam);
-    }
-
-    public function testUnset(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('It is not possible to unset a container definitions.');
-
-        unset($this->container->foo);
-    }
-
-    public function testUnsetArray(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('It is not possible to unset a container definitions.');
-
-        unset($this->container['foo']);
     }
 
     public function testDefaultServices(): void
     {
+        static::assertTrue($this->container->has(ResponseFactoryInterface::class));
+        static::assertInstanceOf(ResponseFactory::class, $this->container->get(ResponseFactoryInterface::class));
+
+        static::assertTrue($this->container->has(StreamFactoryInterface::class));
+        static::assertInstanceOf(StreamFactory::class, $this->container->get(StreamFactoryInterface::class));
+
         static::assertTrue($this->container->has(Configuration::class));
         static::assertInstanceOf(Configuration::class, $this->container->get(Configuration::class));
 

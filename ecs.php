@@ -11,8 +11,9 @@
 
 declare(strict_types=1);
 
-use Jgut\ECS\Config\ConfigSet74;
-use PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\NoSilencedErrorsSniff;
+use Jgut\ECS\Config\ConfigSet80;
+use PhpCsFixer\Fixer\ArrayNotation\ReturnToYieldFromFixer;
+use PhpCsFixer\Fixer\Basic\CurlyBracesPositionFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 $header = <<<'HEADER'
@@ -31,13 +32,16 @@ return static function (ECSConfig $ecsConfig) use ($header): void {
         __DIR__ . '/tests',
     ]);
 
-    (new ConfigSet74())
+    $skipRules = [
+        ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php',
+    ];
+    if (\PHP_VERSION_ID < 80_100) {
+        $skipRules[CurlyBracesPositionFixer::class] = __DIR__ . '/src/CallableResolver.php';
+    }
+
+    (new ConfigSet80())
         ->setHeader($header)
         ->enablePhpUnitRules()
-        ->setAdditionalSkips([
-            NoSilencedErrorsSniff::class . '.Discouraged' => [
-                __DIR__ . '/src/ContainerTrait.php', // Temporal while deprecating container's ArrayAccess
-            ],
-        ])
+        ->setAdditionalSkips($skipRules)
         ->configure($ecsConfig);
 };
