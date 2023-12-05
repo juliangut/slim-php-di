@@ -1,12 +1,10 @@
 <?php
 
 /*
- * slim-php-di (https://github.com/juliangut/slim-php-di).
- * Slim Framework PHP-DI container implementation.
+ * (c) 2015-2023 Julián Gutiérrez <juliangut@gmail.com>
  *
  * @license BSD-3-Clause
  * @link https://github.com/juliangut/slim-php-di
- * @author Julián Gutiérrez <juliangut@gmail.com>
  */
 
 declare(strict_types=1);
