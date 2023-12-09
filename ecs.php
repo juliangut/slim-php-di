@@ -27,6 +27,7 @@ return static function (ECSConfig $ecsConfig): void {
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
+    $ecsConfig->cacheDirectory('.ecs.cache');
 
     $skipRules = [
         ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php',
