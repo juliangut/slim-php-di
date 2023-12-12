@@ -10,7 +10,6 @@
 declare(strict_types=1);
 
 use Jgut\ECS\Config\ConfigSet80;
-use PhpCsFixer\Fixer\ArrayNotation\ReturnToYieldFromFixer;
 use PhpCsFixer\Fixer\Basic\CurlyBracesPositionFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
@@ -29,9 +28,7 @@ return static function (ECSConfig $ecsConfig): void {
     ]);
     $ecsConfig->cacheDirectory('.ecs.cache');
 
-    $skipRules = [
-        ReturnToYieldFromFixer::class => __DIR__ . '/src/definitions.php',
-    ];
+    $skipRules = [];
     if (\PHP_VERSION_ID < 80_100) {
         $skipRules[CurlyBracesPositionFixer::class] = __DIR__ . '/src/CallableResolver.php';
     }
