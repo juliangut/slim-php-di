@@ -14,6 +14,7 @@ namespace Jgut\Slim\PHPDI\Command;
 use DI\Container;
 use DI\Definition\Exception\InvalidDefinition;
 use DI\NotFoundException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,12 +23,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'slim:container:list')]
 class ListCommand extends Command
 {
-    public const NAME = 'slim:container:list';
-
-    protected static $defaultName = self::NAME;
-
     public function __construct(
         private Container $container,
         ?string $name = null,
