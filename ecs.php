@@ -10,13 +10,7 @@
 declare(strict_types=1);
 
 use Jgut\ECS\Config\ConfigSet80;
-use PhpCsFixer\Fixer\Basic\CurlyBracesPositionFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
-
-$skips = [];
-if (\PHP_VERSION_ID < 80_100) {
-    $skips[CurlyBracesPositionFixer::class] = __DIR__ . '/src/CallableResolver.php';
-}
 
 $configSet = (new ConfigSet80())
     ->setHeader(<<<'HEADER'
@@ -25,8 +19,7 @@ $configSet = (new ConfigSet80())
     @license BSD-3-Clause
     @link https://github.com/juliangut/slim-php-di
     HEADER)
-    ->enablePhpUnitRules()
-    ->setAdditionalSkips($skips);
+    ->enablePhpUnitRules();
 $paths = [
     __FILE__,
     __DIR__ . '/src',
@@ -36,7 +29,6 @@ $paths = [
 if (!method_exists(ECSConfig::class, 'configure')) {
     return static function (ECSConfig $ecsConfig) use ($configSet, $paths): void {
         $ecsConfig->paths($paths);
-        $ecsConfig->cacheDirectory('.ecs.cache');
 
         $configSet->configure($ecsConfig);
     };
@@ -44,5 +36,4 @@ if (!method_exists(ECSConfig::class, 'configure')) {
 
 return $configSet
     ->configureBuilder()
-    ->withCache('.ecs.cache')
     ->withPaths($paths);

@@ -106,8 +106,8 @@ class CallableResolver implements AdvancedCallableResolverInterface
     /**
      * Get resolved callable.
      *
-     * @param string|callable(): mixed|array<string>        $resolvable
-     * @param string|callable(): mixed|array<string>|object $toResolve
+     * @param string|callable(): mixed|list<string>        $resolvable
+     * @param string|callable(): mixed|list<string>|object $toResolve
      *
      * @throws InvalidArgumentException
      *

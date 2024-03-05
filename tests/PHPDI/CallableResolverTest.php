@@ -30,8 +30,8 @@ class CallableResolverTest extends TestCase
     /**
      * @dataProvider provideResolveFromStringCases
      *
-     * @param string|array<mixed>|object $toResolve
-     * @param string|array<mixed>        $expectedResolvable
+     * @param string|list<mixed>|object $toResolve
+     * @param string|list<mixed>        $expectedResolvable
      */
     public function testResolveFromString(
         string $resolveMethod,
@@ -52,7 +52,7 @@ class CallableResolverTest extends TestCase
     }
 
     /**
-     * @return iterable<int, array{string, string|array<mixed>|object, string|array<mixed>}>
+     * @return iterable<int, array{string, string|list<mixed>|object, string|list<mixed>}>
      */
     public static function provideResolveFromStringCases(): iterable
     {
@@ -88,8 +88,8 @@ class CallableResolverTest extends TestCase
     /**
      * @dataProvider provideNotResolvableCases
      *
-     * @param string|array<mixed>|object $toResolve
-     * @param string|array<mixed>        $expectedResolvable
+     * @param string|list<mixed>|object $toResolve
+     * @param string|list<mixed>        $expectedResolvable
      */
     public function testNotResolvable(
         string $resolveMethod,
@@ -114,7 +114,7 @@ class CallableResolverTest extends TestCase
     }
 
     /**
-     * @return iterable<int, array{string, string|array<mixed>|object, string|array<mixed>, string}>
+     * @return iterable<int, array{string, string|list<mixed>|object, string|list<mixed>, string}>
      */
     public static function provideNotResolvableCases(): iterable
     {

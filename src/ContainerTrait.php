@@ -76,8 +76,8 @@ trait ContainerTrait
     }
 
     /**
-     * @param string|class-string<T> $key
-     * @param array<mixed>|null      $parent
+     * @param string|class-string<T>                                 $key
+     * @param array<int|string, mixed|array<int|string, mixed>>|null $parent
      *
      * @throws NotFoundException
      *
@@ -103,6 +103,7 @@ trait ContainerTrait
                     break;
                 }
 
+                /** @var array<int|string, mixed> $parent */
                 return $this->getRecursive(implode('.', $keyParts), $parent);
             }
         }

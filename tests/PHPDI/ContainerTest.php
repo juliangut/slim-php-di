@@ -123,7 +123,7 @@ class ContainerTest extends TestCase
 
         $configuration = new Configuration([
             'definitions' => [
-                ['foo' => create('\\Unknown\\Foo\\Bar')],
+                ['foo' => create('\Unknown\Foo\Bar')],
             ],
         ]);
 

@@ -118,7 +118,7 @@ class ListCommand extends Command
      *
      * @param list<string> $entries
      *
-     * @return array<list<string>>
+     * @return list<list<string>>
      */
     private function getTableRows(array $entries, bool $fullDefinition): array
     {

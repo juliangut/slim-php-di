@@ -9,3 +9,6 @@ parameters:
     - src
   ignoreErrors:
     - message: '/^Method Jgut\\Slim\\PHPDI\\Command\\ListCommand::__construct\(\) has a parameter \$container with a type declaration of DI\\Container, but containers should not be injected\.$/'
+      path: src/Command/ListCommand.php
+    - message: '/^Method Jgut\\Slim\\PHPDI\\Configuration::setWrapContainer\(\) has a parameter \$wrapContainer with a type declaration of Psr\\Container\\ContainerInterface, but containers should not be injected\.$/'
+      path: src/Configuration.php
