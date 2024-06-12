@@ -16,7 +16,6 @@ use Invoker\CallableResolver as InvokerResolver;
 use Invoker\Exception\NotCallableException;
 use Jgut\Slim\PHPDI\CallableResolver;
 use Laminas\Diactoros\Response;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,10 +28,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CallableResolverTest extends TestCase
 {
     /**
+     * @dataProvider provideResolveFromStringCases
+     *
      * @param string|list<mixed>|object $toResolve
      * @param string|list<mixed>        $expectedResolvable
      */
-    #[DataProvider('provideResolveFromStringCases')]
     public function testResolveFromString(
         string $resolveMethod,
         string|array|object $toResolve,
@@ -86,10 +86,11 @@ class CallableResolverTest extends TestCase
     }
 
     /**
+     * @dataProvider provideNotResolvableCases
+     *
      * @param string|list<mixed>|object $toResolve
      * @param string|list<mixed>        $expectedResolvable
      */
-    #[DataProvider('provideNotResolvableCases')]
     public function testNotResolvable(
         string $resolveMethod,
         string|array|object $toResolve,

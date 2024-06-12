@@ -34,7 +34,7 @@
   "require-dev": {
     "bnf/phpstan-psr-container": "^1.0",
     "infection/infection": "~0.25|~0.27",
-    "juliangut/easy-coding-standard-config": "^1.16",
+    "juliangut/easy-coding-standard-config": "^1.18",
     "juliangut/phpstan-config": "^1.2",
     "laminas/laminas-diactoros": "^3.2",
     "overtrue/phplint": "^9.0",
