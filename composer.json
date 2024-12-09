@@ -41,7 +41,7 @@
     "phpcompatibility/php-compatibility": "^9.3",
     "phpmd/phpmd": "^2.14",
     "phpstan/phpstan": "^1.11",
-    "phpunit/phpunit": "^9.6.13|^10.4",
+    "phpunit/phpunit": "^11.5.0",
     "povils/phpmnd": "^3.2",
     "roave/security-advisories": "dev-master",
     "symfony/console": "^6.0|^7.0"
