@@ -178,13 +178,14 @@ class ListCommand extends Command
             return $definition;
         }
 
-        preg_match('/^Object \(\n {4}class = (#(NOT INSTANTIABLE)# )?(.+)\n(.+)/', $definition, $matches);
+        preg_match('/^Object \(\n {4}class = (#NOT INSTANTIABLE# )?(.+)\n(.+)/', $definition, $matches);
 
+        /** @var array{0: non-empty-string, 1?: '#NOT INSTANTIABLE# ', 2: non-empty-string, 3: non-empty-string} $matches */
         return sprintf(
             '%s%sObject (%s)',
-            preg_match('/lazy = true/', $matches[4]) === 1 ? 'Lazy ' : '',
-            \array_key_exists(2, $matches) ? 'Not Instantiable ' : '',
-            $matches[3],
+            preg_match('/lazy = true/', $matches[3]) === 1 ? 'Lazy ' : '',
+            \array_key_exists(1, $matches) ? 'Not Instantiable ' : '',
+            $matches[2],
         );
     }
 

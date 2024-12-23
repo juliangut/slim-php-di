@@ -46,7 +46,7 @@ trait ContainerTrait
         } catch (Throwable $exception) {
             throw new DependencyException(
                 rtrim($exception->getMessage(), '.') . '.',
-                $exception->getCode(),
+                (int) $exception->getCode(),
                 $exception,
             );
         }

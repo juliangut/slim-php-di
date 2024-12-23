@@ -34,7 +34,7 @@ final class ContainerBuilder
             $configuration = new Configuration();
         }
 
-        /** @var array<string, string|object|Closure|null> $defaultDefinitions */
+        /** @var non-empty-array<string, string|object|Closure|null> $defaultDefinitions */
         $defaultDefinitions = array_merge(
             require __DIR__ . '/definitions.php',
             [Configuration::class => $configuration],
