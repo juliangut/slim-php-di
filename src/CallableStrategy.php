@@ -57,7 +57,7 @@ class CallableStrategy implements InvocationStrategyInterface
 
         $invocationResponse = $this->invoker->call($callable, $parameters);
         if (!$invocationResponse instanceof ResponseInterface) {
-            throw new InvalidCallableResponse(sprintf(
+            throw new InvalidCallableResponse(\sprintf(
                 'Response should be an instance of "%s", "%s" returned.',
                 ResponseInterface::class,
                 \is_object($invocationResponse) ? $invocationResponse::class : \gettype($invocationResponse),

@@ -104,13 +104,13 @@ class ListCommand extends Command
         }
 
         foreach (['~', '!', '\/', '#', '%', '\|'] as $delimiter) {
-            $pattern = sprintf('/^%1$s.*%1$s[imsxeuADSUXJ]*$/', $delimiter);
+            $pattern = \sprintf('/^%1$s.*%1$s[imsxeuADSUXJ]*$/', $delimiter);
             if (preg_match($pattern, $searchPattern) === 1) {
                 return $searchPattern;
             }
         }
 
-        return sprintf('/%s/i', preg_quote($searchPattern, '/'));
+        return \sprintf('/%s/i', preg_quote($searchPattern, '/'));
     }
 
     /**
@@ -181,7 +181,7 @@ class ListCommand extends Command
         preg_match('/^Object \(\n {4}class = (#NOT INSTANTIABLE# )?(.+)\n(.+)/', $definition, $matches);
 
         /** @var array{0: non-empty-string, 1?: '#NOT INSTANTIABLE# ', 2: non-empty-string, 3: non-empty-string} $matches */
-        return sprintf(
+        return \sprintf(
             '%s%sObject (%s)',
             preg_match('/lazy = true/', $matches[3]) === 1 ? 'Lazy ' : '',
             \array_key_exists(1, $matches) ? 'Not Instantiable ' : '',

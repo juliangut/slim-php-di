@@ -110,7 +110,7 @@ return [
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 // @codeCoverageIgnoreStart
-                throw new RuntimeException(sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
+                throw new RuntimeException(\sprintf('This RequestHandler is replaced by "%s".', RouteRunner::class));
                 // @codeCoverageIgnoreEnd
             }
         };

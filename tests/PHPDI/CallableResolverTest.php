@@ -98,7 +98,7 @@ class CallableResolverTest extends TestCase
         string $expectedException,
     ): void {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('"%s" is not resolvable.', $expectedException));
+        $this->expectExceptionMessage(\sprintf('"%s" is not resolvable.', $expectedException));
 
         $invoker = $this->getMockBuilder(InvokerResolver::class)
             ->disableOriginalConstructor()

@@ -67,7 +67,7 @@ final class Configuration
         $unknownParameters = array_diff(array_keys($configurations), $configs);
         if (\count($unknownParameters) > 0) {
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'The following configuration parameters are not recognized: %s.',
                     implode(', ', $unknownParameters),
                 ),
@@ -109,7 +109,7 @@ final class Configuration
             )
         ) {
             throw new InvalidArgumentException(
-                sprintf('Class "%s" must extend "%s".', $containerClass, DIContainer::class),
+                \sprintf('Class "%s" must extend "%s".', $containerClass, DIContainer::class),
             );
         }
 
@@ -214,7 +214,7 @@ final class Configuration
     public function setProxiesPath(string $proxiesPath): self
     {
         if (!file_exists($proxiesPath) || !is_dir($proxiesPath) || !is_writable($proxiesPath)) {
-            throw new RuntimeException(sprintf('Directory "%s" does not exist or is write protected.', $proxiesPath));
+            throw new RuntimeException(\sprintf('Directory "%s" does not exist or is write protected.', $proxiesPath));
         }
 
         $this->proxiesPath = $proxiesPath;
@@ -240,7 +240,7 @@ final class Configuration
     public function setCompilationPath(string $compilationPath): self
     {
         if (!file_exists($compilationPath) || !is_dir($compilationPath) || !is_writable($compilationPath)) {
-            throw new RuntimeException(sprintf(
+            throw new RuntimeException(\sprintf(
                 'Directory "%s" does not exist or is write protected.',
                 $compilationPath,
             ));
@@ -278,7 +278,7 @@ final class Configuration
             )
         ) {
             throw new InvalidArgumentException(
-                sprintf('Class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class),
+                \sprintf('Class "%s" must extend "%s".', $compiledContainerClass, DICompiledContainer::class),
             );
         }
 
@@ -317,7 +317,7 @@ final class Configuration
             static function ($definition): void {
                 if (!\is_array($definition) && !\is_string($definition)) {
                     throw new InvalidArgumentException(
-                        sprintf(
+                        \sprintf(
                             'A definition must be an array or a file or directory path. "%s" given.',
                             \gettype($definition),
                         ),

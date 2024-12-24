@@ -64,7 +64,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
         if (\is_object($resolvable)) {
             if (!$resolvable instanceof RequestHandlerInterface) {
                 throw new InvalidArgumentException(
-                    sprintf('Route class should implement "%s".', RequestHandlerInterface::class),
+                    \sprintf('Route class should implement "%s".', RequestHandlerInterface::class),
                 );
             }
 
@@ -92,7 +92,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
         if (\is_object($resolvable)) {
             if (!$resolvable instanceof MiddlewareInterface) {
                 throw new InvalidArgumentException(
-                    sprintf('Middleware class should implement "%s".', MiddlewareInterface::class),
+                    \sprintf('Middleware class should implement "%s".', MiddlewareInterface::class),
                 );
             }
 
@@ -128,7 +128,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
                 $callable = $toResolve;
             }
 
-            throw new InvalidArgumentException(sprintf('"%s" is not resolvable.', $callable), 0, $exception);
+            throw new InvalidArgumentException(\sprintf('"%s" is not resolvable.', $callable), 0, $exception);
         }
     }
 

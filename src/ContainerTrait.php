@@ -39,7 +39,7 @@ trait ContainerTrait
                 : $this->getRecursive($name);
         } catch (NotFoundException $exception) {
             throw new NotFoundException(
-                sprintf('No entry or class found for "%s".', $name),
+                \sprintf('No entry or class found for "%s".', $name),
                 $exception->getCode(),
                 $exception,
             );
@@ -108,6 +108,6 @@ trait ContainerTrait
             }
         }
 
-        throw new NotFoundException(sprintf('Entry "%s" not found.', $key));
+        throw new NotFoundException(\sprintf('Entry "%s" not found.', $key));
     }
 }
